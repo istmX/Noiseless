@@ -1,188 +1,482 @@
 # Autonomous Research Analyst Design System, Tokens, Layout Rules, and Component Registry
 
-This document is the single source of truth for every interface, interaction, and component. Design decisions here enforce clarity, information density, and professional trust.
-
-NOTE: Color and typography tokens are TBD. Run the /istm-design skill before beginning implementation to hydrate the color palette, font choices, and motion spec. All {token} placeholders below must be resolved before any component is coded.
+This document is the single source of truth for every interface, interaction, and component.
+Every design decision reinforces clarity, information density, and professional trust.
+All color tokens, typography, spacing, radius, and motion values defined here are final.
+No component may introduce a raw hex code, a raw font name not in this document, or a raw pixel value not on the spacing scale.
 
 ---
 
 # Part 1: Core Principles and Golden Rules
 
 ## Clarity
-The dashboard is a signal-to-noise filter. The UI must reflect that. Show only what the user needs in the current moment. Every element must earn its place.
+The dashboard is a signal-to-noise filter. The UI must reflect that.
+Show only what the user needs in the current moment. Every element must earn its place.
 
 ## Data Density
-This tool serves analysts who read Bloomberg, not consumers who browse Instagram. Information density is a feature. Use it deliberately. Tables, timelines, and compact cards are preferred over large hero sections.
+This tool serves analysts who read Bloomberg, not consumers who browse social media.
+Information density is a feature. Tables, timelines, and compact cards are preferred over large hero sections.
 
 ## Fluidity
-Interactions must feel connected. Findings should animate in. Status changes should pulse, not flash. Users should always know the agent's current state without hunting for it.
+Interactions must feel connected. Findings animate in. Status changes pulse, not flash.
+Users should always know the agent state without hunting for it.
 
 ## Consistency
-Watch cards look the same. Finding cards look the same. Digest cards look the same. Users learn the UI once.
+Watch cards look the same. Finding cards look the same. Digest cards look the same.
+Users learn the UI once and carry that knowledge everywhere.
 
 ## Accessibility
-Accessibility is a design requirement. Every interactive element must have a visible focus ring, sufficient contrast, and a semantic ARIA label.
+Every interactive element has a visible focus ring, sufficient contrast, and a semantic ARIA label.
+Minimum touch target: 44px. WCAG AA contrast on all text.
 
 ---
 
 ## Golden Rules
+
 Every design decision should:
 - Focus on one primary action per screen.
-- Reveal complexity progressively (watch list → watch detail → finding detail).
+- Reveal complexity progressively (watch list then watch detail then finding detail).
 - Reuse existing shadcn/ui components before creating new ones.
 - Preserve user context: no full-page reloads for status updates.
-- Explain state changes through motion (agent running = pulse animation, new finding = slide-in).
-- Prioritize readability at all times. Data-dense does not mean illegible.
+- Explain state changes through motion (agent running = pulse, new finding = slide-in).
+- Prioritize readability at all times.
 
 ---
 
-# Part 2: Design Tokens (TBD — hydrate with /istm-design)
+# Part 2: Design Tokens (LOCKED)
 
-Never hardcode colors, spacing, typography, radius values, or shadows. Always use these tokens once they are filled:
+Never hardcode colors, spacing, typography, radius values, or shadows in components.
+Always use the CSS custom properties defined here.
+
+---
 
 ## Design Personality
 
-The application should feel:
-- Like a Bloomberg terminal meets a modern SaaS workstation
-- Authoritative and data-driven, not friendly and casual
-- Dark, focused, and purposeful
-- Premium without being flashy
+The application should feel like a Bloomberg terminal redesigned by Vercel.
+Authoritative and data-driven. Dark, focused, and purposeful.
+Premium without being flashy. Like an analyst's second brain, not a generic SaaS dashboard.
 
-The UI should feel like an analyst's second brain, not a generic software dashboard.
+The design language mirrors Vercel's Geist system but runs on a near-black canvas instead of near-white,
+uses a curated trio of fonts instead of Geist, and adapts the structural tokens for dark-first rendering.
 
-## Colors (TBD)
+---
 
-All color tokens below must be resolved by /istm-design before implementation.
+## Color Tokens
 
-- Primary Accent (colors.primary): {primary_color_hex}
-- Secondary Accent (colors.secondary): {secondary_color_hex}
-- Background Canvas (colors.canvas): {canvas_color_hex}
-- Surface Card (colors.surface): {surface_color_hex}
-- Elevated Surface (colors.surface-elevated): {elevated_color_hex}
-- Text Primary (colors.ink): {text_primary_hex}
-- Text Secondary (colors.ink-muted): {text_secondary_hex}
-- Border (colors.border): {border_color_hex}
-- Semantic Danger (colors.danger): {danger_color_hex}
-- Semantic Success (colors.success): {success_color_hex}
-- Semantic Warning (colors.warning): {warning_color_hex}
-- Agent Running Pulse (colors.pulse): {pulse_color_hex}
+### Dark Mode (default)
 
-## Typography (TBD)
+```css
+:root[data-theme="dark"] {
+  /* Canvas and surfaces */
+  --color-canvas:           #0A0A0A;   /* page background */
+  --color-surface:          #111111;   /* card and panel background */
+  --color-surface-elevated: #1A1A1A;   /* modals, tooltips, dropdowns */
+  --color-surface-inset:    #0D0D0D;   /* recessed input backgrounds */
 
-All font tokens below must be resolved by /istm-design before implementation.
+  /* Borders */
+  --color-hairline:         #1F1F1F;   /* all card borders, dividers, input borders */
+  --color-hairline-strong:  #2A2A2A;   /* focused input borders, selected card outlines */
 
-- Primary Font (font.sans): {primary_font_family} — used for all body copy, headings, buttons, forms
-- Monospace Font (font.mono): {monospace_font_family} — used for URLs, significance scores, timestamps, IDs
-- Display Font (font.display): optional, used only for deliberate hero typography
+  /* Text (ink ladder) */
+  --color-ink:              #FAFAFA;   /* primary headings, high emphasis */
+  --color-ink-body:         #A1A1A1;   /* standard body copy, nav links */
+  --color-ink-muted:        #6B6B6B;   /* secondary metadata, timestamps */
+  --color-ink-faint:        #3A3A3A;   /* disabled, placeholder text */
 
-## Spacing Scale (8px Grid — locked)
-- XS: 4px
-- SM: 8px
-- MD: 16px
-- LG: 24px
-- XL: 32px
-- 2XL: 48px
-- 3XL: 64px
+  /* Brand accent (Vercel blue, dark-mode calibrated) */
+  --color-primary:          #0070F3;   /* buttons, active nav, focus rings */
+  --color-primary-hover:    #338EF7;   /* lighter on hover */
+  --color-primary-press:    #0761D1;   /* darker on active/press */
+  --color-primary-soft:     #0070F314; /* 8% opacity wash — focus halos, selected rows */
+  --color-on-primary:       #FFFFFF;   /* text on primary button */
 
-## Shadows and Elevation (TBD)
-- Level 1 (Card): {shadow_level_1}
-- Level 2 (Floating Panel): {shadow_level_2}
-- Level 3 (Modal): {shadow_level_3}
+  /* Semantic state colors */
+  --color-success:          #10B981;   /* significance score 7-10, active status */
+  --color-success-soft:     #10B98114; /* success wash */
+  --color-warning:          #F59E0B;   /* significance score 4-6, paused status */
+  --color-warning-soft:     #F59E0B14; /* warning wash */
+  --color-danger:           #EF4444;   /* significance score 1-3, delete actions */
+  --color-danger-soft:      #EF444414; /* danger wash */
 
-## Border Radius (TBD)
-- Sharp (inputs, badges): {radius_small}
-- Standard (cards, buttons): {radius_medium}
-- Pills (tags, status chips): {radius_full}
+  /* Agent running pulse */
+  --color-pulse:            #0070F3;   /* CSS keyframe animation on status dot */
+}
+```
+
+### Light Mode
+
+```css
+:root[data-theme="light"] {
+  /* Canvas and surfaces */
+  --color-canvas:           #FAFAFA;   /* Vercel near-white */
+  --color-surface:          #FFFFFF;   /* card and panel background */
+  --color-surface-elevated: #FFFFFF;   /* modals lifted via shadow */
+  --color-surface-inset:    #F2F2F2;   /* recessed input backgrounds */
+
+  /* Borders */
+  --color-hairline:         #EBEBEB;   /* Vercel hairline — all card borders */
+  --color-hairline-strong:  #D4D4D4;   /* focused states */
+
+  /* Text */
+  --color-ink:              #171717;   /* primary — Vercel ink */
+  --color-ink-body:         #4D4D4D;   /* standard body copy */
+  --color-ink-muted:        #8F8F8F;   /* secondary metadata */
+  --color-ink-faint:        #A1A1A1;   /* disabled, placeholder */
+
+  /* Brand accent */
+  --color-primary:          #0070F3;
+  --color-primary-hover:    #0761D1;
+  --color-primary-press:    #054CA1;
+  --color-primary-soft:     #0070F314;
+  --color-on-primary:       #FFFFFF;
+
+  /* Semantic */
+  --color-success:          #0D9367;
+  --color-success-soft:     #0D936714;
+  --color-warning:          #D97706;
+  --color-warning-soft:     #D9770614;
+  --color-danger:           #DC2626;
+  --color-danger-soft:      #DC262614;
+
+  /* Agent pulse */
+  --color-pulse:            #0070F3;
+}
+```
+
+---
+
+## Typography Tokens
+
+Three fonts work together as a system. Each has one job.
+
+| Font | Role | Google Fonts import |
+|---|---|---|
+| **Playfair Display** | Display: page H1 titles only. Gives editorial, premium gravitas to major headings. | `family=Playfair+Display:wght@600;700` |
+| **Space Grotesk** | UI Sans: navigation, card topic names, badges, chips, buttons, form labels. Geometric and techy. | `family=Space+Grotesk:wght@400;500;600` |
+| **Inter** | Data Sans: body copy, metadata, timestamps, form inputs, secondary text. Screen-optimised at small sizes. | `family=Inter:wght@400;500` |
+| **JetBrains Mono** | Monospace: significance scores, timestamps, IDs, URLs, any numeric readout that needs alignment. | `family=JetBrains+Mono:wght@400` |
+
+```css
+:root {
+  --font-display:  "Playfair Display", Georgia, serif;
+  --font-sans:     "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-data:     "Inter", system-ui, sans-serif;
+  --font-mono:     "JetBrains Mono", "Courier New", monospace;
+}
+```
+
+### Type Scale
+
+| Token | Size | Weight | Line Height | Tracking | Font | Use |
+|---|---|---|---|---|---|---|
+| `--text-display` | 32px | 700 | 1.15 | -0.03em | Playfair Display | Page H1 titles (Watches, Findings) |
+| `--text-h2` | 20px | 600 | 1.3 | -0.01em | Space Grotesk | Section headings, card headlines |
+| `--text-h3` | 15px | 600 | 1.4 | 0 | Space Grotesk | Sub-section labels |
+| `--text-body` | 14px | 400 | 1.6 | 0 | Inter | Standard body copy |
+| `--text-body-sm` | 13px | 400 | 1.55 | 0 | Inter | Secondary copy, supporting text |
+| `--text-label` | 12px | 500 | 1.4 | 0.02em | Space Grotesk | Badge labels, chip text, form labels |
+| `--text-overline` | 11px | 500 | 1.2 | 0.08em | Space Grotesk | ALL CAPS section eyebrows only |
+| `--text-mono` | 12px | 400 | 1.4 | 0.01em | JetBrains Mono | Scores, timestamps, IDs, URLs |
+| `--text-mono-sm` | 11px | 400 | 1.3 | 0.01em | JetBrains Mono | Compact data rows |
+
+Rules:
+- Playfair Display is used for H1 page titles only. Never for body copy, buttons, or labels.
+- Space Grotesk owns all UI chrome: nav, buttons, chips, card headings.
+- Inter owns all reading-weight prose and dense data.
+- JetBrains Mono owns every numeric, identifier, or URL value.
+- Maximum three font weights per font face in any given screen.
+- Never use ALL CAPS except --text-overline eyebrows and badge labels under 3 characters.
+
+---
+
+## Spacing Scale (4px base, locked)
+
+```css
+:root {
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 128px;
+}
+```
+
+Card interior padding: `--space-4` to `--space-6`.
+Section gaps: `--space-24` to `--space-32`.
+Button padding: horizontal `--space-3` or `--space-4`, height set by line-height.
+
+---
+
+## Border Radius Tokens
+
+Vercel bimodal shape language: tight sharp for functional chrome, full pill for marketing CTAs.
+
+```css
+:root {
+  --radius-none: 0px;
+  --radius-sm:   4px;    /* badges, status chips, inputs */
+  --radius-md:   6px;    /* watch cards, buttons, nav items */
+  --radius-lg:   10px;   /* modals, drawers, large panels */
+  --radius-pill: 9999px; /* pill badges, theme toggle */
+  --radius-full: 9999px; /* avatar, circular icon buttons */
+}
+```
+
+---
+
+## Elevation and Shadow Tokens
+
+Depth is minimal. Prefer hairline borders before shadows. Shadows only for floating surfaces.
+
+```css
+:root {
+  --shadow-none:   none;
+  --shadow-low:    0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-medium: 0 2px 8px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-high:   0 8px 24px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+```
+
+Light mode shadow values use lower alpha (0.08, 0.12, 0.18) because the canvas is near-white.
+
+---
+
+## Motion Tokens
+
+```css
+:root {
+  --ease:           cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out:       cubic-bezier(0, 0, 0.2, 1);
+  --duration-micro: 100ms;   /* hover color/border changes */
+  --duration-fast:  150ms;   /* button press, badge swap */
+  --duration-normal:200ms;   /* card reveals, sidebar transitions */
+  --duration-slow:  350ms;   /* modal open, drawer slide-in */
+}
+```
+
+### Agent Running Pulse (CSS only, no JS)
+
+```css
+@keyframes agent-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(1.35); }
+}
+
+.status-dot--running {
+  animation: agent-pulse 1.8s var(--ease) infinite;
+  background-color: var(--color-pulse);
+}
+```
+
+### Finding Card Entrance
+
+```css
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.finding-card {
+  animation: fade-up var(--duration-normal) var(--ease-out) both;
+}
+```
 
 ---
 
 # Part 3: Visual Styling and Layout Rules
 
-These rules define how every screen should be designed. If a UI decision conflicts with this section, these rules win.
-
-## Design Principles
-- Visual Language: Dark mode first. Dense information surfaces with clear visual hierarchy. Data beats decoration.
-- Layout Structure: Left sidebar for navigation, main content area for lists and timelines, right panel for contextual details (slide-in drawer, not a new page).
-- Typography Hierarchy: Use font weight and size to carry hierarchy. Never rely on color alone.
-- Empty State Rules: Every empty state must display a Lucide icon, a headline (no more than 6 words), a supporting sentence, and one primary CTA button. Never use emojis.
-- Prohibited Styles: No gradients on data surfaces. No background images. No decorative illustrations. No emojis anywhere in the UI.
-
 ## Asset Rule (locked)
-Do NOT use image files. All UI and empty states must be built using purely CSS-driven color blocks, typography, and Lucide icons from the shadcn/ui package.
 
-## Layout and Grid
-- Whitespace Philosophy: whitespace is not wasted space. It is the visual separator that makes dense data readable. Use the 8px spacing scale strictly.
-- The dashboard uses a two-column layout on desktop: a fixed-width left sidebar (240px) and a fluid main content area.
-- On tablet, the sidebar collapses to an icon-only rail.
-- On mobile (under 768px), the sidebar becomes a bottom sheet or a hamburger overlay.
+Do NOT use image files. All UI and empty states must be built using CSS, typography, and Lucide icons.
+No illustrations, no background images, no gradients on data surfaces.
 
-## Agent Status Communication
-- When run_in_progress is true for a watch, show a pulsing status indicator (colors.pulse) on the watch card and detail page.
-- The indicator uses a CSS keyframe animation (pulse), not a spinner, to avoid feeling like a loading blocker.
-- Polling interval: TanStack Query polls /watches/{id} every 5 seconds when the user is on the detail page.
+## Mode Support
+
+The app ships with a dark mode default and a light mode toggle.
+The theme is stored in `localStorage` as `"dark"` or `"light"` and applied via `data-theme` on `<html>`.
+Use the CSS custom properties above: never branch by theme in component JS logic.
+
+## Layout Structure
+
+Desktop: 64px left icon sidebar plus a fluid main content area (max-width 1280px centered).
+Sidebar labels appear on hover as tooltips (Space Grotesk 12px).
+Tablet (below 960px): sidebar collapses to icon-only rail (40px).
+Mobile (below 768px): sidebar becomes a bottom sheet triggered by a hamburger icon.
+
+## Whitespace Philosophy
+
+Whitespace is structural. The hairline border and the canvas background do the separating work.
+Cards are grouped by thin hairlines rather than heavy background fills.
+Generous section padding. Tight internal rhythm inside cards.
+
+## Grid
+
+Watch list: 4-column grid on desktop, 2-column on tablet, 1-column on mobile.
+Findings timeline: single column of compact full-width cards.
+Digest history: single column of full-width digest cards.
 
 ---
 
 # Part 4: UI Component Registry
 
-Always use these component structures. Duplicate component declarations are not allowed.
+Always use these component structures. Duplicate declarations are not allowed.
 
-## Navigation
-- sidebar-nav: Fixed-width (240px) left sidebar with icon + label rows. Active state uses colors.primary background. Lucide icons only.
-- breadcrumb: Horizontal breadcrumb above page headings for deep pages (watch detail, finding detail).
+## Sidebar Navigation
+
+`sidebar-nav`: 64px wide on desktop. Icon-only on tablet. Bottom sheet on mobile.
+Each item: Lucide icon 20px centered, active state `--color-primary-soft` background, `--radius-md`.
+Tooltip on hover shows Space Grotesk 12px label.
 
 ## Buttons
-- button-primary: Background colors.primary, text on-primary, radius token standard. Used for "Create Watch", "Run Now".
-- button-secondary: Transparent background, bordered with colors.border, text colors.ink. Used for "Edit", "Pause".
-- button-danger: Background colors.danger. Used exclusively for "Delete Watch" and "Delete Finding".
-- button-ghost: No border, no background. Text colors.ink-muted. Used for icon buttons in card headers.
+
+`button-primary`: Background `--color-primary`, text `--color-on-primary`, `--radius-md`, Space Grotesk 14px 500.
+Used for "Create Watch", "Run Now".
+
+`button-secondary`: Background transparent, 1px border `--color-hairline`, text `--color-ink`, `--radius-md`.
+Used for "Edit", "Pause", "Cancel".
+
+`button-danger`: Background `--color-danger`, text white. Used exclusively for "Delete Watch".
+
+`button-ghost`: No border, no background. Text `--color-ink-muted`, 20px Lucide icon.
+Used for icon buttons inside card headers.
+
+`theme-toggle`: Pill toggle button (`--radius-pill`) with sun/moon Lucide icons. Switches `data-theme`.
 
 ## Cards
-- watch-card: Surface background colors.surface, padded LG, rounded standard. Shows topic, frequency badge, status dot, last-run timestamp, and significance threshold. Clicking navigates to the watch detail page.
-- finding-card: Compact card. Shows title, source domain, significance score badge (colored by score range), category chip, key fact excerpt, and timestamp.
-- digest-card: Shows digest summary text, number of findings included, and a "View findings" link. Full-width in the digest history list.
+
+`watch-card`: Background `--color-surface`, 1px `--color-hairline` border, `--radius-md`, padding `--space-4`.
+Contains: topic name (Space Grotesk 600 15px), status chip top-right, frequency badge,
+significance threshold chip, last-run timestamp (JetBrains Mono 12px `--color-ink-muted`),
+finding count, status dot (pulsing when running).
+
+`finding-card`: Compact full-width card. Background `--color-surface`, `--radius-md`, `--shadow-low`.
+Contains: title (Space Grotesk 600 14px), source domain (Inter 13px muted), significance badge,
+category chip, key-fact excerpt (Inter 13px), timestamp (JetBrains Mono 11px).
+Entrance animation: `fade-up`.
+
+`digest-card`: Full-width. Background `--color-surface`, `--radius-md`.
+Contains: sent timestamp, summary text (Inter 14px, first 200 chars), finding count badge,
+"View findings" link in `--color-primary`.
 
 ## Badges and Chips
-- significance-badge: Displays the 1-10 score. Colors change by range: 1-3 colors.ink-muted, 4-6 colors.warning, 7-10 colors.success.
-- frequency-badge: Displays "Hourly", "Daily", or "Weekly". Small chip with border.
-- status-dot: Small circle. Green = active, gray = paused, pulsing colors.pulse = running.
-- category-chip: Small bordered chip showing the Groq-classified category (e.g. "Earnings", "Product Launch").
 
-## Inputs
-- text-input: Standard shadcn/ui Input. Consistent border radius and focus ring using colors.primary.
-- textarea-input: For multi-line search_queries entry.
-- select-input: shadcn/ui Select. Used for frequency and significance_threshold fields.
-- toggle-switch: shadcn/ui Switch. Used for the watch active/paused toggle.
+`significance-badge`: Displays 1-10 score in JetBrains Mono 12px.
+Score 7-10: background `--color-success-soft`, text `--color-success`.
+Score 4-6: background `--color-warning-soft`, text `--color-warning`.
+Score 1-3: background `--color-danger-soft`, text `--color-danger`.
+Radius: `--radius-sm`.
 
-## Layout Containers
-- screen-container: Root layout wrapper. Max width 1280px, centered, horizontal padding XL.
-- page-header: Full-width row with page title (H1), optional subtitle, and right-aligned CTA button.
-- content-grid: Two-column grid (main content + sidebar details) on desktop, single column on mobile.
+`status-chip`: Space Grotesk 12px 500. "Active" in success colors, "Paused" in warning colors,
+"Running" in primary colors with `status-dot--running` pulse dot. Radius: `--radius-sm`.
 
-## Dialogs and Drawers
-- watch-form-dialog: Modal dialog for creating and editing watches. Uses shadcn/ui Dialog. Fields: topic, search_queries (comma-separated textarea), frequency (select), significance_threshold (select 1-10), notification_email (input), notification_slack_webhook (input).
-- finding-detail-drawer: Right-side slide-in sheet (shadcn/ui Sheet) showing the full finding: title, URL, content_snippet, key_fact, significance_score, category, created_at.
-- delete-confirm-dialog: Small confirmation dialog before deleting a watch.
+`frequency-badge`: Space Grotesk 12px. "Hourly" / "Daily" / "Weekly".
+Border `--color-hairline`, background transparent. Radius: `--radius-sm`.
+
+`category-chip`: Space Grotesk 12px. Groq-classified category label.
+Border `--color-hairline`. Radius: `--radius-sm`.
+
+## Forms and Inputs
+
+`text-input`: Background `--color-surface-inset`, 1px `--color-hairline` border, `--radius-md`.
+Focus: border becomes `--color-primary`, `--color-primary-soft` box-shadow halo.
+Font: Inter 14px.
+
+`textarea-input`: Same as text-input, min-height 80px.
+
+`select-input`: shadcn/ui Select. Same visual treatment as text-input.
+
+`toggle-switch`: shadcn/ui Switch. Active track color: `--color-primary`.
+
+## Page Header
+
+Full-width row at page top. Left: Playfair Display 700 32px H1 title.
+Right: `button-primary` CTA (e.g., "Create Watch").
 
 ## Empty States
-- empty-watches: Icon Eye (Lucide), headline "No watches yet", body "Create your first watch to start monitoring a topic.", CTA "Create Watch" button-primary.
-- empty-findings: Icon FileSearch (Lucide), headline "No findings yet", body "The agent will populate findings after the first run.", no CTA (user cannot force findings).
-- empty-digests: Icon Inbox (Lucide), headline "No digests sent yet", body "A digest is generated when a significant finding is detected.", no CTA.
+
+`empty-watches`:
+- Lucide icon: `Eye`, 40px, `--color-ink-muted`
+- Headline: "No watches yet" (Space Grotesk 600 18px)
+- Body: "Create your first watch to start monitoring a topic." (Inter 14px muted)
+- CTA: `button-primary` "Create Watch"
+
+`empty-findings`:
+- Lucide icon: `FileSearch`, 40px, `--color-ink-muted`
+- Headline: "No findings yet" (Space Grotesk 600 18px)
+- Body: "The agent will populate findings after the first run." (Inter 14px muted)
+- No CTA
+
+`empty-digests`:
+- Lucide icon: `Inbox`, 40px, `--color-ink-muted`
+- Headline: "No digests sent yet" (Space Grotesk 600 18px)
+- Body: "A digest is generated when a significant finding is detected." (Inter 14px muted)
+- No CTA
+
+## Dialogs and Drawers
+
+`watch-form-dialog`: shadcn/ui Dialog, `--radius-lg`, `--shadow-high`.
+Fields: topic (text-input), search queries (textarea-input), frequency (select-input),
+significance threshold (select-input 1-10), notification email (text-input),
+Slack webhook URL (text-input), active (toggle-switch).
+Footer: "Save" `button-primary` + "Cancel" `button-secondary`.
+
+`finding-detail-drawer`: shadcn/ui Sheet (right side), 480px wide, `--shadow-high`.
+Contains: title (Space Grotesk 600 18px), URL (JetBrains Mono 12px link),
+content snippet (Inter 14px), key fact (Inter 14px, emphasized), significance badge,
+category chip, created timestamp (JetBrains Mono 12px).
+
+`delete-confirm-dialog`: Small shadcn/ui AlertDialog. Destructive action requires confirmation.
 
 ---
 
 # Part 5: Responsive Behavior and Breakpoints
 
-## Breakpoints Matrix
-- Desktop XL (1440px): Two-column layout, full sidebar, dense card grids.
-- Desktop (1280px): Default desktop layout.
-- Tablet (960px): Sidebar collapses to icon rail. Cards remain in grid.
-- Mobile (768px): Single column. Sidebar becomes bottom sheet. Cards are full-bleed. Touch targets minimum 44px.
+| Breakpoint | Width | Key Changes |
+|---|---|---|
+| Desktop XL | 1440px | 4-column watch grid, full sidebar 64px, max-width 1280px centered |
+| Desktop | 1280px | Default layout |
+| Tablet | 960px | Sidebar collapses to 40px icon rail. Watch grid becomes 2-column |
+| Mobile | 768px | Single column. Sidebar bottom sheet. Touch targets 44px minimum |
 
 ## Do's and Don'ts
-- DO: Use the significance-badge component consistently for all finding score displays.
-- DO: Show the agent run status on the watch card as well as the detail page.
-- DO: Use Lucide icons from the existing shadcn/ui set. Do not add a second icon library.
+
+- DO: Use Playfair Display only for H1 page titles. Never for body or labels.
+- DO: Use Space Grotesk for all UI chrome: nav, badges, chips, card headings, buttons.
+- DO: Use Inter for all body-weight reading: metadata, form copy, secondary text.
+- DO: Use JetBrains Mono for every numeric, ID, or timestamp value in cards.
+- DO: Apply the `status-dot--running` CSS animation — never a spinner — for agent running state.
+- DO: Keep light and dark mode driven by `data-theme` and CSS custom properties only.
+- DON'T: Hardcode any hex color, pixel value, or font name outside this document.
 - DON'T: Use emojis anywhere in the UI or empty states.
-- DON'T: Hardcode any color, spacing, or radius value. Use design tokens.
-- DON'T: Add background images or illustration files. Code-only visuals.
+- DON'T: Add a second icon library. Use Lucide only.
+- DON'T: Add background images, illustrations, or decorative gradients on data surfaces.
+- DON'T: Use Playfair Display for anything other than the H1 page title.
+
+---
+
+# Visual Effects (Lightweight Tier Only)
+
+- Background: plain `--color-canvas` — no animated gradients, no noise, no mesh
+- Agent pulse: CSS keyframe only (no JS required)
+- Card entrance: `fade-up` CSS animation on mount
+- Theme switch: CSS custom property update, 150ms opacity crossfade on body
+- Scroll effects: none (data workstation, not a marketing page)
+- Glassmorphism: none
+- Particles: none
+- 3D elements: none
+- `prefers-reduced-motion`: disable all animations when true
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```

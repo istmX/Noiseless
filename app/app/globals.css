@@ -1,26 +1,166 @@
 @import "tailwindcss";
 
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Canvas and surfaces */
+  --color-canvas:           #0A0A0A;
+  --color-surface:          #111111;
+  --color-surface-elevated: #1A1A1A;
+  --color-surface-inset:    #0D0D0D;
+
+  /* Borders */
+  --color-hairline:         #1F1F1F;
+  --color-hairline-strong:  #2A2A2A;
+
+  /* Text (ink ladder) */
+  --color-ink:              #FAFAFA;
+  --color-ink-body:         #A1A1A1;
+  --color-ink-muted:        #6B6B6B;
+  --color-ink-faint:        #3A3A3A;
+
+  /* Brand accent */
+  --color-primary:          #0070F3;
+  --color-primary-hover:    #338EF7;
+  --color-primary-press:    #0761D1;
+  --color-primary-soft:     #0070F314;
+  --color-on-primary:       #FFFFFF;
+
+  /* Semantic state colors */
+  --color-success:          #10B981;
+  --color-success-soft:     #10B98114;
+  --color-warning:          #F59E0B;
+  --color-warning-soft:     #F59E0B14;
+  --color-danger:           #EF4444;
+  --color-danger-soft:      #EF444414;
+  --color-pulse:            #0070F3;
+}
+
+/* 2. Dark mode tokens */
+[data-theme="dark"] {
+  /* Canvas and surfaces */
+  --color-canvas:           #0A0A0A;
+  --color-surface:          #111111;
+  --color-surface-elevated: #1A1A1A;
+  --color-surface-inset:    #0D0D0D;
+
+  /* Borders */
+  --color-hairline:         #1F1F1F;
+  --color-hairline-strong:  #2A2A2A;
+
+  /* Text (ink ladder) */
+  --color-ink:              #FAFAFA;
+  --color-ink-body:         #A1A1A1;
+  --color-ink-muted:        #6B6B6B;
+  --color-ink-faint:        #3A3A3A;
+
+  /* Brand accent */
+  --color-primary:          #0070F3;
+  --color-primary-hover:    #338EF7;
+  --color-primary-press:    #0761D1;
+  --color-primary-soft:     #0070F314;
+  --color-on-primary:       #FFFFFF;
+
+  /* Semantic state colors */
+  --color-success:          #10B981;
+  --color-success-soft:     #10B98114;
+  --color-warning:          #F59E0B;
+  --color-warning-soft:     #F59E0B14;
+  --color-danger:           #EF4444;
+  --color-danger-soft:      #EF444414;
+  --color-pulse:            #0070F3;
+}
+
+/* 3. Light mode tokens */
+[data-theme="light"] {
+  /* Canvas and surfaces */
+  --color-canvas:           #FAFAFA;
+  --color-surface:          #FFFFFF;
+  --color-surface-elevated: #FFFFFF;
+  --color-surface-inset:    #F2F2F2;
+
+  /* Borders */
+  --color-hairline:         #EBEBEB;
+  --color-hairline-strong:  #D4D4D4;
+
+  /* Text */
+  --color-ink:              #171717;
+  --color-ink-body:         #4D4D4D;
+  --color-ink-muted:        #8F8F8F;
+  --color-ink-faint:        #A1A1A1;
+
+  /* Brand accent */
+  --color-primary:          #0070F3;
+  --color-primary-hover:    #0761D1;
+  --color-primary-press:    #054CA1;
+  --color-primary-soft:     #0070F314;
+  --color-on-primary:       #FFFFFF;
+
+  /* Semantic */
+  --color-success:          #0D9367;
+  --color-success-soft:     #0D936714;
+  --color-warning:          #D97706;
+  --color-warning-soft:     #D9770614;
+  --color-danger:           #DC2626;
+  --color-danger-soft:      #DC262614;
+  --color-pulse:            #0070F3;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background:         var(--color-canvas);
+  --color-foreground:         var(--color-ink);
+  --color-card:               var(--color-surface);
+  --color-card-foreground:    var(--color-ink);
+  --color-popover:            var(--color-surface-elevated);
+  --color-popover-foreground: var(--color-ink);
+  --color-primary:            var(--color-primary);
+  --color-primary-foreground: var(--color-on-primary);
+  --color-secondary:          var(--color-surface-elevated);
+  --color-secondary-foreground: var(--color-ink);
+  --color-muted:              var(--color-surface-elevated);
+  --color-muted-foreground:   var(--color-ink-muted);
+  --color-accent:             var(--color-primary-soft);
+  --color-accent-foreground:  var(--color-ink);
+  --color-destructive:        var(--color-danger);
+  --color-destructive-foreground: #ffffff;
+  --color-border:             var(--color-hairline);
+  --color-input:              var(--color-hairline);
+  --color-ring:               var(--color-primary);
+  --radius:                   6px;
+  --font-sans:                var(--font-sans);
+  --font-mono:                var(--font-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* 5. Base body styles */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-data);
+}
+
+/* 6. Global animations */
+@keyframes agent-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(1.35); }
+}
+
+.status-dot--running {
+  animation: agent-pulse 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  background-color: var(--color-pulse);
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.finding-card {
+  animation: fade-up 200ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
