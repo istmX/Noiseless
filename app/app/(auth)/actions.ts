@@ -2,7 +2,9 @@
 
 import { signIn } from "@/shared/lib/auth";
 import { AuthError } from "next-auth";
-import { DASHBOARD_ROUTE } from "../constants";
+import { DASHBOARD_ROUTE } from "./constants";
+import { prisma } from "@/shared/lib/db";
+import bcrypt from "bcryptjs";
 
 export async function loginAction(
   prevState: AuthError | null,
@@ -28,15 +30,36 @@ export async function loginAction(
 }
 
 export async function registerAction(
-  prevState: AuthError | null,
+  prevState: any,
   formData: FormData
 ) {
-  // In a full implementation, we will hash the password and INSERT into Neon Postgres here.
-  // For this slice, we will pretend registration is successful and redirect to login.
+  const email = formData.get("email") as string;
+  const name = formData.get("name") as string;
+  const password = formData.get("password") as string;
+
+  if (!email || !name || !password) {
+    return { error: "Missing required fields." };
+  }
+
   try {
+    const existingUser = await prisma.user.findUnique({ where: { email } });
+    if (existingUser) {
+      return { error: "Email is already registered." };
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    await prisma.user.create({
+      data: {
+        email,
+        name,
+        password: hashedPassword,
+      },
+    });
+
     return { success: true, error: null, redirect: true };
   } catch (error) {
+    console.error("Registration error:", error);
     return { error: "Registration failed." };
   }
 }
-

@@ -141,6 +141,8 @@ Use Feature-Based Architecture. Never place business logic inside pages.
 
 ```
 app/
+  prisma/                 # Prisma schema
+    schema.prisma
   app/                      # Next.js App Router root
     (auth)/                 # Auth group: login, register
       components/           # LoginForm, RegisterForm
@@ -246,7 +248,7 @@ No source file should exceed approximately 250 lines whenever reasonably possibl
 
 - The Next.js frontend communicates with FastAPI via a typed api-client.ts wrapper.
 - All FastAPI endpoints return consistent JSON envelopes: { data, error, meta }.
-- Server Actions in Next.js use the Neon client directly for simple reads. Complex agentic operations call FastAPI.
+- Server Actions in Next.js use Prisma ORM (with `@prisma/adapter-neon`) for database operations. Complex agentic operations call FastAPI.
 - All API keys (Tavily, Qdrant, Neon, Brevo, GROQ_API_KEY) live in environment variables. Never commit them.
 
 ---

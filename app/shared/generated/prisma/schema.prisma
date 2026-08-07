@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../shared/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  watches   Watch[]
+}
+
+model Watch {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  topic                 String
+  searchQueries         String[]
+  frequency             String
+  significanceThreshold Int // 1-10 scale
+
+  notificationEmail        String?
+  notificationSlackWebhook String?
+
+  lastRunAt DateTime? // Lock for idempotent background jobs
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  findings Finding[]
+  digests  Digest[]
+}
+
+model Finding {
+  id      String @id @default(cuid())
+  watchId String
+  watch   Watch  @relation(fields: [watchId], references: [id], onDelete: Cascade)
+
+  url      String
+  title    String
+  content  String
+  score    Int // Significance score from Groq (1-10)
+  category String
+  keyFact  String
+
+  createdAt DateTime @default(now())
+}
+
+model Digest {
+  id      String @id @default(cuid())
+  watchId String
+  watch   Watch  @relation(fields: [watchId], references: [id], onDelete: Cascade)
+
+  summary String // RAG-generated digest summary
+  sentAt  DateTime @default(now())
+}

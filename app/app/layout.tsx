@@ -20,19 +20,29 @@ export const metadata: Metadata = {
   description: "Monitor topics, industries, and competitors with an autonomous AI research agent.",
 };
 
+import { ThemeToggle } from "@/shared/components/ThemeToggle";
+
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html
       lang="en"
       suppressHydrationWarning
       className={`${spaceGrotesk.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-canvas">
-        <ThemeProvider attribute="data-theme" defaultTheme="dark">
+      <body className="min-h-full flex flex-col bg-canvas relative">
+        <ThemeProvider 
+          attribute="data-theme" 
+          defaultTheme="system" 
+          enableSystem 
+          disableTransitionOnChange
+        >
+          <div className="absolute top-4 right-4 z-50">
+            <ThemeToggle />
+          </div>
           {children}
         </ThemeProvider>
       </body>

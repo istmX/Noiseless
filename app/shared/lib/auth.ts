@@ -15,12 +15,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const parsed = LoginSchema.safeParse(credentials);
         if (!parsed.success) return null;
 
-        
-        if (parsed.data.email === "test@example.com" && parsed.data.password === "password123") {
-          return { id: "1", email: "test@example.com", name: "Test User" };
-        }
-        
-        return null; 
+        const { prisma } = await import("./db");
+        const bcrypt = await import("bcryptjs");
+
+        const user = await prisma.user.findUnique({
+          where: { email: parsed.data.email },
+        });
+
+        if (!user) return null;
+
+        const isValid = await bcrypt.compare(parsed.data.password, user.password);
+        if (!isValid) return null;
+
+        return { id: user.id, email: user.email, name: user.name };
       },
     }),
   ],

@@ -10,6 +10,10 @@
 - Ran /istm-design to hydrate color palette and typography tokens.
 - Add shadcn/ui to the Next.js app.
 - Implemented global UI tokens in globals.css and layout.tsx (Spec 0001).
+- Installed Prisma with `@prisma/adapter-neon` and synchronized schema to database.
+- Implemented secure JWT-based Auth (Login/Signup) with `bcryptjs`.
+- Added global Theme Toggle logic to Root Layout.
+- Integrated `image.png` global logo into authentication flows.
 
 ### Pending
 - Scaffold FastAPI service at /workspaces/Noiseless/services/api/.
