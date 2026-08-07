@@ -14,7 +14,7 @@
 ### Pending
 - Scaffold FastAPI service at /workspaces/Noiseless/services/api/.
 - Install LangChain dependencies: langchain langchain-groq langchain-community langchain-qdrant.
-- Implement NextAuth.js auth routes.
+- [x] Implement NextAuth.js auth routes.
 - Implement Watch CRUD (FastAPI + Next.js).
 - Implement Agent Pipeline (pipeline.py).
 - Implement APScheduler jobs.

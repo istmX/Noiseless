@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-
+/* 1. Default (Dark mode by default based on your tokens) */
 :root {
   /* Canvas and surfaces */
   --color-canvas:           #0A0A0A;
@@ -37,30 +37,21 @@
 
 /* 2. Dark mode tokens */
 [data-theme="dark"] {
-  /* Canvas and surfaces */
   --color-canvas:           #0A0A0A;
   --color-surface:          #111111;
   --color-surface-elevated: #1A1A1A;
   --color-surface-inset:    #0D0D0D;
-
-  /* Borders */
   --color-hairline:         #1F1F1F;
   --color-hairline-strong:  #2A2A2A;
-
-  /* Text (ink ladder) */
   --color-ink:              #FAFAFA;
   --color-ink-body:         #A1A1A1;
   --color-ink-muted:        #6B6B6B;
   --color-ink-faint:        #3A3A3A;
-
-  /* Brand accent */
   --color-primary:          #0070F3;
   --color-primary-hover:    #338EF7;
   --color-primary-press:    #0761D1;
   --color-primary-soft:     #0070F314;
   --color-on-primary:       #FFFFFF;
-
-  /* Semantic state colors */
   --color-success:          #10B981;
   --color-success-soft:     #10B98114;
   --color-warning:          #F59E0B;
@@ -72,30 +63,21 @@
 
 /* 3. Light mode tokens */
 [data-theme="light"] {
-  /* Canvas and surfaces */
   --color-canvas:           #FAFAFA;
   --color-surface:          #FFFFFF;
   --color-surface-elevated: #FFFFFF;
   --color-surface-inset:    #F2F2F2;
-
-  /* Borders */
   --color-hairline:         #EBEBEB;
   --color-hairline-strong:  #D4D4D4;
-
-  /* Text */
   --color-ink:              #171717;
   --color-ink-body:         #4D4D4D;
   --color-ink-muted:        #8F8F8F;
   --color-ink-faint:        #A1A1A1;
-
-  /* Brand accent */
   --color-primary:          #0070F3;
   --color-primary-hover:    #0761D1;
   --color-primary-press:    #054CA1;
   --color-primary-soft:     #0070F314;
   --color-on-primary:       #FFFFFF;
-
-  /* Semantic */
   --color-success:          #0D9367;
   --color-success-soft:     #0D936714;
   --color-warning:          #D97706;
@@ -105,7 +87,9 @@
   --color-pulse:            #0070F3;
 }
 
+/* 4. Theme registration for Tailwind utilities */
 @theme inline {
+  /* Shadcn-style system defaults */
   --color-background:         var(--color-canvas);
   --color-foreground:         var(--color-ink);
   --color-card:               var(--color-surface);
@@ -128,13 +112,49 @@
   --radius:                   6px;
   --font-sans:                var(--font-sans);
   --font-mono:                var(--font-mono);
+
+  /* NEW: Registered context tokens for clean classnames */
+  --color-canvas:           var(--color-canvas);
+  --color-surface:          var(--color-surface);
+  --color-surface-elevated: var(--color-surface-elevated);
+  --color-surface-inset:    var(--color-surface-inset);
+  --color-hairline:         var(--color-hairline);
+  --color-hairline-strong:  var(--color-hairline-strong);
+  --color-ink:              var(--color-ink);
+  --color-ink-body:         var(--color-ink-body);
+  --color-ink-muted:        var(--color-ink-muted);
+  --color-ink-faint:        var(--color-ink-faint);
+  --color-primary-hover:    var(--color-primary-hover);
+  --color-primary-press:    var(--color-primary-press);
+  --color-primary-soft:     var(--color-primary-soft);
+  --color-success:          var(--color-success);
+  --color-success-soft:     var(--color-success-soft);
+  --color-warning:          var(--color-warning);
+  --color-warning-soft:     var(--color-warning-soft);
+  --color-danger:           var(--color-danger);
+  --color-danger-soft:      var(--color-danger-soft);
+  --color-pulse:            var(--color-pulse);
+  --color-on-primary:       var(--color-on-primary);
+  
+  --font-data:              var(--font-data);
+  
+  --text-display:           var(--text-display);
+  --text-body:              var(--text-body);
+  --text-body-sm:           var(--text-body-sm);
+  --text-label:             var(--text-label);
+
+  --radius-full:            var(--radius-full);
+  --radius-md:              var(--radius-md);
+  --radius-sm:              var(--radius-sm);
+
+  --shadow-low:             var(--shadow-low);
+  --shadow-md:              var(--shadow-md);
 }
 
 /* 5. Base body styles */
 body {
   background-color: var(--color-canvas);
   color: var(--color-ink);
-  font-family: var(--font-data);
 }
 
 /* 6. Global animations */
@@ -157,10 +177,10 @@ body {
   animation: fade-up 200ms cubic-bezier(0, 0, 0.2, 1) both;
 }
 
-
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
 }
+

@@ -143,32 +143,30 @@ Use Feature-Based Architecture. Never place business logic inside pages.
 app/
   app/                      # Next.js App Router root
     (auth)/                 # Auth group: login, register
-    (dashboard)/            # Protected dashboard group
-      watches/              # Watch list and create pages
-        [id]/               # Watch detail page (findings + digests)
-      settings/             # User settings page
-    api/                    # API Routes and Server Actions
-      auth/                 # NextAuth handlers
-  features/
-    auth/
       components/           # LoginForm, RegisterForm
       hooks/
-    watches/
-      components/           # WatchCard, WatchForm, WatchTimeline
-      hooks/                # useWatches, useWatch
-      actions/              # Server Actions for CRUD
       types/
-    findings/
-      components/           # FindingCard, FindingTimeline
-      hooks/                # useFindings
-      types/
-    digests/
-      components/           # DigestCard, DigestHistory
-      hooks/
-      types/
-    agent/
+    (dashboard)/            # Protected dashboard group
+      watches/              # Watch list and create pages
+        components/         # WatchCard, WatchForm, WatchTimeline
+        hooks/              # useWatches, useWatch
+        actions.ts            # Server Actions for CRUD
+        types/
+        [id]/               # Watch detail page (findings + digests)
+          findings/
+            components/     # FindingCard, FindingTimeline
+            hooks/          # useFindings
+            types/
+          digests/
+            components/     # DigestCard, DigestHistory
+            hooks/
+            types/
+      settings/             # User settings page
+    agent/                  # Background agent routes
       components/           # AgentStatusBadge, RunProgress
       hooks/                # useAgentStatus
+    api/                    # API Routes and Server Actions
+      auth/                 # NextAuth handlers
   shared/
     components/
       ui/                   # shadcn/ui components live here
@@ -239,8 +237,8 @@ No source file should exceed approximately 250 lines whenever reasonably possibl
 # State Management
 
 - Frontend: React Server Components handle most data fetching. Use React Query (TanStack Query) on the client for live polling of agent run status and real-time finding updates.
-- Keep state local whenever possible. Lift state only when required.
-- Global state (current user, notification preferences) lives in a shared context, not scattered across components.
+- Keep state local whenever possible. Lift state only when required. Use Zustand for any global client-side state.
+- Global state (current user, notification preferences) lives in Zustand store (or shared context), not scattered across components.
 
 ---
 
@@ -272,6 +270,17 @@ No source file should exceed approximately 250 lines whenever reasonably possibl
 - Digest is only sent when at least one finding in the batch crosses the significance threshold.
 
 ---
+
+
+# Tailwind v4 Class Names (CRITICAL)
+- Do NOT use `[var(--color-something)]` syntax.
+- All tokens are registered in `@theme inline` in `globals.css`. Tailwind v4 automatically handles dark/light shifts from `[data-theme]` selectors. You do not need to prefix them with `dark:` in your HTML.
+- **Surfaces**: `bg-canvas`, `bg-surface`, `bg-surface-elevated`, `bg-surface-inset`
+- **Text**: `text-ink`, `text-ink-body`, `text-ink-muted`, `text-ink-faint`
+- **Borders**: `border-hairline`, `border-hairline-strong`
+- **States**: `bg-primary hover:bg-primary-hover`, `text-danger border-danger-soft`
+- **Typography**: `font-sans`, `font-data`, `text-display`, `text-body`
+- Always use these clean, native class names.
 
 # Constants and Styling Rules
 

@@ -50,7 +50,7 @@ FastAPI (Python)
 - Styling: Tailwind CSS v4
 - Components: shadcn/ui (built on Radix UI primitives)
 - Auth: NextAuth.js (Auth.js v5) with Neon adapter
-- Data fetching: React Server Components for initial data, TanStack Query for client polling
+- Data fetching and State: React Server Components for initial data, TanStack Query for client polling/server state, Zustand for client-side global state.
 - Icons: Lucide (via shadcn/ui)
 
 ## Backend and API

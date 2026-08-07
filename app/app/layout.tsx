@@ -1,12 +1,7 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
-
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["600", "700"],
-});
+import { ThemeProvider } from "@/shared/components/ThemeProvider";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -18,12 +13,6 @@ const inter = Inter({
   subsets: ["latin"],
   variable: "--font-data",
   weight: ["400", "500"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  weight: ["400"],
 });
 
 export const metadata: Metadata = {
@@ -39,26 +28,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-theme="dark"
       suppressHydrationWarning
-      className={`${playfair.variable} ${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${inter.variable} h-full antialiased`}
     >
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                const t = localStorage.getItem("theme");
-                if (t === "light" || t === "dark") {
-                  document.documentElement.setAttribute("data-theme", t);
-                }
-              } catch (e) {}
-            `,
-          }}
-        />
-      </head>
-      <body className="min-h-full flex flex-col bg-[var(--color-canvas)]">
-        {children}
+      <body className="min-h-full flex flex-col bg-canvas">
+        <ThemeProvider attribute="data-theme" defaultTheme="dark">
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
