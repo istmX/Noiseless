@@ -2,10 +2,8 @@
 
 AI agents MUST inspect this file before making code changes or diagnosing errors.
 
-## No errors logged yet.
-
-When a bug is found and fixed, log it here with:
-- Symptom: what the user or agent observed
-- Root cause: why it happened
-- Fix: what was changed
-- Verified: yes/no
+## 2026-08-07 CSRF Proxy Issue
+- Symptom: `Invalid Server Actions request. x-forwarded-host header ... does not match origin`
+- Root cause: Next.js CSRF protection rejecting proxied requests from Codespaces.
+- Fix: Add `serverActions: { allowedOrigins: ["*.github.dev", "*.app.github.dev"] }` to `next.config.ts`.
+- Verified: yes

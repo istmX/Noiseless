@@ -1,21 +1,50 @@
 "use client";
 
-import { useActionState } from "react";
-import { loginAction } from "../actions";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { Label } from "@/shared/components/ui/label";
 import Link from "next/link";
-import { REGISTER_ROUTE } from "../constants";
+import { useRouter } from "next/navigation";
+import { REGISTER_ROUTE, DASHBOARD_ROUTE } from "../constants";
 
 export function LoginForm() {
-  const [state, formAction, isPending] = useActionState(loginAction, { error: null, success: false });
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsPending(true);
+    setError(null);
+
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData);
+
+    try {
+      const res = await signIn("credentials", {
+        ...data,
+        redirect: false,
+      });
+
+      if (res?.error) {
+        setError("Invalid email or password.");
+      } else {
+        router.push(DASHBOARD_ROUTE);
+      }
+    } catch (err) {
+      setError("An unexpected error occurred.");
+    } finally {
+      setIsPending(false);
+    }
+  };
 
   return (
-    <form action={formAction} className="flex flex-col gap-5">
-      {state?.error && (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      {error && (
         <div className="bg-danger-soft text-danger p-3 rounded-md text-sm font-data">
-          {state.error}
+          {error}
         </div>
       )}
       
@@ -38,7 +67,7 @@ export function LoginForm() {
           <Label htmlFor="password" className="font-sans text-ink text-label">
             Password
           </Label>
-          <Link href="/forgot-password" className="font-sans text-label text-ink-muted hover:text-ink transition-colors">
+          <Link href="#" className="font-data text-body-sm text-primary hover:text-primary-hover transition-colors">
             Forgot password?
           </Link>
         </div>
@@ -61,9 +90,9 @@ export function LoginForm() {
       </Button>
       
       <div className="font-data text-body-sm text-center text-ink-muted mt-2">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link href={REGISTER_ROUTE} className="text-ink font-medium hover:underline underline-offset-4 transition-all">
-          Sign up
+          Create one
         </Link>
       </div>
     </form>

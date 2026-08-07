@@ -30,7 +30,7 @@ export async function loginAction(
 }
 
 export async function registerAction(
-  prevState: any,
+  prevState: unknown,
   formData: FormData
 ) {
   const email = formData.get("email") as string;

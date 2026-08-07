@@ -1,29 +1,63 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
-import { registerAction } from "../actions";
+import { useState } from "react";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { Label } from "@/shared/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LOGIN_ROUTE } from "../constants";
+import { signIn } from "next-auth/react";
+import { DASHBOARD_ROUTE } from "../constants";
 
 export function RegisterForm() {
   const router = useRouter();
-  const [state, formAction, isPending] = useActionState(registerAction, { error: null, success: false, redirect: false });
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(false);
 
-  useEffect(() => {
-    if (state?.redirect) {
-      router.push(LOGIN_ROUTE);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsPending(true);
+    setError(null);
+
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData);
+
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        setError(result.error || "Registration failed");
+      } else {
+        const signInRes = await signIn("credentials", {
+          email: data.email,
+          password: data.password,
+          redirect: false,
+        });
+        
+        if (signInRes?.error) {
+          setError("Registration successful, but auto-login failed. Please sign in.");
+        } else {
+          router.push(DASHBOARD_ROUTE);
+        }
+      }
+    } catch (err) {
+      setError("An unexpected error occurred.");
+    } finally {
+      setIsPending(false);
     }
-  }, [state, router]);
+  };
 
   return (
-    <form action={formAction} className="flex flex-col gap-5">
-      {state?.error && (
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      {error && (
         <div className="bg-danger-soft text-danger p-3 rounded-md text-sm font-data">
-          {state.error}
+          {error}
         </div>
       )}
       
@@ -80,7 +114,7 @@ export function RegisterForm() {
       
       <div className="font-data text-body-sm text-center text-ink-muted mt-2">
         Already have an account?{" "}
-        <Link href={LOGIN_ROUTE} className="text-ink font-medium hover:underline underline-offset-4 transition-all">
+        <Link href="/login" className="text-ink font-medium hover:underline underline-offset-4 transition-all">
           Sign in
         </Link>
       </div>

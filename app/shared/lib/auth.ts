@@ -1,8 +1,8 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { LoginSchema } from "@/app/(auth)/types";
-// In a full implementation, we will query Neon Postgres here.
-// For now, we mock the user check as per the slice build approach.
+import { prisma } from "./db";
+import bcrypt from "bcryptjs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -15,8 +15,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const parsed = LoginSchema.safeParse(credentials);
         if (!parsed.success) return null;
 
-        const { prisma } = await import("./db");
-        const bcrypt = await import("bcryptjs");
 
         const user = await prisma.user.findUnique({
           where: { email: parsed.data.email },

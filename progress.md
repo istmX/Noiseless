@@ -14,6 +14,7 @@
 - Implemented secure JWT-based Auth (Login/Signup) with `bcryptjs`.
 - Added global Theme Toggle logic to Root Layout.
 - Integrated `image.png` global logo into authentication flows.
+- Fixed Next.js Server Actions CSRF issue for Codespaces proxies.
 
 ### Pending
 - Scaffold FastAPI service at /workspaces/Noiseless/services/api/.
