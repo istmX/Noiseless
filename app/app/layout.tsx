@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/shared/components/ThemeProvider";
+import { auth } from "@/shared/lib/auth";
+import { AuthProvider } from "@/shared/components/AuthProvider";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -22,11 +24,13 @@ export const metadata: Metadata = {
 
 import { ThemeToggle } from "@/shared/components/ThemeToggle";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html
       lang="en"
@@ -43,7 +47,9 @@ export default function RootLayout({
           <div className="absolute top-4 right-4 z-50">
             <ThemeToggle />
           </div>
-          {children}
+          <AuthProvider isLoggedIn={!!session?.user}>
+            {children}
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

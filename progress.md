@@ -15,11 +15,14 @@
 - Added global Theme Toggle logic to Root Layout.
 - Integrated `image.png` global logo into authentication flows.
 - Fixed Next.js Server Actions CSRF issue for Codespaces proxies.
+- Implemented NextAuth.js auth routes.
+- Added Zustand store for client-side session state management to prevent UI flickering.
+- Configured Next 16 `proxy.ts` to secure private dashboard routes.
+- Implemented automatic login redirect after user registration.
 
 ### Pending
 - Scaffold FastAPI service at /workspaces/Noiseless/services/api/.
 - Install LangChain dependencies: langchain langchain-groq langchain-community langchain-qdrant.
-- [x] Implement NextAuth.js auth routes.
 - Implement Watch CRUD (FastAPI + Next.js).
 - Implement Agent Pipeline (pipeline.py).
 - Implement APScheduler jobs.
