@@ -1,0 +1,21 @@
+{
+  "No": "192",
+  "Product Type": "Ticketing / Box Office",
+  "Primary": "#0F172A",
+  "On Primary": "#FFFFFF",
+  "Secondary": "#1E293B",
+  "On Secondary": "#FFFFFF",
+  "Accent": "#16A34A",
+  "On Accent": "#0F172A",
+  "Background": "#020617",
+  "Foreground": "#F8FAFC",
+  "Card": "#0E1223",
+  "Card Foreground": "#F8FAFC",
+  "Muted": "#1A1E2F",
+  "Muted Foreground": "#94A3B8",
+  "Border": "#334155",
+  "Destructive": "#DC2626",
+  "On Destructive": "#FFFFFF",
+  "Ring": "#0F172A",
+  "Notes": "Event theme colors + available green + sold-out red"
+}

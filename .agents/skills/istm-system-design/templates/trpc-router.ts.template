@@ -1,0 +1,22 @@
+// import { z } from 'zod';
+// import { router, publicProcedure, protectedProcedure } from '{TRPC_CONFIG_PATH}';
+// import { CreateUserSchema } from '{SCHEMA_IMPORT_PATH}';
+
+export const {ROUTER_NAME}Router = router({
+  
+  // Example Query
+  getAll: publicProcedure.query(async ({ ctx }) => {
+    // return ctx.db.user.findMany();
+    return [];
+  }),
+
+  // Example Mutation with Zod Validation
+  create: protectedProcedure
+    .input(/* CreateUserSchema */)
+    .mutation(async ({ ctx, input }) => {
+      // return ctx.db.user.create({ data: input });
+      return { success: true };
+    }),
+    
+  // {ADDITIONAL_PROCEDURES}
+});

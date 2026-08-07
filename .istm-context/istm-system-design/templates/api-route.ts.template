@@ -1,0 +1,32 @@
+import { NextResponse } from 'next/server';
+// import { CreateUserSchema } from '{SCHEMA_IMPORT_PATH}';
+// import db from '{DB_IMPORT_PATH}';
+
+export async function GET(request: Request) {
+  try {
+    // {GET_LOGIC}
+    return NextResponse.json({ message: 'Success' });
+  } catch (error) {
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    
+    // 1. Validate payload
+    // const validatedData = CreateUserSchema.parse(body);
+    
+    // 2. Execute DB mutation
+    // {POST_LOGIC}
+    
+    return NextResponse.json({ success: true }, { status: 201 });
+  } catch (error) {
+    // Handle Zod validation errors gracefully
+    if (error && typeof error === 'object' && 'name' in error && error.name === 'ZodError') {
+      return NextResponse.json({ error: 'Validation failed', details: error }, { status: 400 });
+    }
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+  }
+}

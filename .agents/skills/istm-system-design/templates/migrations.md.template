@@ -1,0 +1,30 @@
+# Database Migration Workflow
+
+This document outlines the strict protocol for evolving the `{DB_PROVIDER}` database safely.
+
+## 1. Schema Changes
+All schema mutations MUST occur in: `{SCHEMA_FILE_PATH}`
+Do not manually execute DDL statements against the database.
+
+## 2. Generating Migrations
+When the schema is modified, run the following command to generate the migration file:
+\`\`\`bash
+{GENERATE_COMMAND}
+\`\`\`
+
+## 3. Applying Migrations
+To apply the migration to your local/development database:
+\`\`\`bash
+{APPLY_COMMAND}
+\`\`\`
+
+## 4. CI/CD Enforcement
+- Migrations MUST be committed to version control.
+- In production, migrations are applied via the CI/CD pipeline using `{PROD_APPLY_COMMAND}` before the new application code is deployed.
+- Never run migrations manually against production.
+
+## 5. Seed Data
+If baseline data is required (e.g. default roles, admin users), maintain the seed script in `{SEED_FILE_PATH}` and run:
+\`\`\`bash
+{SEED_COMMAND}
+\`\`\`

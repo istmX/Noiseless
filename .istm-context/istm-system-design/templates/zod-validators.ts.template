@@ -1,0 +1,14 @@
+import { z } from 'zod';
+
+// This is a dynamic Zod validation template for @istmx/skills
+// Validates incoming API payloads to ensure end-to-end type safety.
+
+export const CreateUserSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  name: z.string().min(2, "Name must be at least 2 characters").optional(),
+});
+
+// {ADDITIONAL_SCHEMAS}
+
+export type CreateUserInput = z.infer<typeof CreateUserSchema>;
+// {ADDITIONAL_TYPES}
