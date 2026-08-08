@@ -63,83 +63,43 @@ uses a curated trio of fonts instead of Geist, and adapts the structural tokens 
 
 ## Color Tokens
 
-### Dark Mode (default)
+### Exclusive Light Grey Theme
 
 ```css
-:root[data-theme="dark"] {
+:root {
 /* Canvas and surfaces */
---color-canvas:           #0A0A0A;   /* page background */
---color-surface:          #111111;   /* card and panel background */
---color-surface-elevated: #1A1A1A;   /* modals, tooltips, dropdowns */
---color-surface-inset:    #0D0D0D;   /* recessed input backgrounds */
+--color-canvas:           #F4F4F5;   /* Zinc 100 - Clean light grey */
+--color-surface:          #FFFFFF;   /* Pure white for cards */
+--color-surface-elevated: #FFFFFF;
+--color-surface-inset:    #FAFAFA;   /* Very subtle inset */
 
 /* Borders */
---color-hairline:         #1F1F1F;   /* all card borders, dividers, input borders */
---color-hairline-strong:  #2A2A2A;   /* focused input borders, selected card outlines */
-
-/* Text (ink ladder) */
---color-ink:              #FAFAFA;   /* primary headings, high emphasis */
---color-ink-body:         #A1A1A1;   /* standard body copy, nav links */
---color-ink-muted:        #6B6B6B;   /* secondary metadata, timestamps */
---color-ink-faint:        #3A3A3A;   /* disabled, placeholder text */
-
-/* Brand accent (Vercel blue, dark-mode calibrated) */
---color-primary:          #0070F3;   /* buttons, active nav, focus rings */
---color-primary-hover:    #338EF7;   /* lighter on hover */
---color-primary-press:    #0761D1;   /* darker on active/press */
---color-primary-soft:     #0070F314; /* 8% opacity wash — focus halos, selected rows */
---color-on-primary:       #FFFFFF;   /* text on primary button */
-
-/* Semantic state colors */
---color-success:          #10B981;   /* significance score 7-10, active status */
---color-success-soft:     #10B98114; /* success wash */
---color-warning:          #F59E0B;   /* significance score 4-6, paused status */
---color-warning-soft:     #F59E0B14; /* warning wash */
---color-danger:           #EF4444;   /* significance score 1-3, delete actions */
---color-danger-soft:      #EF444414; /* danger wash */
-
-/* Agent running pulse */
---color-pulse:            #0070F3;   /* CSS keyframe animation on status dot */
-}
-```
-
-### Light Mode
-
-```css
-:root[data-theme="light"] {
-/* Canvas and surfaces */
---color-canvas:           #FAFAFA;   /* Vercel near-white */
---color-surface:          #FFFFFF;   /* card and panel background */
---color-surface-elevated: #FFFFFF;   /* modals lifted via shadow */
---color-surface-inset:    #F2F2F2;   /* recessed input backgrounds */
-
-/* Borders */
---color-hairline:         #EBEBEB;   /* Vercel hairline — all card borders */
---color-hairline-strong:  #D4D4D4;   /* focused states */
+--color-hairline:         #E4E4E7;   /* Zinc 200 */
+--color-hairline-strong:  #D4D4D8;   /* Zinc 300 */
 
 /* Text */
---color-ink:              #171717;   /* primary — Vercel ink */
---color-ink-body:         #4D4D4D;   /* standard body copy */
---color-ink-muted:        #8F8F8F;   /* secondary metadata */
---color-ink-faint:        #A1A1A1;   /* disabled, placeholder */
+--color-ink:              #18181B;   /* Zinc 900 - Near black */
+--color-ink-body:         #3F3F46;   /* Zinc 700 */
+--color-ink-muted:        #71717A;   /* Zinc 500 */
+--color-ink-faint:        #A1A1AA;   /* Zinc 400 */
 
 /* Brand accent */
---color-primary:          #0070F3;
---color-primary-hover:    #0761D1;
---color-primary-press:    #054CA1;
---color-primary-soft:     #0070F314;
+--color-primary:          #4F46E5;
+--color-primary-hover:    #4338CA;
+--color-primary-press:    #3730A3;
+--color-primary-soft:     #4F46E514;
 --color-on-primary:       #FFFFFF;
 
 /* Semantic */
---color-success:          #0D9367;
---color-success-soft:     #0D936714;
+--color-success:          #059669;
+--color-success-soft:     #05966914;
 --color-warning:          #D97706;
 --color-warning-soft:     #D9770614;
 --color-danger:           #DC2626;
 --color-danger-soft:      #DC262614;
 
 /* Agent pulse */
---color-pulse:            #0070F3;
+--color-pulse:            #4F46E5;
 }
 ```
 
@@ -151,15 +111,14 @@ Three fonts work together as a system. Each has one job.
 
 | Font | Role | Google Fonts import |
 |---|---|---|
-| **Playfair Display** | Display: page H1 titles only. Gives editorial, premium gravitas to major headings. | `family=Playfair+Display:wght@600;700` |
-| **Space Grotesk** | UI Sans: navigation, card topic names, badges, chips, buttons, form labels. Geometric and techy. | `family=Space+Grotesk:wght@400;500;600` |
-| **Inter** | Data Sans: body copy, metadata, timestamps, form inputs, secondary text. Screen-optimised at small sizes. | `family=Inter:wght@400;500` |
+| **Newsreader** | Display: page H1 titles only. Gives editorial, premium gravitas to major headings. | `family=Newsreader:wght@400;500;600` |
+| **Inter** | UI and Data Sans: navigation, card topic names, badges, chips, buttons, form labels, body copy. | `family=Inter:wght@400;500;600` |
 | **JetBrains Mono** | Monospace: significance scores, timestamps, IDs, URLs, any numeric readout that needs alignment. | `family=JetBrains+Mono:wght@400` |
 
 ```css
 :root {
---font-display:  "Playfair Display", Georgia, serif;
---font-sans:     "Space Grotesk", "Inter", system-ui, sans-serif;
+--font-display:  "Newsreader", Georgia, serif;
+--font-sans:     "Inter", system-ui, sans-serif;
 --font-data:     "Inter", system-ui, sans-serif;
 --font-mono:     "JetBrains Mono", "Courier New", monospace;
 }

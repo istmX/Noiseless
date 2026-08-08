@@ -1,93 +1,43 @@
 @import "tailwindcss";
 
-/* 1. Default (Dark mode by default based on your tokens) */
+/* 1. Light Grey Theme (Exclusive) */
 :root {
   /* Canvas and surfaces */
-  --color-canvas:           #0A0A0A;
-  --color-surface:          #111111;
-  --color-surface-elevated: #1A1A1A;
-  --color-surface-inset:    #0D0D0D;
+  --color-canvas:           #F4F4F5;   /* Zinc 100 - Clean light grey */
+  --color-surface:          #FFFFFF;   /* Pure white for cards */
+  --color-surface-elevated: #FFFFFF;
+  --color-surface-inset:    #FAFAFA;   /* Very subtle inset */
 
   /* Borders */
-  --color-hairline:         #1F1F1F;
-  --color-hairline-strong:  #2A2A2A;
+  --color-hairline:         #E4E4E7;   /* Zinc 200 */
+  --color-hairline-strong:  #D4D4D8;   /* Zinc 300 */
 
   /* Text (ink ladder) */
-  --color-ink:              #FAFAFA;
-  --color-ink-body:         #A1A1A1;
-  --color-ink-muted:        #6B6B6B;
-  --color-ink-faint:        #3A3A3A;
+  --color-ink:              #18181B;   /* Zinc 900 - Near black */
+  --color-ink-body:         #3F3F46;   /* Zinc 700 */
+  --color-ink-muted:        #71717A;   /* Zinc 500 */
+  --color-ink-faint:        #A1A1AA;   /* Zinc 400 */
 
-  /* Brand accent */
-  --color-primary:          #0070F3;
-  --color-primary-hover:    #338EF7;
-  --color-primary-press:    #0761D1;
-  --color-primary-soft:     #0070F314;
+  /* Brand accent (Deep Indigo) */
+  --color-primary:          #4F46E5;
+  --color-primary-hover:    #4338CA;
+  --color-primary-press:    #3730A3;
+  --color-primary-soft:     #4F46E514;
   --color-on-primary:       #FFFFFF;
 
   /* Semantic state colors */
-  --color-success:          #10B981;
-  --color-success-soft:     #10B98114;
-  --color-warning:          #F59E0B;
-  --color-warning-soft:     #F59E0B14;
-  --color-danger:           #EF4444;
-  --color-danger-soft:      #EF444414;
-  --color-pulse:            #0070F3;
-}
-
-/* 2. Dark mode tokens */
-[data-theme="dark"] {
-  --color-canvas:           #0A0A0A;
-  --color-surface:          #111111;
-  --color-surface-elevated: #1A1A1A;
-  --color-surface-inset:    #0D0D0D;
-  --color-hairline:         #1F1F1F;
-  --color-hairline-strong:  #2A2A2A;
-  --color-ink:              #FAFAFA;
-  --color-ink-body:         #A1A1A1;
-  --color-ink-muted:        #6B6B6B;
-  --color-ink-faint:        #3A3A3A;
-  --color-primary:          #0070F3;
-  --color-primary-hover:    #338EF7;
-  --color-primary-press:    #0761D1;
-  --color-primary-soft:     #0070F314;
-  --color-on-primary:       #FFFFFF;
-  --color-success:          #10B981;
-  --color-success-soft:     #10B98114;
-  --color-warning:          #F59E0B;
-  --color-warning-soft:     #F59E0B14;
-  --color-danger:           #EF4444;
-  --color-danger-soft:      #EF444414;
-  --color-pulse:            #0070F3;
-}
-
-/* 3. Light mode tokens */
-[data-theme="light"] {
-  --color-canvas:           #FAFAFA;
-  --color-surface:          #FFFFFF;
-  --color-surface-elevated: #FFFFFF;
-  --color-surface-inset:    #F2F2F2;
-  --color-hairline:         #EBEBEB;
-  --color-hairline-strong:  #D4D4D4;
-  --color-ink:              #171717;
-  --color-ink-body:         #4D4D4D;
-  --color-ink-muted:        #8F8F8F;
-  --color-ink-faint:        #A1A1A1;
-  --color-primary:          #0070F3;
-  --color-primary-hover:    #0761D1;
-  --color-primary-press:    #054CA1;
-  --color-primary-soft:     #0070F314;
-  --color-on-primary:       #FFFFFF;
-  --color-success:          #0D9367;
-  --color-success-soft:     #0D936714;
+  --color-success:          #059669;
+  --color-success-soft:     #05966914;
   --color-warning:          #D97706;
   --color-warning-soft:     #D9770614;
   --color-danger:           #DC2626;
   --color-danger-soft:      #DC262614;
-  --color-pulse:            #0070F3;
+  
+  /* Agent running pulse */
+  --color-pulse:            #4F46E5;
 }
 
-/* 4. Theme registration for Tailwind utilities */
+/* 2. Theme registration for Tailwind utilities */
 @theme inline {
   /* Shadcn-style system defaults */
   --color-background:         var(--color-canvas);
