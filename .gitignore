@@ -1,0 +1,27 @@
+# Python virtual environment and caching
+backend/.venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+backend/.env
+
+# Node and Next.js
+node_modules/
+app/node_modules/
+.next/
+app/.next/
+out/
+app/out/
+build/
+dist/
