@@ -36,12 +36,17 @@
 - Added resilient multi tier fallback in `createWatch` server action to guarantee watch creation across dev/demo/DB modes.
 - Verified TypeScript compilation (`npx tsc --noEmit`) with 0 errors.
 
-- Scaffold FastAPI service at `/workspaces/Noiseless/services/api/`.
+- Scaffold FastAPI service at `/workspaces/Noiseless/backend/`.
 - Install dependencies including `langchain`, `langchain-groq`, and `qdrant-client`.
 - Implement Watch CRUD FastAPI routes.
-- Implement Agent Pipeline (`pipeline.py`) integrated with Groq embeddings.
+- Implement Agent Pipeline (`pipeline.py`) integrated with Groq scoring and digests.
+- Setup deterministic hash-based local embeddings to run without heavy PyTorch installation.
+- Resolved asyncpg database connection string parameters compatibility for Neon Postgres.
+- Reorganized folder layout to flatten `backend/` and configured root `.gitignore`.
 - Implement APScheduler jobs for background intelligence tasks.
 - Implement Notifications (Brevo and Slack Webhooks).
+- Verified full agent pipeline flow successfully creating findings/digests and sending Slack alerts.
+- Created 20 git commits to track the backend codebase changes.
 
 ### Pending
 
