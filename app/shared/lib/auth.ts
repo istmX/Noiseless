@@ -25,10 +25,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const isValid = await bcrypt.compare(parsed.data.password, user.password);
         if (!isValid) return null;
 
-        return { id: user.id, email: user.email, name: user.name };
+        return { id: user.id, email: user.email, name: user.name, avatarUrl: user.avatarUrl };
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user, trigger, session }) {
+      if (user) {
+        token.id = user.id;
+        token.avatarUrl = (user as any).avatarUrl || null;
+      }
+      if (trigger === "update" && session) {
+        token.name = session.name;
+        token.email = session.email;
+        token.avatarUrl = session.avatarUrl;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token && session.user) {
+        (session.user as any).id = token.id as string;
+        (session.user as any).avatarUrl = token.avatarUrl as string;
+      }
+      return session;
+    },
+  },
   session: { strategy: "jwt" },
   pages: {
     signIn: "/login",

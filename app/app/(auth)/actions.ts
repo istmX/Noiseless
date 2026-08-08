@@ -1,7 +1,8 @@
 "use server";
 
-import { signIn } from "@/shared/lib/auth";
+import { signIn, signOut } from "@/shared/lib/auth";
 import { AuthError } from "next-auth";
+import { cookies } from "next/headers";
 import { DASHBOARD_ROUTE } from "./constants";
 import { prisma } from "@/shared/lib/db";
 import bcrypt from "bcryptjs";
@@ -49,11 +50,15 @@ export async function registerAction(
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
+    const avatarSeed = Math.random().toString(36).substring(7);
+    const avatarUrl = `https://api.dicebear.com/7.x/identicon/svg?seed=${avatarSeed}`;
+
     await prisma.user.create({
       data: {
         email,
         name,
         password: hashedPassword,
+        avatarUrl,
       },
     });
 
@@ -62,4 +67,27 @@ export async function registerAction(
     console.error("Registration error:", error);
     return { error: "Registration failed." };
   }
+}
+
+export async function serverLogoutAction() {
+  try {
+    const cookieStore = await cookies();
+    const cookieNames = [
+      "authjs.session-token",
+      "__Secure-authjs.session-token",
+      "next-auth.session-token",
+      "__Secure-next-auth.session-token",
+      "authjs.csrf-token",
+      "__Secure-authjs.csrf-token",
+      "authjs.callback-url",
+      "__Secure-authjs.callback-url",
+    ];
+    for (const name of cookieNames) {
+      cookieStore.delete(name);
+    }
+  } catch (e) {
+    console.error("Failed to delete cookies:", e);
+  }
+  
+  await signOut({ redirectTo: "/login" });
 }

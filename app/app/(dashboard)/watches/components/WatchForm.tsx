@@ -159,7 +159,7 @@ export function WatchForm({ onSuccess }: WatchFormProps) {
         <div className="space-y-5">
           <div className="space-y-3">
             <Label htmlFor="email" className="text-body-sm font-medium text-ink flex items-center gap-2">
-              Email Address <span className="px-1.5 py-0.5 bg-surface-inset border border-hairline rounded text-[10px] text-ink-faint">Optional</span>
+              Email Address <span className="px-1.5 py-0.5 bg-surface-inset border border-hairline rounded-md text-[10px] text-ink-faint">Optional</span>
             </Label>
             <Input 
               id="email" 
@@ -172,7 +172,7 @@ export function WatchForm({ onSuccess }: WatchFormProps) {
 
           <div className="space-y-3">
             <Label htmlFor="slack" className="text-body-sm font-medium text-ink flex items-center gap-2">
-              Slack Webhook <span className="px-1.5 py-0.5 bg-surface-inset border border-hairline rounded text-[10px] text-ink-faint">Optional</span>
+              Slack Webhook <span className="px-1.5 py-0.5 bg-surface-inset border border-hairline rounded-md text-[10px] text-ink-faint">Optional</span>
             </Label>
             <Input 
               id="slack" 
@@ -185,9 +185,8 @@ export function WatchForm({ onSuccess }: WatchFormProps) {
         </div>
       </div>
 
-      {/* FOOTER ACTIONS */}
       <div className="pt-8 border-t border-hairline/50 flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-6 sticky bottom-0 bg-surface-elevated pb-2 z-10">
-        <div className="flex items-center gap-3 bg-surface-inset/50 px-3 py-2 rounded-lg border border-hairline/50">
+        <div className="flex items-center gap-3 bg-surface-inset/50 px-4 py-2 rounded-md border border-hairline/50">
           <Switch 
             id="active" 
             checked={form.watch("active")}
@@ -201,7 +200,7 @@ export function WatchForm({ onSuccess }: WatchFormProps) {
           <Button
             type="button"
             variant="ghost"
-            className="flex-1 sm:flex-none font-sans text-ink-muted hover:text-ink hover:bg-surface-inset rounded-lg h-11 px-6 cursor-pointer transition-colors"
+            className="flex-1 sm:flex-none font-sans text-ink-muted hover:text-ink hover:bg-surface-inset rounded-full h-11 px-6 cursor-pointer transition-colors"
             onClick={() => { if (onSuccess) onSuccess(); }}
           >
             Cancel
@@ -209,7 +208,7 @@ export function WatchForm({ onSuccess }: WatchFormProps) {
           <Button
             type="submit"
             disabled={form.formState.isSubmitting}
-            className="flex-1 sm:flex-none bg-primary hover:bg-primary-hover text-on-primary font-sans font-medium rounded-lg h-11 px-8 shadow-md cursor-pointer transition-all"
+            className="flex-1 sm:flex-none bg-primary hover:bg-primary-hover text-on-primary font-sans font-medium rounded-full h-11 px-8 shadow-md cursor-pointer transition-all"
           >
             {form.formState.isSubmitting && <Loader2 className="mr-2 w-4 h-4 animate-spin" />}
             Save Watch

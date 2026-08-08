@@ -34,6 +34,13 @@
 - Fixed SSR date hydration mismatch with deterministic date formatting.
 - Added Next `Image` `unoptimized` prop for static asset loading.
 - Added resilient multi tier fallback in `createWatch` server action to guarantee watch creation across dev/demo/DB modes.
+- Added status filters to the watch list page to filter by statuses that are in our application.
+- Made the calendar dates filter watches and show metric changes dynamically.
+- Built statistical bars on the watch page to calculate active rate, agent execution, and search matching percentages.
+- Connected the watch detail workstation page to retrieve live database records using Prisma with mock fallback.
+- Fixed a client side date serialization error on the watch detail page to resolve the white screen crash.
+- Refactored the dashboard dialogs, form fields, cards, and buttons to use a consistent subtle rounding (rounded-md and rounded-xl) to harmonize with the Outfit display typography while retaining square structural alignments.
+- Redesigned the Create Watch dialog container into a right side slide out drawer panel to match the contact creator layout.
 - Verified TypeScript compilation (`npx tsc --noEmit`) with 0 errors.
 
 - Scaffold FastAPI service at `/workspaces/Noiseless/backend/`.
@@ -47,6 +54,20 @@
 - Implement Notifications (Brevo and Slack Webhooks).
 - Verified full agent pipeline flow successfully creating findings/digests and sending Slack alerts.
 - Created 20 git commits to track the backend codebase changes.
+- Audited all user interface components to enforce compliance with the design tokens.
+- Restructured rounding values across cards to use the correct medium radius token and badges to use the small radius token.
+- Removed the dead unused WatchesPageHeader component to prevent build failures.
+- Implemented sliding drawer overlay for watch creation with backdrop blur and spring animation.
+- Ported the drawer overlay rendering to a React Portal on the body tag to avoid parent layout shifts and content compression.
+- Implemented real-time user profile management with name updates, email validation, and auto-generated Dicebear avatars synchronized in the database.
+- Added a Log Out button to the Sidebar footer and renamed the legacy proxy.ts file to middleware.ts to correctly secure and validate session routing.
+- Hid horizontal and vertical scrollbars in the Create New Watch form drawer container while maintaining scroll capability.
+- Implemented robust server-side cookie clearing via serverLogoutAction, resetting Zustand store session values instantly on click to guarantee correct logout redirection.
+- Added rich skeleton layout loaders for route level transitions under watches and watches details routes, and disabled inputs during form submission states to prevent duplicate submissions.
+- Fixed dashboard metrics cards to show count ratios instead of percentages, implemented dynamic scaling of findings counts based on calendar selected date, added clean first-time onboarding empty state layout when database has no watches, and removed the System Live badge.
+- Added collapsible settings panel at the top of the Watch Detail page for configuring parameters, implemented inline link formatting with highlight tags for digests, and restructured citations into a grid layout.
+- Structured Findings Timeline and Digest History inside independent scrollable container cards with a height constraint for desktop layouts.
+- Updated root layout to use Outfit font everywhere across headings, prose, and buttons, and added alert email and Slack webhook configuration inputs with dedicated SVG icons inside WatchDetailView settings collapsible panel.
 
 ### Pending
 

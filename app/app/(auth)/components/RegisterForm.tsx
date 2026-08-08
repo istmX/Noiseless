@@ -43,7 +43,7 @@ export function RegisterForm() {
         if (signInRes?.error) {
           setError("Registration successful, but auto-login failed. Please sign in.");
         } else {
-          router.push(DASHBOARD_ROUTE);
+          window.location.href = DASHBOARD_ROUTE;
         }
       }
     } catch (err) {
@@ -71,6 +71,7 @@ export function RegisterForm() {
           type="text" 
           placeholder="John Doe" 
           required 
+          disabled={isPending}
           className="font-data bg-surface-inset border-hairline focus-visible:ring-1 focus-visible:ring-primary-soft focus-visible:border-primary h-11"
         />
       </div>
@@ -85,6 +86,7 @@ export function RegisterForm() {
           type="email" 
           placeholder="m@example.com" 
           required 
+          disabled={isPending}
           className="font-data bg-surface-inset border-hairline focus-visible:ring-1 focus-visible:ring-primary-soft focus-visible:border-primary h-11"
         />
       </div>
@@ -100,6 +102,7 @@ export function RegisterForm() {
           placeholder="••••••••" 
           required 
           minLength={8}
+          disabled={isPending}
           className="font-data bg-surface-inset border-hairline focus-visible:ring-1 focus-visible:ring-primary-soft focus-visible:border-primary h-11"
         />
       </div>

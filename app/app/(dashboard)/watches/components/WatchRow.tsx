@@ -16,20 +16,20 @@ export function WatchRow({ watch, onSelect }: WatchRowProps) {
   const isPaused = !watch.active;
   
   let StatusBadge = (
-    <span className="px-2 py-0.5 rounded text-xs font-mono tracking-wider bg-surface-inset text-ink border border-hairline uppercase font-medium shrink-0">
+    <span className="px-2 py-0.5 rounded-sm text-xs font-mono tracking-wider bg-surface-inset text-ink border border-hairline uppercase font-medium shrink-0">
       MONITORING
     </span>
   );
   
   if (isRunning) {
     StatusBadge = (
-      <span className="px-2 py-0.5 rounded text-xs font-mono tracking-wider bg-primary-soft text-primary border border-primary/20 uppercase font-medium animate-pulse shrink-0">
+      <span className="px-2 py-0.5 rounded-sm text-xs font-mono tracking-wider bg-primary-soft text-primary border border-primary/20 uppercase font-medium animate-pulse shrink-0">
         AGENT ACTIVE
       </span>
     );
   } else if (isPaused) {
     StatusBadge = (
-      <span className="px-2 py-0.5 rounded text-xs font-mono tracking-wider bg-surface-inset text-ink-faint border border-hairline uppercase font-medium shrink-0">
+      <span className="px-2 py-0.5 rounded-sm text-xs font-mono tracking-wider bg-surface-inset text-ink-faint border border-hairline uppercase font-medium shrink-0">
         PAUSED
       </span>
     );
@@ -74,7 +74,7 @@ export function WatchRow({ watch, onSelect }: WatchRowProps) {
       </div>
       
       <div className="hidden md:flex col-span-1 items-center justify-end gap-2">
-        <span className="font-mono text-xs font-medium text-ink bg-surface-inset px-2.5 py-1 border border-hairline rounded">
+        <span className="font-mono text-xs font-medium text-ink bg-surface-inset px-2.5 py-1 border border-hairline rounded-sm">
           {watch._count?.findings || 0}
         </span>
         <ChevronRight className="w-4 h-4 text-ink-faint group-hover:text-ink group-hover:translate-x-0.5 transition-all" />

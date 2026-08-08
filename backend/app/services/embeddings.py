@@ -9,7 +9,7 @@ class EmbeddingService:
         without PyTorch or external API key restrictions.
         """
         vector = []
-        # Generate 768 floats deterministically
+     
         for i in range(768):
             h = hashlib.sha256(f"{text}_{i}".encode("utf-8")).hexdigest()
             # Convert first 8 hex characters to a float normalized between -1.0 and 1.0

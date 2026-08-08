@@ -4,7 +4,7 @@ export interface Digest {
   summary: string;
   citations: string[];
   triggerScore: number;
-  createdAt: Date;
+  createdAt: string;
   deliveredEmail: boolean;
   deliveredSlack: boolean;
 }

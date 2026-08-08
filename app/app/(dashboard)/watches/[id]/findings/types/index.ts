@@ -5,7 +5,7 @@ export interface Finding {
   url: string;
   summary: string;
   significanceScore: number;
-  publishedAt: Date;
-  createdAt: Date;
+  publishedAt: string;
+  createdAt: string;
   category: string;
 }

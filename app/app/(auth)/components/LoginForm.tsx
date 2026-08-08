@@ -31,7 +31,7 @@ export function LoginForm() {
       if (res?.error) {
         setError("Invalid email or password.");
       } else {
-        router.push(DASHBOARD_ROUTE);
+        window.location.href = DASHBOARD_ROUTE;
       }
     } catch (err) {
       setError("An unexpected error occurred.");
@@ -58,6 +58,7 @@ export function LoginForm() {
           type="email" 
           placeholder="m@example.com" 
           required 
+          disabled={isPending}
           className="font-data bg-surface-inset border-hairline focus-visible:ring-1 focus-visible:ring-primary-soft focus-visible:border-primary h-11"
         />
       </div>
@@ -77,6 +78,7 @@ export function LoginForm() {
           type="password"
           placeholder="••••••••" 
           required 
+          disabled={isPending}
           className="font-data bg-surface-inset border-hairline focus-visible:ring-1 focus-visible:ring-primary-soft focus-visible:border-primary h-11"
         />
       </div>

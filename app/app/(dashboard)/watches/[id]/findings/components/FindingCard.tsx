@@ -15,11 +15,11 @@ export function FindingCard({ finding }: FindingCardProps) {
     <motion.div 
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-6 bg-surface border border-hairline rounded-xl shadow-xs hover:border-hairline-strong transition-all flex flex-col gap-3"
+      className="p-6 bg-surface border border-hairline rounded-md shadow-xs hover:border-hairline-strong transition-all flex flex-col gap-3"
     >
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 rounded text-xs font-mono tracking-wider bg-surface-inset text-ink border border-hairline uppercase font-medium">
+          <span className="px-2 py-0.5 rounded-sm text-xs font-mono tracking-wider bg-surface-inset text-ink border border-hairline uppercase font-medium">
             {finding.category}
           </span>
           <div className="flex items-center gap-1 text-xs font-mono text-ink-muted">
@@ -28,7 +28,7 @@ export function FindingCard({ finding }: FindingCardProps) {
           </div>
         </div>
 
-        <div className={`px-2.5 py-0.5 rounded-full text-xs font-mono font-medium border ${
+        <div className={`px-2.5 py-0.5 rounded-sm text-xs font-mono font-medium border ${
           isHighSignificance 
             ? "bg-primary-soft text-primary border-primary/20" 
             : "bg-surface-inset text-ink-muted border-hairline"

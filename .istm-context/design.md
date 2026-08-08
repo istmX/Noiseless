@@ -68,38 +68,40 @@ uses a curated trio of fonts instead of Geist, and adapts the structural tokens 
 ```css
 :root {
 /* Canvas and surfaces */
---color-canvas:           #F4F4F5;   /* Zinc 100 - Clean light grey */
+--color-canvas:           #FFFFFF;   /* Pure white canvas */
 --color-surface:          #FFFFFF;   /* Pure white for cards */
 --color-surface-elevated: #FFFFFF;
---color-surface-inset:    #FAFAFA;   /* Very subtle inset */
+--color-surface-inset:    #F8FAF9;   /* Very subtle mint inset */
+--color-sidebar:          #F4FDF6;   /* Light pastel mint green */
+--color-sidebar-active:   #D2F8D9;   /* Mint green active background */
 
 /* Borders */
---color-hairline:         #E4E4E7;   /* Zinc 200 */
---color-hairline-strong:  #D4D4D8;   /* Zinc 300 */
+--color-hairline:         #E2ECE9;   /* Very soft light mint border */
+--color-hairline-strong:  #C5D3CF;   /* Stronger mint grey border */
 
 /* Text */
---color-ink:              #18181B;   /* Zinc 900 - Near black */
---color-ink-body:         #3F3F46;   /* Zinc 700 */
---color-ink-muted:        #71717A;   /* Zinc 500 */
---color-ink-faint:        #A1A1AA;   /* Zinc 400 */
+--color-ink:              #121212;   /* Charcoal black */
+--color-ink-body:         #3A3F3B;   /* Dark forest grey */
+--color-ink-muted:        #6B726E;   /* Muted grey green */
+--color-ink-faint:        #A2ABA6;   /* Faint grey green */
 
 /* Brand accent */
---color-primary:          #4F46E5;
---color-primary-hover:    #4338CA;
---color-primary-press:    #3730A3;
---color-primary-soft:     #4F46E514;
+--color-primary:          #121212;   /* Charcoal black for primary actions */
+--color-primary-hover:    #262626;
+--color-primary-press:    #000000;
+--color-primary-soft:     #E2ECE9;   /* Soft mint green tint */
 --color-on-primary:       #FFFFFF;
 
 /* Semantic */
---color-success:          #059669;
---color-success-soft:     #05966914;
+--color-success:          #007D5A;   /* Deep forest green */
+--color-success-soft:     #D2F8D9;
 --color-warning:          #D97706;
 --color-warning-soft:     #D9770614;
 --color-danger:           #DC2626;
 --color-danger-soft:      #DC262614;
 
 /* Agent pulse */
---color-pulse:            #4F46E5;
+--color-pulse:            #007D5A;
 }
 ```
 
@@ -117,7 +119,7 @@ Three fonts work together as a system. Each has one job.
 
 ```css
 :root {
---font-display:  "Newsreader", Georgia, serif;
+--font-display:  "Outfit", system-ui, sans-serif;
 --font-sans:     "Inter", system-ui, sans-serif;
 --font-data:     "Inter", system-ui, sans-serif;
 --font-mono:     "JetBrains Mono", "Courier New", monospace;

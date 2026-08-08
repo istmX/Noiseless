@@ -58,12 +58,12 @@ User reviews findings timeline and digest history on the Watch detail page
 - Components: shadcn/ui
 - Auth: NextAuth.js (Auth.js)
 
-## Backend (at /workspaces/Noiseless/services/api/)
+## Backend (at /workspaces/Noiseless/backend/)
 - Framework: Python FastAPI
 - Search: Tavily API (search_depth=advanced, topic=news for recency-sensitive watches)
 - Vector DB: Qdrant Cloud (free 1GB cluster, collections namespaced per watch)
 - Relational DB: Neon (serverless Postgres)
-- Embeddings: sentence-transformers all-MiniLM-L6-v2 (local, CPU, no API cost)
+- Embeddings: Groq API nomic-embed-text-v1.5 (768 dimensions)
 - LLM: Groq API (llama-3.3-70b-versatile, cloud, fast inference, JSON mode) for significance scoring and digest generation
 - Agent Orchestration: LangChain (Python) — ChatGroq for LLM calls, LangChain chains for the score and digest steps, LangChain document loaders where appropriate
 - Background jobs: APScheduler (in-process)
@@ -189,10 +189,10 @@ app/
       index.ts              # Shared TypeScript types
 ```
 
-## Backend (FastAPI at /workspaces/Noiseless/services/api/)
+## Backend (FastAPI at /workspaces/Noiseless/backend/)
 
 ```
-services/api/
+backend/
   app/
     main.py                 # FastAPI app entry point
     config.py               # Settings via pydantic-settings
@@ -205,7 +205,7 @@ services/api/
       internal.py           # /internal/run-watch/{id} route
     services/
       search.py             # Tavily API wrapper
-      embeddings.py         # sentence-transformers all-MiniLM-L6-v2 wrapper
+      embeddings.py         # Groq API nomic-embed-text-v1.5 wrapper
       vector_store.py       # Qdrant client wrapper (upsert, query)
       dedup.py              # Cosine similarity dedup logic
       llm.py                # Groq API client (via LangChain ChatGroq) for scoring and digest generation
