@@ -32,7 +32,7 @@ export function WatchForm({ onSuccess }: WatchFormProps) {
   const onSubmit = async (data: WatchFormValues) => {
     const res = await createWatch(data);
     if (res.error) {
-      toast.error("Error", { description: res.error });
+      toast.error("Unable to save watch", { description: res.error });
       return;
     }
     toast.success("Watch Created", { description: "Your watch has been created and will run soon." });

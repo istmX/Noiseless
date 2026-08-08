@@ -2,7 +2,7 @@ import { WatchFormValues } from "../types";
 
 export const WATCH_POLLING_INTERVAL_MS = 5000;
 
-export const DEFAULT_WATCH_FORM_VALUES: Partial<WatchFormValues> = {
+export const DEFAULT_WATCH_FORM_VALUES: WatchFormValues = {
   topic: "",
   searchQueries: [{ value: "" }],
   frequency: "daily",
@@ -11,3 +11,4 @@ export const DEFAULT_WATCH_FORM_VALUES: Partial<WatchFormValues> = {
   notificationSlackWebhook: "",
   active: true,
 };
+

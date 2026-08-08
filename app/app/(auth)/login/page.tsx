@@ -1,6 +1,6 @@
 import { LoginForm } from "../components/LoginForm";
 import Link from "next/link";
-import Image from "next/image";
+import { Logo } from "@/shared/components/Logo";
 
 export const metadata = {
   title: "Sign In - Autonomous Research Analyst",
@@ -14,17 +14,8 @@ export default function LoginPage() {
       <div className="hidden md:flex md:w-1/2 bg-surface-inset border-r border-hairline p-12 flex-col justify-between relative overflow-hidden">
 
 
-        <div className="relative z-10 flex items-center gap-3">
-          <Image 
-            src="/logos/image.png" 
-            alt="Noiseless Logo" 
-            width={32} 
-            height={32} 
-            className="object-cover"
-          />
-          <span className="font-sans font-semibold text-ink tracking-tight">
-            Noiseless
-          </span>
+        <div className="relative z-10">
+          <Logo size={32} href="/login" />
         </div>
 
         <div className="relative z-10 max-w-md">
@@ -39,7 +30,7 @@ export default function LoginPage() {
 
       {/* Form Section */}
       <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-12 relative">
-        <div className="w-full max-w-[400px] flex flex-col gap-8">
+        <div className="w-full max-w-sm flex flex-col gap-8">
           <div className="flex flex-col gap-2 text-center md:text-left">
             <h2 className="font-sans text-2xl font-semibold text-ink tracking-tight">
               Welcome back

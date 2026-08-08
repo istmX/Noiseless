@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { Search } from "lucide-react";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { Label } from "@/shared/components/ui/label";
 import { LOGIN_ROUTE } from "../constants";
+import { Logo } from "@/shared/components/Logo";
 
 export const metadata = {
   title: "Forgot Password - Autonomous Research Analyst",
@@ -14,16 +14,11 @@ export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen w-full flex flex-col md:flex-row bg-canvas">
       
-      <div className="hidden md:flex md:w-1/2 bg-[#050505] border-r border-hairline p-12 flex-col justify-between relative overflow-hidden">
+      <div className="hidden md:flex md:w-1/2 bg-surface-inset border-r border-hairline p-12 flex-col justify-between relative overflow-hidden">
         <div className="absolute top-[-20%] left-[-10%] w-[120%] h-[50%] bg-primary-soft opacity-20 blur-[100px] rounded-full pointer-events-none" />
 
-        <div className="relative z-10 flex items-center gap-3">
-          <div className="h-8 w-8 rounded-md bg-primary flex items-center justify-center shadow-low">
-            <Search className="w-4 h-4 text-on-primary" strokeWidth={2.5} />
-          </div>
-          <span className="font-sans font-semibold text-ink tracking-tight">
-            Noiseless
-          </span>
+        <div className="relative z-10">
+          <Logo size={32} href="/login" />
         </div>
 
         <div className="relative z-10 max-w-md">

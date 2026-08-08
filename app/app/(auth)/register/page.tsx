@@ -1,6 +1,6 @@
 import { RegisterForm } from "../components/RegisterForm";
 import Link from "next/link";
-import Image from "next/image";
+import { Logo } from "@/shared/components/Logo";
 
 export const metadata = {
   title: "Register - Autonomous Research Analyst",
@@ -14,17 +14,8 @@ export default function RegisterPage() {
       <div className="hidden md:flex md:w-1/2 bg-surface-inset border-r border-hairline p-12 flex-col justify-between relative overflow-hidden">
 
 
-        <div className="relative z-10 flex items-center gap-3">
-          <Image 
-            src="/logos/image.png" 
-            alt="Noiseless Logo" 
-            width={32} 
-            height={32} 
-            className="object-cover"
-          />
-          <span className="font-sans font-semibold text-ink tracking-tight">
-            Noiseless
-          </span>
+        <div className="relative z-10">
+          <Logo size={32} href="/register" />
         </div>
 
         <div className="relative z-10 max-w-md">

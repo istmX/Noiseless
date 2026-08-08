@@ -3,6 +3,7 @@ import { Inter, Newsreader, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { auth } from "@/shared/lib/auth";
 import { AuthProvider } from "@/shared/components/AuthProvider";
+import { Sidebar } from "@/shared/components/Sidebar";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -45,7 +46,12 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-canvas relative">
         <AuthProvider isLoggedIn={!!session?.user}>
-          {children}
+          <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-canvas">
+            <Sidebar />
+            <main className="flex-1 overflow-y-auto pl-0 md:pl-64 w-full">
+              {children}
+            </main>
+          </div>
         </AuthProvider>
         <Toaster />
       </body>

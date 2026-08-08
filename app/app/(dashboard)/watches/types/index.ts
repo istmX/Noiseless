@@ -11,6 +11,7 @@ export interface Watch {
   notificationSlackWebhook: string | null;
   lastRunAt: Date | null;
   runInProgress: boolean;
+  active: boolean;
   createdAt: Date;
   updatedAt: Date;
   _count?: {
@@ -28,13 +29,12 @@ export const watchFormSchema = z.object({
       })
     )
     .min(1, "At least one search query is required"),
-  frequency: z.enum(["hourly", "daily", "weekly"], {
-    required_error: "Please select a frequency",
-  }),
+  frequency: z.enum(["hourly", "daily", "weekly"]),
   significanceThreshold: z.number().min(1).max(10),
   notificationEmail: z.string().email("Invalid email address").optional().or(z.literal("")),
   notificationSlackWebhook: z.string().url("Invalid Slack webhook URL").optional().or(z.literal("")),
-  active: z.boolean().default(true),
+  active: z.boolean(),
 });
 
 export type WatchFormValues = z.infer<typeof watchFormSchema>;
+
