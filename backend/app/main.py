@@ -3,6 +3,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import engine, Base
+from app.models.user import User
+from app.models.watch import Watch
+from app.models.finding import Finding
+from app.models.digest import Digest
 from app.routers import watches, findings, digests, internal
 from app.scheduler import scheduler_manager
 
