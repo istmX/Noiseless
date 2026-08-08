@@ -26,7 +26,7 @@ export async function loginAction(
           return { error: "An unexpected authentication error occurred." };
       }
     }
-    throw error; // Let Next.js handle redirects internally
+    throw error; 
   }
 }
 

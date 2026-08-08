@@ -49,13 +49,13 @@ async def create_watch(watch_in: WatchCreate, db: AsyncSession = Depends(get_db)
     # Register background task in scheduler
     scheduler_manager.add_watch_job(db_watch)
     
-    return {"data": db_watch}
+    return {"data": WatchResponse.model_validate(db_watch).model_dump(mode="json")}
 
 @router.get("", response_model=dict)
 async def list_watches(db: AsyncSession = Depends(get_db), user_id: str = Depends(get_user_id)):
     result = await db.execute(select(Watch).filter(Watch.userId == user_id))
     watches = result.scalars().all()
-    return {"data": watches}
+    return {"data": [WatchResponse.model_validate(w).model_dump(mode="json") for w in watches]}
 
 @router.patch("/{watch_id}", response_model=dict)
 async def update_watch(watch_id: str, watch_in: WatchUpdate, db: AsyncSession = Depends(get_db)):
@@ -74,7 +74,7 @@ async def update_watch(watch_id: str, watch_in: WatchUpdate, db: AsyncSession = 
     # Update scheduler configuration for this watch
     scheduler_manager.update_watch_job(watch)
     
-    return {"data": watch}
+    return {"data": WatchResponse.model_validate(watch).model_dump(mode="json")}
 
 @router.delete("/{watch_id}", response_model=dict)
 async def delete_watch(watch_id: str, db: AsyncSession = Depends(get_db)):

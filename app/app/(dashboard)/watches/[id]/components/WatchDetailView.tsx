@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect, useRef } from "react";
 import { ArrowLeft, Clock, Hash, FileText, Search, Plus, X, Sliders, ChevronDown, ChevronUp, Layers, Sparkles, Mail, MessageSquare, Play } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
@@ -35,6 +35,33 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
   const [isPending, startTransition] = useTransition();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const router = useRouter();
+
+  const [prevRunInProgress, setPrevRunInProgress] = useState(watch.runInProgress);
+  const [initialFindingsCount, setInitialFindingsCount] = useState(findings.length);
+
+  useEffect(() => {
+    if (watch.runInProgress && !prevRunInProgress) {
+      setInitialFindingsCount(findings.length);
+      setPrevRunInProgress(true);
+    }
+    if (!watch.runInProgress && prevRunInProgress) {
+      setPrevRunInProgress(false);
+      if (findings.length === initialFindingsCount) {
+        toast.info("Scan complete. No new updates found (all search results were duplicates).");
+      } else {
+        toast.success(`Scan complete. Found ${findings.length - initialFindingsCount} new findings!`);
+      }
+    }
+  }, [watch.runInProgress, findings.length, prevRunInProgress, initialFindingsCount]);
+
+  useEffect(() => {
+    if (watch.runInProgress) {
+      const interval = setInterval(() => {
+        router.refresh();
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [watch.runInProgress, router]);
 
   const hasChanges = 
     active !== watch.active ||
