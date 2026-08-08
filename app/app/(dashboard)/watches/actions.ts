@@ -108,3 +108,102 @@ export async function getWatches(): Promise<Watch[]> {
 
   return localWatchesStore;
 }
+
+export async function updateWatch(watchId: string, values: any) {
+  const session = await auth();
+  const userId = session?.user?.id || "demo-user";
+
+  const payload: any = { ...values };
+  if (values.searchQueries) {
+    payload.searchQueries = values.searchQueries.map((q: any) => typeof q === "string" ? q : q.value);
+  }
+
+  // 1. Try FastAPI backend API via PATCH request
+  try {
+    const res = await fetchApi<Watch>(`/watches/${watchId}`, {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    });
+    if (res.data) {
+      revalidatePath("/watches");
+      revalidatePath(`/watches/${watchId}`);
+      return { data: res.data };
+    }
+  } catch (apiErr) {
+    // Backend API not running or offline
+  }
+
+  // 2. Try Prisma database update
+  try {
+    const updatedWatch = await prisma.watch.update({
+      where: { id: watchId },
+      data: {
+        topic: payload.topic,
+        searchQueries: payload.searchQueries,
+        frequency: payload.frequency,
+        significanceThreshold: payload.significanceThreshold,
+        notificationEmail: payload.notificationEmail !== undefined ? (payload.notificationEmail || null) : undefined,
+        notificationSlackWebhook: payload.notificationSlackWebhook !== undefined ? (payload.notificationSlackWebhook || null) : undefined,
+        active: payload.active,
+      },
+    });
+    revalidatePath("/watches");
+    revalidatePath(`/watches/${watchId}`);
+    return { data: updatedWatch as unknown as Watch };
+  } catch (dbErr) {
+    // 3. Fallback to mock update for dev mode
+    revalidatePath("/watches");
+    revalidatePath(`/watches/${watchId}`);
+    return { error: "Failed to update watch configuration in database" };
+  }
+}
+
+export async function deleteWatch(watchId: string) {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return { error: "Authentication required" };
+  }
+
+  // 1. Try FastAPI backend API via DELETE request
+  try {
+    const res = await fetchApi<void>(`/watches/${watchId}`, {
+      method: "DELETE",
+    });
+    if (!res.error) {
+      revalidatePath("/watches");
+      return { success: true };
+    }
+  } catch (apiErr) {
+    // Backend API offline or not running
+  }
+
+  // 2. Try Prisma database delete
+  try {
+    await prisma.watch.delete({
+      where: { id: watchId },
+    });
+    revalidatePath("/watches");
+    return { success: true };
+  } catch (dbErr) {
+    return { error: "Failed to delete watch from database" };
+  }
+}
+
+export async function runWatchNow(watchId: string) {
+  try {
+    const res = await fetchApi<any>(`/internal/run-watch/${watchId}`, {
+      method: "POST",
+    });
+    if (res.data) {
+      revalidatePath("/watches");
+      revalidatePath(`/watches/${watchId}`);
+      return { success: true };
+    }
+    return { error: res.error || "Failed to trigger agent run" };
+  } catch (err) {
+    return { error: "Failed to connect to backend agent" };
+  }
+}
+

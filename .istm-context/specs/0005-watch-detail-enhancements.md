@@ -34,3 +34,4 @@ Include form inputs for:
 Build a formatter function to detect markdown links inside the digest content text.
 Replace raw inline links with styled numbers or highlight tags.
 Render a structured citations grid at the bottom of the digest report layout. Each grid item should display the domain or link in a compact code style box.
+

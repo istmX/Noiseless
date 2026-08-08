@@ -20,11 +20,11 @@
   --color-ink-muted:        #6B726E;   /* Muted grey green */
   --color-ink-faint:        #A2ABA6;   /* Faint grey green */
 
-  /* Brand accent (Charcoal Black) */
-  --color-primary:          #121212;
-  --color-primary-hover:    #262626;
-  --color-primary-press:    #000000;
-  --color-primary-soft:     #E2ECE9;   /* Soft mint green tint */
+  /* Brand accent (Forest Green Accent) */
+  --color-primary:          #007D5A;
+  --color-primary-hover:    #006347;
+  --color-primary-press:    #004d37;
+  --color-primary-soft:     #D2F8D9;   /* Soft mint green tint */
   --color-on-primary:       #FFFFFF;
 
   /* Semantic state colors */

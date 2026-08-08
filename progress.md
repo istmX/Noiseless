@@ -68,6 +68,9 @@
 - Added collapsible settings panel at the top of the Watch Detail page for configuring parameters, implemented inline link formatting with highlight tags for digests, and restructured citations into a grid layout.
 - Structured Findings Timeline and Digest History inside independent scrollable container cards with a height constraint for desktop layouts.
 - Updated root layout to use Outfit font everywhere across headings, prose, and buttons, and added alert email and Slack webhook configuration inputs with dedicated SVG icons inside WatchDetailView settings collapsible panel.
+- Implemented updateWatch Server Action in actions.ts to modify watch configurations via FastAPI PATCH calls and Prisma fallback database updates, and wired the save changes flow into WatchDetailView with saving disabled states.
+- Configured frontend API client to dynamically resolve the FastAPI host using the BACKEND_API_URL environment variable, implemented a deleteWatch Server Action, and integrated a delete confirmation prompt into the details page collapsible settings panel.
+- Restructured the settings Save button to the bottom row, integrated a Run Now button into the details header to trigger manual runs, replaced native confirm dialogs with a custom shadcn Dialog modal, and updated brand primary colors to Forest Green accents in globals.css.
 
 ### Pending
 

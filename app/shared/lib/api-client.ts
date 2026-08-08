@@ -1,6 +1,6 @@
 import { auth } from "@/shared/lib/auth";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE_URL = process.env.BACKEND_API_URL || "http://localhost:8000";
 
 interface ApiResponse<T> {
   data?: T;

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { ArrowLeft, Clock, Hash, FileText, Search, Plus, X, Sliders, ChevronDown, ChevronUp, Layers, Sparkles, Mail, MessageSquare } from "lucide-react";
+import { useState, useTransition } from "react";
+import { ArrowLeft, Clock, Hash, FileText, Search, Plus, X, Sliders, ChevronDown, ChevronUp, Layers, Sparkles, Mail, MessageSquare, Play } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { FindingTimeline } from "../findings/components/FindingTimeline";
@@ -9,9 +9,13 @@ import { DigestHistory } from "../digests/components/DigestHistory";
 import { Finding } from "../findings/types";
 import { Digest } from "../digests/types";
 import { Watch } from "../../types";
+import { useRouter } from "next/navigation";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
+import { deleteWatch, updateWatch, runWatchNow } from "../../actions";
+import { toast } from "sonner";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
 
 interface WatchDetailViewProps {
   watch: Watch;
@@ -28,6 +32,59 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
   const [newQuery, setNewQuery] = useState("");
   const [notificationEmail, setNotificationEmail] = useState(watch.notificationEmail || "");
   const [notificationSlackWebhook, setNotificationSlackWebhook] = useState(watch.notificationSlackWebhook || "");
+  const [isPending, startTransition] = useTransition();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const router = useRouter();
+
+  const hasChanges = 
+    active !== watch.active ||
+    frequency !== watch.frequency ||
+    threshold !== watch.significanceThreshold ||
+    JSON.stringify(queries) !== JSON.stringify(watch.searchQueries) ||
+    notificationEmail !== (watch.notificationEmail || "") ||
+    notificationSlackWebhook !== (watch.notificationSlackWebhook || "");
+
+  const handleSave = () => {
+    startTransition(async () => {
+      const result = await updateWatch(watch.id, {
+        active,
+        frequency,
+        significanceThreshold: threshold,
+        searchQueries: queries,
+        notificationEmail: notificationEmail || null,
+        notificationSlackWebhook: notificationSlackWebhook || null,
+      });
+      if (result.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Watch configuration updated successfully");
+      }
+    });
+  };
+
+  const handleRunNow = () => {
+    startTransition(async () => {
+      const result = await runWatchNow(watch.id);
+      if (result.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Background agent pipeline triggered successfully");
+      }
+    });
+  };
+
+  const confirmDelete = () => {
+    startTransition(async () => {
+      const result = await deleteWatch(watch.id);
+      if (result.error) {
+        toast.error(result.error);
+        setShowDeleteConfirm(false);
+      } else {
+        toast.success("Watch deleted successfully");
+        router.push("/watches");
+      }
+    });
+  };
 
   const handleAddQuery = (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,6 +154,15 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
             </div>
 
             <Button
+              onClick={handleRunNow}
+              disabled={isPending || watch.runInProgress}
+              className="bg-primary hover:bg-primary-hover text-on-primary font-sans font-medium rounded-full px-4 h-10 flex items-center gap-2 cursor-pointer text-xs"
+            >
+              <Play className="w-4 h-4" />
+              <span>{watch.runInProgress ? "Running..." : "Run Now"}</span>
+            </Button>
+
+            <Button
               onClick={() => setShowSettings(!showSettings)}
               className="bg-surface-inset border border-hairline text-ink hover:bg-primary-soft rounded-full px-4 h-10 flex items-center gap-2 cursor-pointer text-xs"
             >
@@ -131,9 +197,10 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
                     </div>
                     <button
                       onClick={() => setActive(!active)}
+                      disabled={isPending}
                       className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
                         active ? "bg-primary" : "bg-hairline"
-                      }`}
+                      } ${isPending ? "opacity-50 cursor-not-allowed" : ""}`}
                     >
                       <span
                         className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-sm ring-0 transition duration-200 ease-in-out ${
@@ -150,11 +217,12 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
                         <button
                           key={f}
                           onClick={() => setFrequency(f)}
+                          disabled={isPending}
                           className={`py-2 text-xs font-semibold rounded-md border capitalize cursor-pointer transition-all ${
                             frequency === f
                               ? "bg-primary text-on-primary border-primary"
                               : "bg-surface text-ink-muted border-hairline hover:text-ink"
-                          }`}
+                          } ${isPending ? "opacity-50 cursor-not-allowed" : ""}`}
                         >
                           {f}
                         </button>
@@ -172,8 +240,9 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
                       min="1"
                       max="10"
                       value={threshold}
+                      disabled={isPending}
                       onChange={(e) => setThreshold(parseInt(e.target.value))}
-                      className="w-full accent-primary h-1 bg-hairline rounded-lg appearance-none cursor-pointer"
+                      className="w-full accent-primary h-1 bg-hairline rounded-lg appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                   </div>
 
@@ -188,6 +257,7 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
                           type="email"
                           placeholder="alert@example.com"
                           value={notificationEmail}
+                          disabled={isPending}
                           onChange={(e) => setNotificationEmail(e.target.value)}
                           className="bg-surface border-hairline font-sans text-xs focus-visible:ring-1 focus-visible:ring-primary-soft focus-visible:border-primary pl-9 h-10 rounded-md w-full"
                         />
@@ -202,6 +272,7 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
                           type="url"
                           placeholder="https://hooks.slack.com/services/..."
                           value={notificationSlackWebhook}
+                          disabled={isPending}
                           onChange={(e) => setNotificationSlackWebhook(e.target.value)}
                           className="bg-surface border-hairline font-sans text-xs focus-visible:ring-1 focus-visible:ring-primary-soft focus-visible:border-primary pl-9 h-10 rounded-md w-full"
                         />
@@ -218,11 +289,12 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
                       <Input
                         placeholder="Add search query..."
                         value={newQuery}
+                        disabled={isPending}
                         onChange={(e) => setNewQuery(e.target.value)}
                         className="bg-surface border-hairline font-sans text-xs focus-visible:ring-1 focus-visible:ring-primary-soft focus-visible:border-primary pl-9 h-10 rounded-md w-full"
                       />
                     </div>
-                    <Button type="submit" size="sm" className="h-10 px-4 rounded-md cursor-pointer bg-primary text-on-primary hover:bg-primary-hover">
+                    <Button type="submit" size="sm" disabled={isPending} className="h-10 px-4 rounded-md cursor-pointer bg-primary text-on-primary hover:bg-primary-hover">
                       Add
                     </Button>
                   </form>
@@ -234,13 +306,35 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
                         <span>{q}</span>
                         <button
                           onClick={() => handleRemoveQuery(idx)}
-                          className="hover:text-danger rounded-full hover:bg-danger-soft/10 p-0.5 transition-colors cursor-pointer"
+                          disabled={isPending}
+                          className="hover:text-danger rounded-full hover:bg-danger-soft/10 p-0.5 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           <X className="w-3 h-3" />
                         </button>
                       </span>
                     ))}
                   </div>
+                </div>
+
+                <div className="col-span-1 md:col-span-2 pt-6 border-t border-hairline flex justify-between items-center gap-4">
+                  <div>
+                    {hasChanges && (
+                      <Button
+                        onClick={handleSave}
+                        disabled={isPending}
+                        className="bg-primary hover:bg-primary-hover text-on-primary font-sans font-medium h-10 px-6 rounded-md cursor-pointer"
+                      >
+                        {isPending ? "Saving..." : "Save Changes"}
+                      </Button>
+                    )}
+                  </div>
+                  <Button
+                    onClick={() => setShowDeleteConfirm(true)}
+                    disabled={isPending}
+                    className="bg-danger hover:bg-danger/90 text-white font-sans font-medium h-10 px-4 rounded-md cursor-pointer flex items-center gap-2"
+                  >
+                    Delete Watch
+                  </Button>
                 </div>
               </div>
             </motion.div>
@@ -299,6 +393,37 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {showDeleteConfirm && (
+          <Dialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+            <DialogContent className="sm:max-w-[425px] bg-surface border border-hairline rounded-lg p-6 shadow-high">
+              <DialogHeader>
+                <DialogTitle className="text-xl font-sans font-semibold text-ink">Delete Watch</DialogTitle>
+                <DialogDescription className="text-xs text-ink-muted mt-2">
+                  Are you sure you want to permanently delete this watch? This action cannot be undone and all captured findings and digests will be lost.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex justify-end gap-3 mt-6">
+                <Button
+                  onClick={() => setShowDeleteConfirm(false)}
+                  disabled={isPending}
+                  className="bg-surface-inset border border-hairline text-ink hover:bg-primary-soft rounded-md px-4 h-10 text-xs cursor-pointer"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={confirmDelete}
+                  disabled={isPending}
+                  className="bg-danger hover:bg-danger/90 text-white font-sans font-medium rounded-md px-4 h-10 text-xs cursor-pointer"
+                >
+                  {isPending ? "Deleting..." : "Delete Permanently"}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
