@@ -2353,7 +2353,9 @@ export namespace Prisma {
     significanceThreshold: number | null
     notificationEmail: string | null
     notificationSlackWebhook: string | null
+    active: boolean | null
     lastRunAt: Date | null
+    runInProgress: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2366,7 +2368,9 @@ export namespace Prisma {
     significanceThreshold: number | null
     notificationEmail: string | null
     notificationSlackWebhook: string | null
+    active: boolean | null
     lastRunAt: Date | null
+    runInProgress: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2380,7 +2384,9 @@ export namespace Prisma {
     significanceThreshold: number
     notificationEmail: number
     notificationSlackWebhook: number
+    active: number
     lastRunAt: number
+    runInProgress: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2403,7 +2409,9 @@ export namespace Prisma {
     significanceThreshold?: true
     notificationEmail?: true
     notificationSlackWebhook?: true
+    active?: true
     lastRunAt?: true
+    runInProgress?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2416,7 +2424,9 @@ export namespace Prisma {
     significanceThreshold?: true
     notificationEmail?: true
     notificationSlackWebhook?: true
+    active?: true
     lastRunAt?: true
+    runInProgress?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2430,7 +2440,9 @@ export namespace Prisma {
     significanceThreshold?: true
     notificationEmail?: true
     notificationSlackWebhook?: true
+    active?: true
     lastRunAt?: true
+    runInProgress?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2531,7 +2543,9 @@ export namespace Prisma {
     significanceThreshold: number
     notificationEmail: string | null
     notificationSlackWebhook: string | null
+    active: boolean
     lastRunAt: Date | null
+    runInProgress: boolean
     createdAt: Date
     updatedAt: Date
     _count: WatchCountAggregateOutputType | null
@@ -2564,7 +2578,9 @@ export namespace Prisma {
     significanceThreshold?: boolean
     notificationEmail?: boolean
     notificationSlackWebhook?: boolean
+    active?: boolean
     lastRunAt?: boolean
+    runInProgress?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -2582,7 +2598,9 @@ export namespace Prisma {
     significanceThreshold?: boolean
     notificationEmail?: boolean
     notificationSlackWebhook?: boolean
+    active?: boolean
     lastRunAt?: boolean
+    runInProgress?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -2597,7 +2615,9 @@ export namespace Prisma {
     significanceThreshold?: boolean
     notificationEmail?: boolean
     notificationSlackWebhook?: boolean
+    active?: boolean
     lastRunAt?: boolean
+    runInProgress?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -2612,12 +2632,14 @@ export namespace Prisma {
     significanceThreshold?: boolean
     notificationEmail?: boolean
     notificationSlackWebhook?: boolean
+    active?: boolean
     lastRunAt?: boolean
+    runInProgress?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type WatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "topic" | "searchQueries" | "frequency" | "significanceThreshold" | "notificationEmail" | "notificationSlackWebhook" | "lastRunAt" | "createdAt" | "updatedAt", ExtArgs["result"]["watch"]>
+  export type WatchOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "topic" | "searchQueries" | "frequency" | "significanceThreshold" | "notificationEmail" | "notificationSlackWebhook" | "active" | "lastRunAt" | "runInProgress" | "createdAt" | "updatedAt", ExtArgs["result"]["watch"]>
   export type WatchInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     findings?: boolean | Watch$findingsArgs<ExtArgs>
@@ -2647,7 +2669,9 @@ export namespace Prisma {
       significanceThreshold: number
       notificationEmail: string | null
       notificationSlackWebhook: string | null
+      active: boolean
       lastRunAt: Date | null
+      runInProgress: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["watch"]>
@@ -3084,7 +3108,9 @@ export namespace Prisma {
     readonly significanceThreshold: FieldRef<"Watch", 'Int'>
     readonly notificationEmail: FieldRef<"Watch", 'String'>
     readonly notificationSlackWebhook: FieldRef<"Watch", 'String'>
+    readonly active: FieldRef<"Watch", 'Boolean'>
     readonly lastRunAt: FieldRef<"Watch", 'DateTime'>
+    readonly runInProgress: FieldRef<"Watch", 'Boolean'>
     readonly createdAt: FieldRef<"Watch", 'DateTime'>
     readonly updatedAt: FieldRef<"Watch", 'DateTime'>
   }
@@ -5788,7 +5814,9 @@ export namespace Prisma {
     significanceThreshold: 'significanceThreshold',
     notificationEmail: 'notificationEmail',
     notificationSlackWebhook: 'notificationSlackWebhook',
+    active: 'active',
     lastRunAt: 'lastRunAt',
+    runInProgress: 'runInProgress',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -5893,6 +5921,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -5981,7 +6016,9 @@ export namespace Prisma {
     significanceThreshold?: IntFilter<"Watch"> | number
     notificationEmail?: StringNullableFilter<"Watch"> | string | null
     notificationSlackWebhook?: StringNullableFilter<"Watch"> | string | null
+    active?: BoolFilter<"Watch"> | boolean
     lastRunAt?: DateTimeNullableFilter<"Watch"> | Date | string | null
+    runInProgress?: BoolFilter<"Watch"> | boolean
     createdAt?: DateTimeFilter<"Watch"> | Date | string
     updatedAt?: DateTimeFilter<"Watch"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -5998,7 +6035,9 @@ export namespace Prisma {
     significanceThreshold?: SortOrder
     notificationEmail?: SortOrderInput | SortOrder
     notificationSlackWebhook?: SortOrderInput | SortOrder
+    active?: SortOrder
     lastRunAt?: SortOrderInput | SortOrder
+    runInProgress?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -6018,7 +6057,9 @@ export namespace Prisma {
     significanceThreshold?: IntFilter<"Watch"> | number
     notificationEmail?: StringNullableFilter<"Watch"> | string | null
     notificationSlackWebhook?: StringNullableFilter<"Watch"> | string | null
+    active?: BoolFilter<"Watch"> | boolean
     lastRunAt?: DateTimeNullableFilter<"Watch"> | Date | string | null
+    runInProgress?: BoolFilter<"Watch"> | boolean
     createdAt?: DateTimeFilter<"Watch"> | Date | string
     updatedAt?: DateTimeFilter<"Watch"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -6035,7 +6076,9 @@ export namespace Prisma {
     significanceThreshold?: SortOrder
     notificationEmail?: SortOrderInput | SortOrder
     notificationSlackWebhook?: SortOrderInput | SortOrder
+    active?: SortOrder
     lastRunAt?: SortOrderInput | SortOrder
+    runInProgress?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: WatchCountOrderByAggregateInput
@@ -6057,7 +6100,9 @@ export namespace Prisma {
     significanceThreshold?: IntWithAggregatesFilter<"Watch"> | number
     notificationEmail?: StringNullableWithAggregatesFilter<"Watch"> | string | null
     notificationSlackWebhook?: StringNullableWithAggregatesFilter<"Watch"> | string | null
+    active?: BoolWithAggregatesFilter<"Watch"> | boolean
     lastRunAt?: DateTimeNullableWithAggregatesFilter<"Watch"> | Date | string | null
+    runInProgress?: BoolWithAggregatesFilter<"Watch"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Watch"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Watch"> | Date | string
   }
@@ -6264,7 +6309,9 @@ export namespace Prisma {
     significanceThreshold: number
     notificationEmail?: string | null
     notificationSlackWebhook?: string | null
+    active?: boolean
     lastRunAt?: Date | string | null
+    runInProgress?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutWatchesInput
@@ -6281,7 +6328,9 @@ export namespace Prisma {
     significanceThreshold: number
     notificationEmail?: string | null
     notificationSlackWebhook?: string | null
+    active?: boolean
     lastRunAt?: Date | string | null
+    runInProgress?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     findings?: FindingUncheckedCreateNestedManyWithoutWatchInput
@@ -6296,7 +6345,9 @@ export namespace Prisma {
     significanceThreshold?: IntFieldUpdateOperationsInput | number
     notificationEmail?: NullableStringFieldUpdateOperationsInput | string | null
     notificationSlackWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
     lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    runInProgress?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutWatchesNestedInput
@@ -6313,7 +6364,9 @@ export namespace Prisma {
     significanceThreshold?: IntFieldUpdateOperationsInput | number
     notificationEmail?: NullableStringFieldUpdateOperationsInput | string | null
     notificationSlackWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
     lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    runInProgress?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     findings?: FindingUncheckedUpdateManyWithoutWatchNestedInput
@@ -6329,7 +6382,9 @@ export namespace Prisma {
     significanceThreshold: number
     notificationEmail?: string | null
     notificationSlackWebhook?: string | null
+    active?: boolean
     lastRunAt?: Date | string | null
+    runInProgress?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -6342,7 +6397,9 @@ export namespace Prisma {
     significanceThreshold?: IntFieldUpdateOperationsInput | number
     notificationEmail?: NullableStringFieldUpdateOperationsInput | string | null
     notificationSlackWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
     lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    runInProgress?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6356,7 +6413,9 @@ export namespace Prisma {
     significanceThreshold?: IntFieldUpdateOperationsInput | number
     notificationEmail?: NullableStringFieldUpdateOperationsInput | string | null
     notificationSlackWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
     lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    runInProgress?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -6621,6 +6680,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -6671,7 +6735,9 @@ export namespace Prisma {
     significanceThreshold?: SortOrder
     notificationEmail?: SortOrder
     notificationSlackWebhook?: SortOrder
+    active?: SortOrder
     lastRunAt?: SortOrder
+    runInProgress?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -6688,7 +6754,9 @@ export namespace Prisma {
     significanceThreshold?: SortOrder
     notificationEmail?: SortOrder
     notificationSlackWebhook?: SortOrder
+    active?: SortOrder
     lastRunAt?: SortOrder
+    runInProgress?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -6701,7 +6769,9 @@ export namespace Prisma {
     significanceThreshold?: SortOrder
     notificationEmail?: SortOrder
     notificationSlackWebhook?: SortOrder
+    active?: SortOrder
     lastRunAt?: SortOrder
+    runInProgress?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -6742,6 +6812,14 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedStringNullableFilter<$PrismaModel>
     _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -6933,6 +7011,10 @@ export namespace Prisma {
     set?: string | null
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
   }
@@ -7110,6 +7192,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -7176,6 +7263,14 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -7198,7 +7293,9 @@ export namespace Prisma {
     significanceThreshold: number
     notificationEmail?: string | null
     notificationSlackWebhook?: string | null
+    active?: boolean
     lastRunAt?: Date | string | null
+    runInProgress?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     findings?: FindingCreateNestedManyWithoutWatchInput
@@ -7213,7 +7310,9 @@ export namespace Prisma {
     significanceThreshold: number
     notificationEmail?: string | null
     notificationSlackWebhook?: string | null
+    active?: boolean
     lastRunAt?: Date | string | null
+    runInProgress?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     findings?: FindingUncheckedCreateNestedManyWithoutWatchInput
@@ -7258,7 +7357,9 @@ export namespace Prisma {
     significanceThreshold?: IntFilter<"Watch"> | number
     notificationEmail?: StringNullableFilter<"Watch"> | string | null
     notificationSlackWebhook?: StringNullableFilter<"Watch"> | string | null
+    active?: BoolFilter<"Watch"> | boolean
     lastRunAt?: DateTimeNullableFilter<"Watch"> | Date | string | null
+    runInProgress?: BoolFilter<"Watch"> | boolean
     createdAt?: DateTimeFilter<"Watch"> | Date | string
     updatedAt?: DateTimeFilter<"Watch"> | Date | string
   }
@@ -7434,7 +7535,9 @@ export namespace Prisma {
     significanceThreshold: number
     notificationEmail?: string | null
     notificationSlackWebhook?: string | null
+    active?: boolean
     lastRunAt?: Date | string | null
+    runInProgress?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutWatchesInput
@@ -7450,7 +7553,9 @@ export namespace Prisma {
     significanceThreshold: number
     notificationEmail?: string | null
     notificationSlackWebhook?: string | null
+    active?: boolean
     lastRunAt?: Date | string | null
+    runInProgress?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     digests?: DigestUncheckedCreateNestedManyWithoutWatchInput
@@ -7480,7 +7585,9 @@ export namespace Prisma {
     significanceThreshold?: IntFieldUpdateOperationsInput | number
     notificationEmail?: NullableStringFieldUpdateOperationsInput | string | null
     notificationSlackWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
     lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    runInProgress?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutWatchesNestedInput
@@ -7496,7 +7603,9 @@ export namespace Prisma {
     significanceThreshold?: IntFieldUpdateOperationsInput | number
     notificationEmail?: NullableStringFieldUpdateOperationsInput | string | null
     notificationSlackWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
     lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    runInProgress?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     digests?: DigestUncheckedUpdateManyWithoutWatchNestedInput
@@ -7510,7 +7619,9 @@ export namespace Prisma {
     significanceThreshold: number
     notificationEmail?: string | null
     notificationSlackWebhook?: string | null
+    active?: boolean
     lastRunAt?: Date | string | null
+    runInProgress?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutWatchesInput
@@ -7526,7 +7637,9 @@ export namespace Prisma {
     significanceThreshold: number
     notificationEmail?: string | null
     notificationSlackWebhook?: string | null
+    active?: boolean
     lastRunAt?: Date | string | null
+    runInProgress?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     findings?: FindingUncheckedCreateNestedManyWithoutWatchInput
@@ -7556,7 +7669,9 @@ export namespace Prisma {
     significanceThreshold?: IntFieldUpdateOperationsInput | number
     notificationEmail?: NullableStringFieldUpdateOperationsInput | string | null
     notificationSlackWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
     lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    runInProgress?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutWatchesNestedInput
@@ -7572,7 +7687,9 @@ export namespace Prisma {
     significanceThreshold?: IntFieldUpdateOperationsInput | number
     notificationEmail?: NullableStringFieldUpdateOperationsInput | string | null
     notificationSlackWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
     lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    runInProgress?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     findings?: FindingUncheckedUpdateManyWithoutWatchNestedInput
@@ -7586,7 +7703,9 @@ export namespace Prisma {
     significanceThreshold: number
     notificationEmail?: string | null
     notificationSlackWebhook?: string | null
+    active?: boolean
     lastRunAt?: Date | string | null
+    runInProgress?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -7599,7 +7718,9 @@ export namespace Prisma {
     significanceThreshold?: IntFieldUpdateOperationsInput | number
     notificationEmail?: NullableStringFieldUpdateOperationsInput | string | null
     notificationSlackWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
     lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    runInProgress?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     findings?: FindingUpdateManyWithoutWatchNestedInput
@@ -7614,7 +7735,9 @@ export namespace Prisma {
     significanceThreshold?: IntFieldUpdateOperationsInput | number
     notificationEmail?: NullableStringFieldUpdateOperationsInput | string | null
     notificationSlackWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
     lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    runInProgress?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     findings?: FindingUncheckedUpdateManyWithoutWatchNestedInput
@@ -7629,7 +7752,9 @@ export namespace Prisma {
     significanceThreshold?: IntFieldUpdateOperationsInput | number
     notificationEmail?: NullableStringFieldUpdateOperationsInput | string | null
     notificationSlackWebhook?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
     lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    runInProgress?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

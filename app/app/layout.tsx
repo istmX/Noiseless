@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Space_Grotesk, Inter, Playfair_Display, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/shared/components/ThemeProvider";
 import { auth } from "@/shared/lib/auth";
@@ -17,12 +17,25 @@ const inter = Inter({
   weight: ["400", "500"],
 });
 
+const playfairDisplay = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["600", "700"],
+});
+
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  weight: ["400"],
+});
+
 export const metadata: Metadata = {
   title: "Autonomous Research Analyst",
   description: "Monitor topics, industries, and competitors with an autonomous AI research agent.",
 };
 
 import { ThemeToggle } from "@/shared/components/ThemeToggle";
+import { Toaster } from "@/shared/components/ui/sonner";
 
 export default async function RootLayout({
   children,
@@ -35,7 +48,7 @@ export default async function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${spaceGrotesk.variable} ${inter.variable} h-full antialiased`}
+      className={`${spaceGrotesk.variable} ${inter.variable} ${playfairDisplay.variable} ${jetBrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-canvas relative">
         <ThemeProvider 
@@ -50,6 +63,7 @@ export default async function RootLayout({
           <AuthProvider isLoggedIn={!!session?.user}>
             {children}
           </AuthProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

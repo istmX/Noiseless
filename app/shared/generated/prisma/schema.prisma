@@ -30,7 +30,9 @@ model Watch {
   notificationEmail        String?
   notificationSlackWebhook String?
 
-  lastRunAt DateTime? // Lock for idempotent background jobs
+  active        Boolean   @default(true)
+  lastRunAt     DateTime? // Lock for idempotent background jobs
+  runInProgress Boolean   @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

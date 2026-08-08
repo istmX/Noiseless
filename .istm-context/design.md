@@ -67,39 +67,39 @@ uses a curated trio of fonts instead of Geist, and adapts the structural tokens 
 
 ```css
 :root[data-theme="dark"] {
-  /* Canvas and surfaces */
-  --color-canvas:           #0A0A0A;   /* page background */
-  --color-surface:          #111111;   /* card and panel background */
-  --color-surface-elevated: #1A1A1A;   /* modals, tooltips, dropdowns */
-  --color-surface-inset:    #0D0D0D;   /* recessed input backgrounds */
+/* Canvas and surfaces */
+--color-canvas:           #0A0A0A;   /* page background */
+--color-surface:          #111111;   /* card and panel background */
+--color-surface-elevated: #1A1A1A;   /* modals, tooltips, dropdowns */
+--color-surface-inset:    #0D0D0D;   /* recessed input backgrounds */
 
-  /* Borders */
-  --color-hairline:         #1F1F1F;   /* all card borders, dividers, input borders */
-  --color-hairline-strong:  #2A2A2A;   /* focused input borders, selected card outlines */
+/* Borders */
+--color-hairline:         #1F1F1F;   /* all card borders, dividers, input borders */
+--color-hairline-strong:  #2A2A2A;   /* focused input borders, selected card outlines */
 
-  /* Text (ink ladder) */
-  --color-ink:              #FAFAFA;   /* primary headings, high emphasis */
-  --color-ink-body:         #A1A1A1;   /* standard body copy, nav links */
-  --color-ink-muted:        #6B6B6B;   /* secondary metadata, timestamps */
-  --color-ink-faint:        #3A3A3A;   /* disabled, placeholder text */
+/* Text (ink ladder) */
+--color-ink:              #FAFAFA;   /* primary headings, high emphasis */
+--color-ink-body:         #A1A1A1;   /* standard body copy, nav links */
+--color-ink-muted:        #6B6B6B;   /* secondary metadata, timestamps */
+--color-ink-faint:        #3A3A3A;   /* disabled, placeholder text */
 
-  /* Brand accent (Vercel blue, dark-mode calibrated) */
-  --color-primary:          #0070F3;   /* buttons, active nav, focus rings */
-  --color-primary-hover:    #338EF7;   /* lighter on hover */
-  --color-primary-press:    #0761D1;   /* darker on active/press */
-  --color-primary-soft:     #0070F314; /* 8% opacity wash — focus halos, selected rows */
-  --color-on-primary:       #FFFFFF;   /* text on primary button */
+/* Brand accent (Vercel blue, dark-mode calibrated) */
+--color-primary:          #0070F3;   /* buttons, active nav, focus rings */
+--color-primary-hover:    #338EF7;   /* lighter on hover */
+--color-primary-press:    #0761D1;   /* darker on active/press */
+--color-primary-soft:     #0070F314; /* 8% opacity wash — focus halos, selected rows */
+--color-on-primary:       #FFFFFF;   /* text on primary button */
 
-  /* Semantic state colors */
-  --color-success:          #10B981;   /* significance score 7-10, active status */
-  --color-success-soft:     #10B98114; /* success wash */
-  --color-warning:          #F59E0B;   /* significance score 4-6, paused status */
-  --color-warning-soft:     #F59E0B14; /* warning wash */
-  --color-danger:           #EF4444;   /* significance score 1-3, delete actions */
-  --color-danger-soft:      #EF444414; /* danger wash */
+/* Semantic state colors */
+--color-success:          #10B981;   /* significance score 7-10, active status */
+--color-success-soft:     #10B98114; /* success wash */
+--color-warning:          #F59E0B;   /* significance score 4-6, paused status */
+--color-warning-soft:     #F59E0B14; /* warning wash */
+--color-danger:           #EF4444;   /* significance score 1-3, delete actions */
+--color-danger-soft:      #EF444414; /* danger wash */
 
-  /* Agent running pulse */
-  --color-pulse:            #0070F3;   /* CSS keyframe animation on status dot */
+/* Agent running pulse */
+--color-pulse:            #0070F3;   /* CSS keyframe animation on status dot */
 }
 ```
 
@@ -107,39 +107,39 @@ uses a curated trio of fonts instead of Geist, and adapts the structural tokens 
 
 ```css
 :root[data-theme="light"] {
-  /* Canvas and surfaces */
-  --color-canvas:           #FAFAFA;   /* Vercel near-white */
-  --color-surface:          #FFFFFF;   /* card and panel background */
-  --color-surface-elevated: #FFFFFF;   /* modals lifted via shadow */
-  --color-surface-inset:    #F2F2F2;   /* recessed input backgrounds */
+/* Canvas and surfaces */
+--color-canvas:           #FAFAFA;   /* Vercel near-white */
+--color-surface:          #FFFFFF;   /* card and panel background */
+--color-surface-elevated: #FFFFFF;   /* modals lifted via shadow */
+--color-surface-inset:    #F2F2F2;   /* recessed input backgrounds */
 
-  /* Borders */
-  --color-hairline:         #EBEBEB;   /* Vercel hairline — all card borders */
-  --color-hairline-strong:  #D4D4D4;   /* focused states */
+/* Borders */
+--color-hairline:         #EBEBEB;   /* Vercel hairline — all card borders */
+--color-hairline-strong:  #D4D4D4;   /* focused states */
 
-  /* Text */
-  --color-ink:              #171717;   /* primary — Vercel ink */
-  --color-ink-body:         #4D4D4D;   /* standard body copy */
-  --color-ink-muted:        #8F8F8F;   /* secondary metadata */
-  --color-ink-faint:        #A1A1A1;   /* disabled, placeholder */
+/* Text */
+--color-ink:              #171717;   /* primary — Vercel ink */
+--color-ink-body:         #4D4D4D;   /* standard body copy */
+--color-ink-muted:        #8F8F8F;   /* secondary metadata */
+--color-ink-faint:        #A1A1A1;   /* disabled, placeholder */
 
-  /* Brand accent */
-  --color-primary:          #0070F3;
-  --color-primary-hover:    #0761D1;
-  --color-primary-press:    #054CA1;
-  --color-primary-soft:     #0070F314;
-  --color-on-primary:       #FFFFFF;
+/* Brand accent */
+--color-primary:          #0070F3;
+--color-primary-hover:    #0761D1;
+--color-primary-press:    #054CA1;
+--color-primary-soft:     #0070F314;
+--color-on-primary:       #FFFFFF;
 
-  /* Semantic */
-  --color-success:          #0D9367;
-  --color-success-soft:     #0D936714;
-  --color-warning:          #D97706;
-  --color-warning-soft:     #D9770614;
-  --color-danger:           #DC2626;
-  --color-danger-soft:      #DC262614;
+/* Semantic */
+--color-success:          #0D9367;
+--color-success-soft:     #0D936714;
+--color-warning:          #D97706;
+--color-warning-soft:     #D9770614;
+--color-danger:           #DC2626;
+--color-danger-soft:      #DC262614;
 
-  /* Agent pulse */
-  --color-pulse:            #0070F3;
+/* Agent pulse */
+--color-pulse:            #0070F3;
 }
 ```
 
@@ -158,10 +158,10 @@ Three fonts work together as a system. Each has one job.
 
 ```css
 :root {
-  --font-display:  "Playfair Display", Georgia, serif;
-  --font-sans:     "Space Grotesk", "Inter", system-ui, sans-serif;
-  --font-data:     "Inter", system-ui, sans-serif;
-  --font-mono:     "JetBrains Mono", "Courier New", monospace;
+--font-display:  "Playfair Display", Georgia, serif;
+--font-sans:     "Space Grotesk", "Inter", system-ui, sans-serif;
+--font-data:     "Inter", system-ui, sans-serif;
+--font-mono:     "JetBrains Mono", "Courier New", monospace;
 }
 ```
 
@@ -193,17 +193,17 @@ Rules:
 
 ```css
 :root {
-  --space-1:  4px;
-  --space-2:  8px;
-  --space-3:  12px;
-  --space-4:  16px;
-  --space-6:  24px;
-  --space-8:  32px;
-  --space-10: 40px;
-  --space-12: 48px;
-  --space-16: 64px;
-  --space-24: 96px;
-  --space-32: 128px;
+--space-1:  4px;
+--space-2:  8px;
+--space-3:  12px;
+--space-4:  16px;
+--space-6:  24px;
+--space-8:  32px;
+--space-10: 40px;
+--space-12: 48px;
+--space-16: 64px;
+--space-24: 96px;
+--space-32: 128px;
 }
 ```
 
@@ -219,12 +219,12 @@ Vercel bimodal shape language: tight sharp for functional chrome, full pill for 
 
 ```css
 :root {
-  --radius-none: 0px;
-  --radius-sm:   4px;    /* badges, status chips, inputs */
-  --radius-md:   6px;    /* watch cards, buttons, nav items */
-  --radius-lg:   10px;   /* modals, drawers, large panels */
-  --radius-pill: 9999px; /* pill badges, theme toggle */
-  --radius-full: 9999px; /* avatar, circular icon buttons */
+--radius-none: 0px;
+--radius-sm:   4px;    /* badges, status chips, inputs */
+--radius-md:   6px;    /* watch cards, buttons, nav items */
+--radius-lg:   10px;   /* modals, drawers, large panels */
+--radius-pill: 9999px; /* pill badges, theme toggle */
+--radius-full: 9999px; /* avatar, circular icon buttons */
 }
 ```
 
@@ -236,10 +236,10 @@ Depth is minimal. Prefer hairline borders before shadows. Shadows only for float
 
 ```css
 :root {
-  --shadow-none:   none;
-  --shadow-low:    0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-medium: 0 2px 8px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-high:   0 8px 24px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.4);
+--shadow-none:   none;
+--shadow-low:    0 1px 2px rgba(0, 0, 0, 0.4);
+--shadow-medium: 0 2px 8px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.3);
+--shadow-high:   0 8px 24px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 ```
 
@@ -251,12 +251,12 @@ Light mode shadow values use lower alpha (0.08, 0.12, 0.18) because the canvas i
 
 ```css
 :root {
-  --ease:           cubic-bezier(0.4, 0, 0.2, 1);
-  --ease-out:       cubic-bezier(0, 0, 0.2, 1);
-  --duration-micro: 100ms;   /* hover color/border changes */
-  --duration-fast:  150ms;   /* button press, badge swap */
-  --duration-normal:200ms;   /* card reveals, sidebar transitions */
-  --duration-slow:  350ms;   /* modal open, drawer slide-in */
+--ease:           cubic-bezier(0.4, 0, 0.2, 1);
+--ease-out:       cubic-bezier(0, 0, 0.2, 1);
+--duration-micro: 100ms;   /* hover color/border changes */
+--duration-fast:  150ms;   /* button press, badge swap */
+--duration-normal:200ms;   /* card reveals, sidebar transitions */
+--duration-slow:  350ms;   /* modal open, drawer slide-in */
 }
 ```
 
@@ -264,13 +264,13 @@ Light mode shadow values use lower alpha (0.08, 0.12, 0.18) because the canvas i
 
 ```css
 @keyframes agent-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.4; transform: scale(1.35); }
+0%, 100% { opacity: 1; transform: scale(1); }
+50%       { opacity: 0.4; transform: scale(1.35); }
 }
 
 .status-dot--running {
-  animation: agent-pulse 1.8s var(--ease) infinite;
-  background-color: var(--color-pulse);
+animation: agent-pulse 1.8s var(--ease) infinite;
+background-color: var(--color-pulse);
 }
 ```
 
@@ -278,12 +278,12 @@ Light mode shadow values use lower alpha (0.08, 0.12, 0.18) because the canvas i
 
 ```css
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+from { opacity: 0; transform: translateY(8px); }
+to   { opacity: 1; transform: translateY(0); }
 }
 
 .finding-card {
-  animation: fade-up var(--duration-normal) var(--ease-out) both;
+animation: fade-up var(--duration-normal) var(--ease-out) both;
 }
 ```
 
@@ -474,9 +474,9 @@ category chip, created timestamp (JetBrains Mono 12px).
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
+*, *::before, *::after {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+}
 }
 ```

@@ -138,7 +138,9 @@ exports.Prisma.WatchScalarFieldEnum = {
   significanceThreshold: 'significanceThreshold',
   notificationEmail: 'notificationEmail',
   notificationSlackWebhook: 'notificationSlackWebhook',
+  active: 'active',
   lastRunAt: 'lastRunAt',
+  runInProgress: 'runInProgress',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

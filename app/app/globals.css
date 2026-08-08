@@ -112,6 +112,7 @@
   --radius:                   6px;
   --font-sans:                var(--font-sans);
   --font-mono:                var(--font-mono);
+  --font-display:             var(--font-display);
 
   /* NEW: Registered context tokens for clean classnames */
   --color-canvas:           var(--color-canvas);

@@ -1,20 +1,17 @@
-import React from 'react'
-import { auth } from '@/shared/lib/auth'
-import { redirect } from 'next/navigation'
+import { getWatches } from "./actions";
+import { WatchList } from "./components/WatchList";
+import { WatchesPageHeader } from "./components/WatchesPageHeader";
 
-export default async function DashboardPage() {
-  const session = await auth()
-  if (!session) {
-    redirect('/login')
-  }
+export default async function WatchesPage() {
+  const watches = await getWatches();
 
   return (
-    <div className="min-h-screen p-8 bg-canvas">
-      <h1 className="text-display font-sans font-bold text-ink">Watches Dashboard</h1>
-      <p className="mt-4 text-ink-muted">Welcome back, {session.user?.email}!</p>
-      <div className="mt-8 p-6 rounded-md border-hairline bg-surface">
-        <p className="text-ink">This is a placeholder dashboard. Watch CRUD implementation is pending.</p>
+    <div className="relative flex flex-col w-full max-w-[1400px] mx-auto px-6 md:px-12 py-12 md:py-16 min-h-screen">
+      <WatchesPageHeader hasWatches={watches.length > 0} />
+      
+      <div className="relative z-10 mt-4">
+        <WatchList watches={watches} />
       </div>
     </div>
-  )
+  );
 }
