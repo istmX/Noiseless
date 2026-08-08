@@ -20,17 +20,34 @@
 - Configured Next 16 `proxy.ts` to secure private dashboard routes.
 - Implemented automatic login redirect after user registration.
 
+## 2026-08-08
+
+### Completed
+- Designed and implemented **Linear Intelligence Matrix** for Watch List (`WatchList.tsx`, `WatchRow.tsx`, `WatchCard.tsx`).
+- Created reusable `Logo` component using `/public/logos/image.png` across all auth pages and sidebar headers.
+- Implemented real time search input debouncing using `useDeferredValue`.
+- Replaced raw status dots with clean monochrome text badges (`MONITORING`, `AGENT ACTIVE`, `PAUSED`).
+- Added responsive mobile navigation top bar with hamburger menu and toggleable slide drawer in `Sidebar.tsx`.
+- Redesigned Create Watch dialog button and Matrix Table/Grid view toggle with Framer Motion animated layout pill.
+- Created Watch Detail workstation page (`[id]/page.tsx`), `FindingTimeline` & `FindingCard`, `DigestHistory` & `DigestCard`.
+- Fixed Next.js Server Component runtime errors by adding `"use client";` to animated findings/digests components.
+- Fixed SSR date hydration mismatch with deterministic date formatting.
+- Added Next `Image` `unoptimized` prop for static asset loading.
+- Added resilient multi tier fallback in `createWatch` server action to guarantee watch creation across dev/demo/DB modes.
+- Verified TypeScript compilation (`npx tsc --noEmit`) with 0 errors.
+
+- Scaffold FastAPI service at `/workspaces/Noiseless/services/api/`.
+- Install dependencies including `langchain`, `langchain-groq`, and `qdrant-client`.
+- Implement Watch CRUD FastAPI routes.
+- Implement Agent Pipeline (`pipeline.py`) integrated with Groq embeddings.
+- Implement APScheduler jobs for background intelligence tasks.
+- Implement Notifications (Brevo and Slack Webhooks).
+
 ### Pending
-- Scaffold FastAPI service at /workspaces/Noiseless/services/api/.
-- Install LangChain dependencies: langchain langchain-groq langchain-community langchain-qdrant.
-- Implement Watch CRUD (FastAPI + Next.js).
-- Implement Agent Pipeline (pipeline.py).
-- Implement APScheduler jobs.
-- Implement Notifications (Brevo + Slack).
-- Implement Findings Timeline and Digest History screens.
 
 ### Notes
 - Design tokens must be resolved before any component is coded.
 - GROQ_API_KEY must be set in the FastAPI .env. LangChain (ChatGroq) reads this key automatically.
 - Qdrant Cloud cluster must be provisioned.
 - shadcn initialized with Tailwind v4 in app/. Alias paths set to @/shared/components and @/shared/lib.
+

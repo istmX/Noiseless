@@ -27,12 +27,12 @@ FastAPI (Python)
      │
      ├─► Neon Postgres (asyncpg) ── users, watches, findings, digests tables
      ├─► Qdrant Cloud ──────────── per-watch vector collections for dedup + RAG
-     ├─► APScheduler ───────────── triggers /internal/run-watch/{id} per watch frequency
+     ├─► APScheduler ───────────── triggers /api/internal/run-watch/{id} per watch frequency
      │
      └─► Agent Pipeline (per watch run)
               │
               ├─► Tavily API ──── web search (search_depth=advanced)
-              ├─► sentence-transformers (local CPU) ── embed results
+              ├─► Groq Embeddings (nomic-embed-text-v1.5) ── embed results
               ├─► Qdrant query ── find nearest neighbors, discard duplicates
               ├─► Groq API ── score significance + classify category
               ├─► Qdrant upsert ── store new embedding
@@ -58,7 +58,7 @@ FastAPI (Python)
 - Database: Neon (serverless Postgres, asyncpg driver)
 - ORM: SQLAlchemy 2.x (async) with Alembic for migrations
 - Vector DB: Qdrant Cloud (qdrant-client Python SDK)
-- Embeddings: sentence-transformers all-MiniLM-L6-v2 (local, CPU)
+- Embeddings: Groq API nomic-embed-text-v1.5 (768 dimensions)
 - LLM: Groq API (llama-3.3-70b-versatile, JSON mode)
 - Agent Orchestration: LangChain (Python, langchain-groq + langchain-community). ChatGroq wraps the Groq API. LangChain chains handle the significance scoring step and the RAG digest generation step.
 - Web search: Tavily Python SDK
@@ -164,7 +164,7 @@ See agents.md for the full annotated tree.
 2. FastAPI sets run_in_progress = true and last_run_at = now() in Neon (idempotency lock).
 3. For each search_query in the watch:
    a. Call Tavily with search_depth=advanced, topic=news.
-   b. Embed each result's content snippet using all-MiniLM-L6-v2.
+   b. Embed each result's content snippet using nomic-embed-text-v1.5 via Groq.
    c. Query Qdrant watch_{watch_id} for top-5 nearest neighbors.
    d. If max cosine similarity > 0.88: skip (duplicate).
    e. If novel: run the LangChain scoring chain (ChatGroq + PromptTemplate + JsonOutputParser). Chain returns { score, category, key_fact }.
@@ -192,12 +192,10 @@ Use:
 - React Server Components for all initial data loads (zero client JS for static content)
 - Async SQLAlchemy with connection pooling on the FastAPI side
 - Qdrant batch upserts to avoid per-finding network round trips
-- sentence-transformers model loaded once at FastAPI startup (not per request)
 
 Avoid:
 - Unnecessary re-renders on the frontend
 - Blocking Tavily calls without timeouts
-- Loading the embedding model per request (expensive: load once at startup)
 - Synchronous SQLAlchemy in async FastAPI handlers
 
 ---
