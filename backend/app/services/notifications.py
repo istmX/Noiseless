@@ -2,10 +2,10 @@ import httpx
 from app.config import settings
 
 class NotificationService:
-    async def send_slack_notification(self, webhook_url: str, topic: str, digest_summary: str, watch_id: str):
+    async def send_slack_notification(self, webhook_url: str, topic: str, digest_summary: str, watch_id: str) -> bool:
         """Sends a notification to a Slack incoming webhook."""
         if not webhook_url:
-            return
+            return False
 
         payload = {
             "text": f"🔔 *Noiseless Intelligence Alert* for topic *{topic}*\n\n{digest_summary}\n\n🔗 _View findings on the dashboard: /watches/{watch_id}_"
@@ -16,13 +16,16 @@ class NotificationService:
                 response = await client.post(webhook_url, json=payload, timeout=10.0)
                 if response.status_code != 200:
                     print(f"Failed to send Slack notification: status {response.status_code}, response: {response.text}")
+                    return False
+                return True
         except Exception as e:
             print(f"Error sending Slack notification: {e}")
+            return False
 
-    async def send_email_notification(self, recipient_email: str, topic: str, digest_summary: str):
+    async def send_email_notification(self, recipient_email: str, topic: str, digest_summary: str) -> bool:
         """Sends an email notification via Brevo Transactional Email API."""
         if not recipient_email or not settings.BREVO_API_KEY:
-            return
+            return False
 
         url = "https://api.brevo.com/v3/smtp/email"
         headers = {
@@ -60,7 +63,10 @@ class NotificationService:
                 response = await client.post(url, json=payload, headers=headers, timeout=10.0)
                 if response.status_code not in (200, 201, 202):
                     print(f"Failed to send Brevo email: status {response.status_code}, response: {response.text}")
+                    return False
+                return True
         except Exception as e:
             print(f"Error sending Brevo email: {e}")
+            return False
 
 notification_service = NotificationService()

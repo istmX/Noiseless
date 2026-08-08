@@ -71,6 +71,8 @@
 - Implemented updateWatch Server Action in actions.ts to modify watch configurations via FastAPI PATCH calls and Prisma fallback database updates, and wired the save changes flow into WatchDetailView with saving disabled states.
 - Configured frontend API client to dynamically resolve the FastAPI host using the BACKEND_API_URL environment variable, implemented a deleteWatch Server Action, and integrated a delete confirmation prompt into the details page collapsible settings panel.
 - Restructured the settings Save button to the bottom row, integrated a Run Now button into the details header to trigger manual runs, replaced native confirm dialogs with a custom shadcn Dialog modal, and updated brand primary colors to Forest Green accents in globals.css.
+- Implemented frontend hourly frequency locks with a padlock visual badge, integrated automated LLM fallback requests using Gemini 3.5 Flash and Mistral API endpoints, and updated notification services to track boolean delivery outcomes.
+- Implemented user profile and billing plans Settings page, including a ProfileForm for name and email updates with dynamic Dicebear avatar previews, and a BillingPlans table displaying tier quotas and package upgrades.
 
 ### Pending
 

@@ -1,11 +1,11 @@
 # Feature Specification: Billing, Tokens, and LLM Fallback Systems
 
-This specification defines the logical flow and UI constraints for restricting free tier watch frequencies, adding a basic credit token system outline, and implementing automated LLM fallbacks (using Gemini 2.5 Flash and Mistral) along with failed notification queuing.
+This specification defines the logical flow and UI constraints for restricting free tier watch frequencies, adding a basic credit token system outline, and implementing automated LLM fallbacks (using Gemini 3.5 Flash and Mistral) along with failed notification queuing.
 
 ## Summary and Requirements
 
 - **Frequency Lock**: Free accounts can only set watches to "daily" or "weekly" intervals. The "hourly" option in the UI is disabled and shows a lock icon.
-- **Multi LLM Fallback**: If the Groq API fails or returns rate limits (429 or 503), the agent pipeline automatically routes significance scoring and digest compiles to Gemini 2.5 Flash or Mistral.
+- **Multi LLM Fallback**: If the Groq API fails or returns rate limits (429 or 503), the agent pipeline automatically routes significance scoring and digest compiles to Gemini 3.5 Flash or Mistral.
 - **Notification Queue**: If Brevo email or Slack webhook dispatches fail, the notification state is logged as FAILED in Postgres to allow retries, instead of failing silently.
 - **Token System Schema**: Define database model properties to track user plan tiers and token credit usages.
 
@@ -30,7 +30,7 @@ Update the watch settings collapsible panel in [WatchDetailView.tsx](file:///wor
 ### Step 2: Implement LLM Fallback Chain
 Modify [llm.py](file:///workspaces/Noiseless/backend/app/services/llm.py):
 - Capture connection and rate limit errors during Groq API calls.
-- If an error occurs, attempt the same prompt payload using Gemini 2.5 Flash (via GEMINI_API_KEY).
+- If an error occurs, attempt the same prompt payload using Gemini 3.5 Flash (via GEMINI_API_KEY).
 - If Gemini fails, fallback to Mistral (via MISTRAL_API_KEY).
 
 ### Step 3: Notification Failure Log

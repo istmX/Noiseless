@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     GROQ_API_KEY: str = Field(..., description="Groq API key")
     BREVO_API_KEY: str = Field("", description="Brevo API key for notifications")
     SLACK_WEBHOOK_URL: str = Field("", description="Slack webhook URL")
+    GEMINI_API_KEY: str = Field("", description="Gemini API key for fallback LLM")
+    MISTRAL_API_KEY: str = Field("", description="Mistral API key for fallback LLM")
 
     # Local settings
     HOST: str = "0.0.0.0"

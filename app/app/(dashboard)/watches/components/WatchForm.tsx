@@ -9,7 +9,7 @@ import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { Switch } from "@/shared/components/ui/switch";
-import { Plus, X, Loader2 } from "lucide-react";
+import { Plus, X, Loader2, Lock } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "motion/react";
@@ -127,7 +127,9 @@ export function WatchForm({ onSuccess }: WatchFormProps) {
                 <SelectValue placeholder="Select frequency" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="hourly" className="cursor-pointer">Hourly</SelectItem>
+                <SelectItem value="hourly" disabled={true} className="cursor-not-allowed opacity-60 flex items-center justify-between gap-1.5">
+                  <span className="flex items-center gap-1">Hourly <Lock className="w-3.5 h-3.5 text-ink-faint inline" /></span>
+                </SelectItem>
                 <SelectItem value="daily" className="cursor-pointer">Daily</SelectItem>
                 <SelectItem value="weekly" className="cursor-pointer">Weekly</SelectItem>
               </SelectContent>

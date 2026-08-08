@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition, useEffect, useRef } from "react";
-import { ArrowLeft, Clock, Hash, FileText, Search, Plus, X, Sliders, ChevronDown, ChevronUp, Layers, Sparkles, Mail, MessageSquare, Play } from "lucide-react";
+import { ArrowLeft, Clock, Hash, FileText, Search, Plus, X, Sliders, ChevronDown, ChevronUp, Layers, Sparkles, Mail, MessageSquare, Play, Lock } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { FindingTimeline } from "../findings/components/FindingTimeline";
@@ -240,20 +240,27 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
                   <div className="space-y-2">
                     <Label className="text-body-sm font-medium text-ink">Frequency Interval</Label>
                     <div className="grid grid-cols-3 gap-2">
-                      {["hourly", "daily", "weekly"].map((f) => (
-                        <button
-                          key={f}
-                          onClick={() => setFrequency(f)}
-                          disabled={isPending}
-                          className={`py-2 text-xs font-semibold rounded-md border capitalize cursor-pointer transition-all ${
-                            frequency === f
-                              ? "bg-primary text-on-primary border-primary"
-                              : "bg-surface text-ink-muted border-hairline hover:text-ink"
-                          } ${isPending ? "opacity-50 cursor-not-allowed" : ""}`}
-                        >
-                          {f}
-                        </button>
-                      ))}
+                      {["hourly", "daily", "weekly"].map((f) => {
+                        const isLocked = f === "hourly";
+                        return (
+                          <button
+                            key={f}
+                            type="button"
+                            onClick={() => !isLocked && setFrequency(f)}
+                            disabled={isPending || isLocked}
+                            className={`py-2 text-xs font-semibold rounded-md border capitalize cursor-pointer transition-all flex items-center justify-center gap-1.5 ${
+                              frequency === f
+                                ? "bg-primary text-on-primary border-primary"
+                                : "bg-surface text-ink-muted border-hairline hover:text-ink"
+                            } ${isLocked ? "opacity-60 cursor-not-allowed bg-surface-inset border-hairline-strong text-ink-faint" : ""} ${
+                              isPending ? "opacity-50 cursor-not-allowed" : ""
+                            }`}
+                          >
+                            <span>{f}</span>
+                            {isLocked && <Lock className="w-3 h-3 text-ink-faint" />}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
 
