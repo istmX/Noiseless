@@ -12,6 +12,7 @@ import {
   DialogFooter,
 } from "@/shared/components/ui/dialog";
 import { upgradeUserPlan } from "../actions";
+import { useAuthStore } from "@/shared/hooks/useAuthStore";
 
 interface BillingPlansProps {
   tokensBalance: number;
@@ -111,6 +112,9 @@ export function BillingPlans({ tokensBalance, tokensUsed, tier }: BillingPlansPr
     if (result?.error) {
       setError(result.error);
     } else {
+      if (selectedPlan) {
+        useAuthStore.setState({ userTier: selectedPlan });
+      }
       setSelectedPlan(null);
     }
   };
@@ -136,8 +140,8 @@ export function BillingPlans({ tokensBalance, tokensUsed, tier }: BillingPlansPr
           <p className="text-xs text-ink-muted">Your queries reset on the first of every month.</p>
         </div>
         <div className="text-center sm:text-right shrink-0">
-          <span className="font-mono text-xl font-semibold text-ink">{tokensUsed} / {tokensBalance + tokensUsed}</span>
-          <span className="text-xs text-ink-faint ml-1.5 block sm:inline">query tokens used</span>
+          <span className="font-mono text-xl font-semibold text-ink">{tokensBalance}</span>
+          <span className="text-xs text-ink-faint ml-1.5 block sm:inline">tokens remaining ({tokensUsed} used)</span>
         </div>
       </div>
 
@@ -244,6 +248,7 @@ export function BillingPlans({ tokensBalance, tokensUsed, tier }: BillingPlansPr
                       if (result?.error) {
                         setError(result.error);
                       } else {
+                        useAuthStore.setState({ userTier: "FREE" });
                         setSelectedPlan(null);
                       }
                     }}

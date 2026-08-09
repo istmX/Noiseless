@@ -7,6 +7,7 @@ import { Input } from "@/shared/components/ui/input";
 import { Label } from "@/shared/components/ui/label";
 import { updateUserProfile } from "../actions";
 import { toast } from "sonner";
+import { useAuthStore } from "@/shared/hooks/useAuthStore";
 
 interface ProfileFormProps {
   initialUser: {
@@ -22,7 +23,7 @@ export function ProfileForm({ initialUser }: ProfileFormProps) {
   const [avatarUrl, setAvatarUrl] = useState(initialUser.avatarUrl || `https://api.dicebear.com/10.x/croodles/svg?seed=${encodeURIComponent(initialUser.name)}`);
   const [isPending, startTransition] = useTransition();
 
-  const hasChanges = name !== initialUser.name || email !== initialUser.email;
+  const hasChanges = name !== initialUser.name || email !== initialUser.email || avatarUrl !== initialUser.avatarUrl;
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,13 +33,18 @@ export function ProfileForm({ initialUser }: ProfileFormProps) {
     }
 
     startTransition(async () => {
-      const res = await updateUserProfile(name, email);
+      const res = await updateUserProfile(name, email, avatarUrl);
       if (res.error) {
         toast.error(res.error);
       } else {
         toast.success("Profile updated successfully");
         if (res.avatarUrl) {
           setAvatarUrl(res.avatarUrl);
+          useAuthStore.setState({
+            userName: name,
+            userEmail: email,
+            userAvatarUrl: res.avatarUrl,
+          });
         }
       }
     });

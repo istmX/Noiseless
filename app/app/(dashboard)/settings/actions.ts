@@ -4,7 +4,7 @@ import { prisma } from "@/shared/lib/db";
 import { auth } from "@/shared/lib/auth";
 import { revalidatePath } from "next/cache";
 
-export async function updateUserProfile(name: string, email: string) {
+export async function updateUserProfile(name: string, email: string, avatarUrl?: string) {
   const session = await auth();
   const userId = session?.user?.id;
 
@@ -17,20 +17,19 @@ export async function updateUserProfile(name: string, email: string) {
   }
 
   try {
-    // Generate default Dicebear avatar based on name
-    const avatarUrl = `https://api.dicebear.com/10.x/croodles/svg?seed=${encodeURIComponent(name.trim())}`;
+    const finalAvatarUrl = avatarUrl || `https://api.dicebear.com/10.x/croodles/svg?seed=${encodeURIComponent(name.trim())}`;
     
     await prisma.user.update({
       where: { id: userId },
       data: {
         name: name.trim(),
         email: email.trim(),
-        avatarUrl,
+        avatarUrl: finalAvatarUrl,
       },
     });
 
     revalidatePath("/settings");
-    return { success: true, avatarUrl };
+    return { success: true, avatarUrl: finalAvatarUrl };
   } catch (err: any) {
     if (err.code === "P2002") {
       return { error: "Email is already in use by another account" };

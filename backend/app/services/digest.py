@@ -77,6 +77,7 @@ Follow these rules strictly:
 2. Ground all statements in the provided findings. Never invent facts or extrapolate beyond what is stated in the findings.
 3. Organize into clear logical paragraphs. Highlight the key facts and relevance.
 4. Keep the summary professional, data-dense, and objective.
+"""
                 url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={settings.GEMINI_API_KEY}"
                 payload = {
                     "contents": [{"parts": [{"text": prompt_text}]}]

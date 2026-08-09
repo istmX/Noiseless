@@ -3,6 +3,7 @@ import "./globals.css";
 import { auth } from "@/shared/lib/auth";
 import { AuthProvider } from "@/shared/components/AuthProvider";
 import { Toaster } from "@/shared/components/ui/sonner";
+import { prisma } from "@/shared/lib/db";
 
 export const metadata: Metadata = {
   title: "Noiseless — Autonomous Research Analyst",
@@ -16,7 +17,19 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
-  const sessionUser = session?.user as ({ name?: string | null; email?: string | null; avatarUrl?: string | null; tier?: string | null } | undefined);
+  
+  let dbUser = null;
+  if (session?.user?.id) {
+    dbUser = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: {
+        name: true,
+        email: true,
+        avatarUrl: true,
+        tier: true,
+      },
+    });
+  }
 
   return (
     <html
@@ -27,11 +40,11 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col bg-canvas relative text-ink">
         <AuthProvider
           isLoggedIn={!!session?.user}
-          profile={sessionUser ? {
-            name: sessionUser.name || "Analyst",
-            email: sessionUser.email || "",
-            avatarUrl: sessionUser.avatarUrl || "",
-            tier: sessionUser.tier || "FREE",
+          profile={dbUser ? {
+            name: dbUser.name || "Analyst",
+            email: dbUser.email || "",
+            avatarUrl: dbUser.avatarUrl || "",
+            tier: dbUser.tier || "FREE",
           } : undefined}
         >
           {children}
