@@ -215,6 +215,7 @@
 * Added an End Premium cancellation action to the billing page that returns Pro and Enterprise accounts back to the Free plan.
 * Implemented dynamic preflight token balance checks inside the agent pipeline and manual watch runs based on user subscription levels.
 * Purged unused placeholder modules (placeholder.ts), legacy route handlers (proxy.ts), and the backend scratch directory.
+* Upgraded user avatar URL template styles to use the newer 10.x/croodles Dicebear API style across all registrations and profile updates.
 
 
 ### Notes

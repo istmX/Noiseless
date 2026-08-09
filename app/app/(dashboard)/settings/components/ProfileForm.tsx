@@ -19,7 +19,7 @@ interface ProfileFormProps {
 export function ProfileForm({ initialUser }: ProfileFormProps) {
   const [name, setName] = useState(initialUser.name);
   const [email, setEmail] = useState(initialUser.email);
-  const [avatarUrl, setAvatarUrl] = useState(initialUser.avatarUrl || `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(initialUser.name)}`);
+  const [avatarUrl, setAvatarUrl] = useState(initialUser.avatarUrl || `https://api.dicebear.com/10.x/croodles/svg?seed=${encodeURIComponent(initialUser.name)}`);
   const [isPending, startTransition] = useTransition();
 
   const hasChanges = name !== initialUser.name || email !== initialUser.email;
@@ -46,7 +46,7 @@ export function ProfileForm({ initialUser }: ProfileFormProps) {
 
   const regenerateAvatar = () => {
     const randomSeed = Math.random().toString(36).substring(7);
-    const newAvatar = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(randomSeed)}`;
+    const newAvatar = `https://api.dicebear.com/10.x/croodles/svg?seed=${encodeURIComponent(randomSeed)}`;
     setAvatarUrl(newAvatar);
   };
 

@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     const avatarSeed = Math.random().toString(36).substring(7);
-    const avatarUrl = `https://api.dicebear.com/7.x/identicon/svg?seed=${avatarSeed}`;
+    const avatarUrl = `https://api.dicebear.com/10.x/croodles/svg?seed=${avatarSeed}`;
 
     await prisma.user.create({
       data: {
