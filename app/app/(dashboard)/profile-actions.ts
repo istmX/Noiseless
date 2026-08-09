@@ -55,8 +55,10 @@ export async function updateProfileAction(name: string, email: string) {
         name: updatedUser.name,
         email: updatedUser.email,
         avatarUrl: updatedUser.avatarUrl,
+        tier: updatedUser.tier,
       },
     };
+
   } catch (error) {
     console.error("Profile update error:", error);
     return { error: "Failed to update profile" };
@@ -76,12 +78,14 @@ export async function getProfileAction() {
         name: true,
         email: true,
         avatarUrl: true,
+        tier: true,
       },
     });
 
     if (!user) {
       return { error: "User not found" };
     }
+
 
     // Generate avatar if missing
     if (!user.avatarUrl) {

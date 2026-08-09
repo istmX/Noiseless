@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 import { useAuthStore } from "../hooks/useAuthStore";
 import { Sidebar } from "./Sidebar";
 
+import { usePathname } from "next/navigation";
+
 export function AuthProvider({
   isLoggedIn,
   children,
@@ -13,6 +15,7 @@ export function AuthProvider({
 }) {
   const setLoggedIn = useAuthStore((state) => state.setLoggedIn);
   const sidebarCollapsed = useAuthStore((state) => state.sidebarCollapsed);
+  const pathname = usePathname();
   const initialized = useRef(false);
 
   if (!initialized.current) {
@@ -24,7 +27,16 @@ export function AuthProvider({
     setLoggedIn(isLoggedIn);
   }, [isLoggedIn, setLoggedIn]);
 
-  if (!isLoggedIn) {
+  const isDashboardRoute =
+    pathname === "/dashboard" ||
+    pathname?.startsWith("/watches") ||
+    pathname?.startsWith("/agent") ||
+    pathname?.startsWith("/settings") ||
+    pathname?.startsWith("/checkout");
+
+  const showSidebar = isLoggedIn && isDashboardRoute;
+
+  if (!showSidebar) {
     return (
       <div className="flex flex-col h-screen overflow-hidden bg-canvas">
         <main className="flex-1 overflow-y-auto overflow-x-hidden w-full">

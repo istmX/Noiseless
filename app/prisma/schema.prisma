@@ -8,14 +8,17 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  password  String
-  avatarUrl String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  watches   Watch[]
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  password      String
+  avatarUrl     String?
+  tokensBalance Int      @default(500)
+  tokensUsed    Int      @default(0)
+  tier          String   @default("FREE")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  watches       Watch[]
 }
 
 model Watch {
@@ -26,13 +29,13 @@ model Watch {
   topic                  String
   searchQueries          String[] 
   frequency              String   
-  significanceThreshold  Int       // 1-10 scale
+  significanceThreshold  Int     
   
   notificationEmail      String?
   notificationSlackWebhook String?
   
   active                 Boolean   @default(true)
-  lastRunAt              DateTime? // Lock for idempotent background jobs
+  lastRunAt              DateTime? 
   runInProgress          Boolean   @default(false)
   
   createdAt              DateTime  @default(now())
@@ -50,7 +53,7 @@ model Finding {
   url           String
   title         String
   content       String
-  score         Int      // Significance score from Groq (1-10)
+  score         Int      
   category      String
   keyFact       String
   
@@ -62,7 +65,7 @@ model Digest {
   watchId       String
   watch         Watch    @relation(fields: [watchId], references: [id], onDelete: Cascade)
   
-  summary       String   // RAG-generated digest summary
+  summary       String   
   sentAt        DateTime @default(now())
 }
 

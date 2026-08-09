@@ -31,11 +31,12 @@ interface WatchListProps {
 
 const getDynamicFindingsCount = (watch: Watch, selectedDay: number) => {
   const watchDay = new Date(watch.createdAt).getDate();
-  if (selectedDay > 8) return 0;
+  const currentDay = new Date().getDate();
+  if (selectedDay > currentDay) return 0;
   if (watchDay > selectedDay) return 0;
   
   const totalFindings = watch._count?.findings || 0;
-  const daysDiff = 8 - watchDay;
+  const daysDiff = currentDay - watchDay;
   if (daysDiff <= 0) return totalFindings;
   
   const selectedDiff = selectedDay - watchDay;
@@ -44,7 +45,7 @@ const getDynamicFindingsCount = (watch: Watch, selectedDay: number) => {
 };
  
 export function WatchList({ watches }: WatchListProps) {
-  const [selectedDate, setSelectedDate] = useState<number>(8); // Highlighted August 8th
+  const [selectedDate, setSelectedDate] = useState<number>(new Date().getDate());
   const [statusFilter, setStatusFilter] = useState<string>("ALL"); // ALL, MONITORING, AGENT ACTIVE, PAUSED
   const [searchQuery, setSearchQuery] = useState<string>("");
   const deferredSearchQuery = useDeferredValue(searchQuery);
@@ -54,27 +55,36 @@ export function WatchList({ watches }: WatchListProps) {
 
   useEffect(() => {
     setMounted(true);
+    setSelectedDate(new Date().getDate());
   }, []);
+
+  const activeDays = new Set(watches.map((w) => new Date(w.createdAt).getDate()));
+
+
  
-  // Generate simple day grid for August 2026 (Starts on Saturday, August 1st)
-  const daysInMonth = 31;
-  const calendarDays = [];
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth();
+  const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+  const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
   
-  // Previous month padding
-  for (let i = 27; i <= 31; i++) {
+  const calendarDays = [];
+  const firstDayIndex = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1;
+  
+  for (let i = daysInPrevMonth - firstDayIndex + 1; i <= daysInPrevMonth; i++) {
     calendarDays.push({ day: i, isCurrentMonth: false });
   }
-  // Current month
   for (let i = 1; i <= daysInMonth; i++) {
     calendarDays.push({ day: i, isCurrentMonth: true });
   }
-  // Next month padding
-  for (let i = 1; i <= 6; i++) {
+  const totalCellsNeeded = 42;
+  const nextMonthPadding = totalCellsNeeded - calendarDays.length;
+  for (let i = 1; i <= nextMonthPadding; i++) {
     calendarDays.push({ day: i, isCurrentMonth: false });
   }
 
   // Filter watches based on status, search, and date
-  // Changing date updates the list of watches by showing watches created on or before that date
   const filteredWatches = watches.filter((watch) => {
     // 1. Status Filter
     const isRunning = watch.runInProgress;
@@ -93,12 +103,18 @@ export function WatchList({ watches }: WatchListProps) {
       if (!matchesTopic && !matchesQueries) return false;
     }
 
-    // 3. Date Filter (simulating activity or creation limit for August 2026)
-    if (selectedDate > 8) return false; // Future date is empty
+    // 3. Date Filter
+    const currentDay = new Date().getDate();
+    if (selectedDate > currentDay) return false;
 
     const watchDay = new Date(watch.createdAt).getDate();
-    // If watch is created in the current month, only show if day is <= selectedDate
-    if (watchDay > selectedDate) return false;
+    const watchMonth = new Date(watch.createdAt).getMonth();
+    const watchYear = new Date(watch.createdAt).getFullYear();
+    const nowCheck = new Date();
+
+    if (watchYear === nowCheck.getFullYear() && watchMonth === nowCheck.getMonth()) {
+      if (watchDay > selectedDate) return false;
+    }
 
     return true;
   });
@@ -162,7 +178,7 @@ export function WatchList({ watches }: WatchListProps) {
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                   <span className="font-sans font-semibold text-sm text-ink">
-                    August 2026
+                    {new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(new Date())}
                   </span>
                   <button className="p-1 hover:bg-primary-soft rounded-full text-ink-muted hover:text-ink transition-colors cursor-pointer">
                     <ChevronRight className="w-4 h-4" />
@@ -186,7 +202,7 @@ export function WatchList({ watches }: WatchListProps) {
                       >
                         <span>{item.day}</span>
                         {/* Activity Dot */}
-                        {item.isCurrentMonth && (item.day === 8 || item.day === 12 || item.day === 21) && (
+                        {item.isCurrentMonth && activeDays.has(item.day) && (
                           <span className="absolute bottom-0.5 w-1 h-1 rounded-full bg-success" />
                         )}
                       </button>

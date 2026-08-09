@@ -23,8 +23,11 @@ export async function fetchApi<T>(
     headers.set("X-User-Id", session.user.id);
   }
 
+  const baseUrl = API_BASE_URL.replace(/\/$/, "");
+  const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  
   try {
-    const res = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const res = await fetch(`${baseUrl}${cleanEndpoint}`, {
       ...options,
       headers,
     });
@@ -32,7 +35,7 @@ export async function fetchApi<T>(
     if (!res.ok) {
       // If the backend returns a structured error, use it.
       const errBody = await res.json().catch(() => ({}));
-      return { error: errBody.error || `Error ${res.status}: ${res.statusText}` };
+      return { error: errBody.detail || errBody.error || `Error ${res.status}: ${res.statusText}` };
     }
     
     return await res.json();

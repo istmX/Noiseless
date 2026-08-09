@@ -25,7 +25,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const isValid = await bcrypt.compare(parsed.data.password, user.password);
         if (!isValid) return null;
 
-        return { id: user.id, email: user.email, name: user.name, avatarUrl: user.avatarUrl };
+        return { id: user.id, email: user.email, name: user.name, avatarUrl: user.avatarUrl, tier: user.tier };
       },
     }),
   ],
@@ -34,11 +34,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.id = user.id;
         token.avatarUrl = (user as any).avatarUrl || null;
+        token.tier = (user as any).tier || "FREE";
       }
       if (trigger === "update" && session) {
         token.name = session.name;
         token.email = session.email;
         token.avatarUrl = session.avatarUrl;
+        token.tier = session.tier || token.tier;
       }
       return token;
     },
@@ -46,10 +48,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (token && session.user) {
         (session.user as any).id = token.id as string;
         (session.user as any).avatarUrl = token.avatarUrl as string;
+        (session.user as any).tier = token.tier as string;
       }
       return session;
     },
   },
+
   session: { strategy: "jwt" },
   pages: {
     signIn: "/login",

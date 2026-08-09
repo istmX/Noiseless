@@ -2,20 +2,18 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { LayoutDashboard, Settings, Activity, User, Menu, X, LogOut, ChevronLeft, ChevronRight } from "lucide-react";
+import { LayoutDashboard, Settings, Activity, User, Menu, X, LogOut, ChevronLeft, ChevronRight, List } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
 import { useAuthStore } from "../hooks/useAuthStore";
 import { getProfileAction } from "@/app/(dashboard)/profile-actions";
-import { ProfileEditDialog } from "./ProfileEditDialog";
 import Image from "next/image";
 import { serverLogoutAction } from "@/app/(auth)/actions";
 
 export function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
 
   const { isLoggedIn, userName, userAvatarUrl, setProfile, sidebarCollapsed, setSidebarCollapsed } = useAuthStore();
 
@@ -27,14 +25,17 @@ export function Sidebar() {
             name: res.user.name,
             email: res.user.email,
             avatarUrl: res.user.avatarUrl || "",
+            tier: (res.user as any).tier || "FREE",
           });
         }
       });
     }
   }, [isLoggedIn, setProfile]);
 
+
   const navItems = [
-    { icon: LayoutDashboard, label: "Watches", href: "/watches" },
+    { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
+    { icon: List, label: "Watches", href: "/watches" },
     { icon: Activity, label: "System Health", href: "/agent" },
     { icon: Settings, label: "Settings", href: "/settings" },
   ];
@@ -87,8 +88,9 @@ export function Sidebar() {
       <div className={`p-4 border-t border-hairline bg-[var(--color-sidebar-active)]/20 flex ${
         sidebarCollapsed ? "flex-col items-center gap-4 py-6" : "items-center justify-between gap-2"
       }`}>
-        <div 
-          onClick={() => setDialogOpen(true)}
+        <Link 
+          href="/settings"
+          onClick={() => setMobileOpen(false)}
           className={`flex items-center gap-3 rounded-md hover:bg-[var(--color-sidebar-active)]/30 transition-colors cursor-pointer min-w-0 ${
             sidebarCollapsed ? "justify-center p-1.5" : "flex-1 px-2 py-1.5"
           }`}
@@ -112,10 +114,10 @@ export function Sidebar() {
           {!sidebarCollapsed && (
             <div className="flex flex-col min-w-0">
               <span className="font-sans text-sm font-medium text-ink truncate">{userName}</span>
-              <span className="font-sans text-xs text-ink-muted">Edit Profile</span>
+              <span className="font-sans text-xs text-ink-muted">Settings</span>
             </div>
           )}
-        </div>
+        </Link>
 
         <button
           onClick={async () => {
@@ -182,8 +184,6 @@ export function Sidebar() {
       }`}>
         {sidebarContent}
       </aside>
-
-      <ProfileEditDialog open={dialogOpen} onOpenChange={setDialogOpen} />
     </>
   );
 }

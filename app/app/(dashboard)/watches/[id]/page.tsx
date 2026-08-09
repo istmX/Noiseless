@@ -6,7 +6,7 @@ import { Finding } from "./findings/types";
 import { Digest } from "./digests/types";
 import { prisma } from "@/shared/lib/db";
 import { mockWatches } from "../placeholder";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 
 import { WatchDetailView } from "./components/WatchDetailView";
 
@@ -36,7 +36,7 @@ export default async function WatchDetailPage({ params }: WatchDetailPageProps) 
   const watch = dbWatch || mockWatch;
 
   if (!watch) {
-    return notFound();
+    redirect("/404");
   }
 
   // Generate realistic findings if we are using the fallback mock and they are empty

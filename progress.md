@@ -74,6 +74,16 @@
 - Implemented frontend hourly frequency locks with a padlock visual badge, integrated automated LLM fallback requests using Gemini 3.5 Flash and Mistral API endpoints, and updated notification services to track boolean delivery outcomes.
 - Implemented user profile and billing plans Settings page, including a ProfileForm for name and email updates with dynamic Dicebear avatar previews, and a BillingPlans table displaying tier quotas and package upgrades.
 
+## 2026-08-09
+
+### Completed
+- Added tier column to database and updated user models in Next.js and FastAPI backend.
+- Enforced token limit validations and hourly frequency constraints in the background agent pipeline.
+- Implemented real time token deduction post run and depletion notification alerts via email and Slack.
+- Updated NextAuth session callbacks and Zustand state to track and store user tier dynamically on the client.
+- Built a secure checkout payment modal supporting Card, PayPal, and Apple Pay checkout methods to upgrade user plans.
+- Dynamically enabled and locked hourly watches in create and edit watch views based on active user plan tier.
+
 ### Pending
 
 ### Notes
@@ -81,4 +91,5 @@
 - GROQ_API_KEY must be set in the FastAPI .env. LangChain (ChatGroq) reads this key automatically.
 - Qdrant Cloud cluster must be provisioned.
 - shadcn initialized with Tailwind v4 in app/. Alias paths set to @/shared/components and @/shared/lib.
+
 

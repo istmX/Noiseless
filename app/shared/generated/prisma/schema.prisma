@@ -8,14 +8,17 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String
-  password  String
-  avatarUrl String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  watches   Watch[]
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String
+  password      String
+  avatarUrl     String?
+  tokensBalance Int      @default(500)
+  tokensUsed    Int      @default(0)
+  tier          String   @default("FREE")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  watches       Watch[]
 }
 
 model Watch {

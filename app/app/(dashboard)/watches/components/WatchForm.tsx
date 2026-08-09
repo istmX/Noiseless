@@ -13,16 +13,22 @@ import { Plus, X, Loader2, Lock } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "motion/react";
+import { useAuthStore } from "@/shared/hooks/useAuthStore";
+
 
 interface WatchFormProps {
   onSuccess?: () => void;
 }
 
 export function WatchForm({ onSuccess }: WatchFormProps) {
+  const { userTier, userEmail } = useAuthStore();
+  const isHourlyLocked = userTier === "FREE";
+
   const form = useForm<WatchFormValues>({
     resolver: zodResolver(watchFormSchema),
     defaultValues: DEFAULT_WATCH_FORM_VALUES as WatchFormValues,
   });
+
 
   const { fields, append, remove } = useFieldArray({
     name: "searchQueries",
@@ -30,7 +36,11 @@ export function WatchForm({ onSuccess }: WatchFormProps) {
   });
 
   const onSubmit = async (data: WatchFormValues) => {
-    const res = await createWatch(data);
+    const submissionData = {
+      ...data,
+      notificationEmail: data.notificationEmail?.trim() ? data.notificationEmail : userEmail,
+    };
+    const res = await createWatch(submissionData);
     if (res.error) {
       toast.error("Unable to save watch", { description: res.error });
       return;
@@ -127,12 +137,19 @@ export function WatchForm({ onSuccess }: WatchFormProps) {
                 <SelectValue placeholder="Select frequency" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="hourly" disabled={true} className="cursor-not-allowed opacity-60 flex items-center justify-between gap-1.5">
-                  <span className="flex items-center gap-1">Hourly <Lock className="w-3.5 h-3.5 text-ink-faint inline" /></span>
+                <SelectItem 
+                  value="hourly" 
+                  disabled={isHourlyLocked} 
+                  className={`${isHourlyLocked ? "cursor-not-allowed opacity-60" : "cursor-pointer"} flex items-center justify-between gap-1.5`}
+                >
+                  <span className="flex items-center gap-1">
+                    Hourly {isHourlyLocked && <Lock className="w-3.5 h-3.5 text-ink-faint inline" />}
+                  </span>
                 </SelectItem>
                 <SelectItem value="daily" className="cursor-pointer">Daily</SelectItem>
                 <SelectItem value="weekly" className="cursor-pointer">Weekly</SelectItem>
               </SelectContent>
+
             </Select>
           </div>
 

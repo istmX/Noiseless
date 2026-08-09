@@ -38,3 +38,41 @@ export async function updateUserProfile(name: string, email: string) {
     return { error: "Failed to update profile settings" };
   }
 }
+
+export async function upgradeUserPlan(tier: string) {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    return { error: "Authentication required" };
+  }
+
+  const allowedTiers = ["FREE", "PRO", "ENTERPRISE"];
+  if (!allowedTiers.includes(tier)) {
+    return { error: "Invalid subscription tier" };
+  }
+
+  let tokensBalance = 500;
+  if (tier === "PRO") {
+    tokensBalance = 10000;
+  } else if (tier === "ENTERPRISE") {
+    tokensBalance = 100000;
+  }
+
+  try {
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        tier,
+        tokensBalance,
+        tokensUsed: 0,
+      },
+    });
+
+    revalidatePath("/settings");
+    return { success: true };
+  } catch (err: any) {
+    return { error: "Failed to upgrade subscription plan" };
+  }
+}
+

@@ -69,4 +69,64 @@ class NotificationService:
             print(f"Error sending Brevo email: {e}")
             return False
 
+    async def send_token_depletion_alert(self, recipient_email: str, webhook_url: str, topic: str, watch_id: str) -> bool:
+        """Sends an alert to email and Slack when a watch run is blocked due to depleted tokens."""
+        email_sent = True
+        slack_sent = True
+
+        if webhook_url:
+            payload = {
+                "text": f"⚠️ *Noiseless Watch Blocked* for topic *{topic}*\n\nYour watch run was blocked because your token balance is depleted (less than 10 tokens remaining). Please upgrade your plan or top up your tokens on the settings page.\n\n🔗 _Update billing: /settings_"
+            }
+            try:
+                async with httpx.AsyncClient() as client:
+                    response = await client.post(webhook_url, json=payload, timeout=10.0)
+                    if response.status_code != 200:
+                        print(f"Failed to send Slack depletion alert: status {response.status_code}")
+                        slack_sent = False
+            except Exception as e:
+                print(f"Error sending Slack depletion alert: {e}")
+                slack_sent = False
+
+        if recipient_email and settings.BREVO_API_KEY:
+            url = "https://api.brevo.com/v3/smtp/email"
+            headers = {
+                "api-key": settings.BREVO_API_KEY,
+                "content-type": "application/json"
+            }
+            html_content = f"""
+            <html>
+            <body style="font-family: sans-serif; background-color: #F4F4F5; padding: 24px; color: #18181B;">
+                <div style="background-color: #FFFFFF; border: 1px solid #E4E4E7; border-radius: 6px; padding: 24px; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #DC2626; margin-top: 0;">Noiseless Watch Blocked: Depleted Tokens</h2>
+                    <p><strong>Topic:</strong> {topic}</p>
+                    <div style="border-top: 1px solid #E4E4E7; padding-top: 16px; margin-top: 16px; line-height: 1.6;">
+                        Your watch run has been blocked because your token balance is depleted. You must have at least 10 tokens to execute a watch run.
+                    </div>
+                    <div style="margin-top: 24px; font-size: 12px; color: #71717A;">
+                        Please visit the settings page on your Noiseless dashboard to purchase additional tokens or upgrade your subscription.
+                    </div>
+                </div>
+            </body>
+            </html>
+            """
+            payload = {
+                "sender": {"name": "Noiseless Agent", "email": "agent@noiseless.ai"},
+                "to": [{"email": recipient_email}],
+                "subject": f"[Noiseless] Action Required: Watch Blocked for {topic}",
+                "htmlContent": html_content
+            }
+            try:
+                async with httpx.AsyncClient() as client:
+                    response = await client.post(url, json=payload, headers=headers, timeout=10.0)
+                    if response.status_code not in (200, 201, 202):
+                        print(f"Failed to send Brevo depletion email: status {response.status_code}")
+                        email_sent = False
+            except Exception as e:
+                print(f"Error sending Brevo depletion email: {e}")
+                email_sent = False
+
+        return email_sent or slack_sent
+
 notification_service = NotificationService()
+

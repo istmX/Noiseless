@@ -19,6 +19,9 @@ export default async function SettingsPage() {
       name: true,
       email: true,
       avatarUrl: true,
+      tokensBalance: true,
+      tokensUsed: true,
+      tier: true,
     },
   });
 
@@ -41,8 +44,9 @@ export default async function SettingsPage() {
       {/* Settings Sections */}
       <div className="grid grid-cols-1 gap-8">
         <ProfileForm initialUser={user} />
-        <BillingPlans />
+        <BillingPlans tokensBalance={user.tokensBalance} tokensUsed={user.tokensUsed} tier={user.tier} />
       </div>
     </div>
   );
+
 }

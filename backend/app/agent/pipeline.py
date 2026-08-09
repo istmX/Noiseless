@@ -24,6 +24,37 @@ async def run_agent_pipeline(watch_id: str, db: AsyncSession):
     if not watch or not watch.active:
         return
 
+    # Check user tokens balance and subscription tier constraints
+    from app.models.user import User
+    user_result = await db.execute(select(User).filter(User.id == watch.userId))
+    user = user_result.scalar_one_or_none()
+    if not user:
+        print(f"User owner of Watch {watch_id} not found, aborting.")
+        return
+
+    # 1. Enforce tier restrictions: hourly watches require premium tier
+    if watch.frequency == "hourly" and user.tier == "FREE":
+        print(f"User {user.id} is on FREE tier but Watch {watch_id} has hourly frequency. Deactivating watch.")
+        watch.active = False
+        await db.commit()
+        return
+
+    # 2. Enforce token limits: require at least 10 tokens to execute
+    if user.tokensBalance < 10:
+        print(f"User {user.id} has insufficient tokens ({user.tokensBalance}), deactivating watch and sending alert.")
+        watch.active = False
+        await db.commit()
+        # Dispatch depletion alert to watch notification channels or fallback to user email
+        recipient = watch.notificationEmail or user.email
+        await notification_service.send_token_depletion_alert(
+            recipient_email=recipient,
+            webhook_url=watch.notificationSlackWebhook,
+            topic=watch.topic,
+            watch_id=watch.id
+        )
+        return
+
+
     # Idempotency lock & rate limit check
     if watch.runInProgress:
         print(f"Watch {watch_id} run in progress, skipping.")
@@ -133,6 +164,24 @@ async def run_agent_pipeline(watch_id: str, db: AsyncSession):
                     watch.topic,
                     summary
                 )
+
+        # Successful completion of pipeline run: deduct tokens only if new findings were found
+        if new_findings:
+            user.tokensBalance = max(0, user.tokensBalance - 10)
+            user.tokensUsed += 10
+            await db.commit()
+        else:
+            print(f"No new findings found for watch {watch_id}. Skipping token deduction.")
+            if watch.notificationEmail:
+                try:
+                    await notification_service.send_email_notification(
+                        watch.notificationEmail,
+                        watch.topic,
+                        "No new changes detected for this watch since the last run. We will keep monitoring."
+                    )
+                except Exception as email_err:
+                    print(f"Failed to send no-changes email: {email_err}")
+            await db.commit()
 
     except Exception as e:
         print(f"Error in pipeline run for watch {watch_id}: {e}")

@@ -6,7 +6,7 @@ export const proxy = auth((req) => {
   
   if (isAuthPage) {
     if (isLoggedIn) {
-      return Response.redirect(new URL('/watches', req.nextUrl));
+      return Response.redirect(new URL('/dashboard', req.nextUrl));
     }
     return;
   }
@@ -14,6 +14,11 @@ export const proxy = auth((req) => {
   if (!isLoggedIn) {
     return Response.redirect(new URL('/login', req.nextUrl));
   }
+
+  if (req.nextUrl.pathname === '/') {
+    return Response.redirect(new URL('/dashboard', req.nextUrl));
+  }
+
 });
 
 export const config = {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useTransition, useEffect, useRef } from "react";
-import { ArrowLeft, Clock, Hash, FileText, Search, Plus, X, Sliders, ChevronDown, ChevronUp, Layers, Sparkles, Mail, MessageSquare, Play, Lock } from "lucide-react";
+import { ArrowLeft, Clock, Hash, FileText, Search, Plus, X, Sliders, ChevronDown, ChevronUp, Layers, Sparkles, Mail, MessageSquare, Play, Lock, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { FindingTimeline } from "../findings/components/FindingTimeline";
@@ -16,6 +16,8 @@ import { Label } from "@/shared/components/ui/label";
 import { deleteWatch, updateWatch, runWatchNow } from "../../actions";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/shared/components/ui/dialog";
+import { useAuthStore } from "@/shared/hooks/useAuthStore";
+
 
 interface WatchDetailViewProps {
   watch: Watch;
@@ -24,10 +26,14 @@ interface WatchDetailViewProps {
 }
 
 export function WatchDetailView({ watch, findings, digests }: WatchDetailViewProps) {
+  const { userTier, userEmail } = useAuthStore();
+  const isHourlyLocked = userTier === "FREE";
+
   const [showSettings, setShowSettings] = useState(false);
   const [active, setActive] = useState(watch.active);
   const [frequency, setFrequency] = useState(watch.frequency);
   const [threshold, setThreshold] = useState(watch.significanceThreshold);
+
   const [queries, setQueries] = useState<string[]>(watch.searchQueries);
   const [newQuery, setNewQuery] = useState("");
   const [notificationEmail, setNotificationEmail] = useState(watch.notificationEmail || "");
@@ -63,6 +69,30 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
     }
   }, [watch.runInProgress, router]);
 
+  const [cooldownRemaining, setCooldownRemaining] = useState<number>(0);
+
+  useEffect(() => {
+    if (!watch.lastRunAt) return;
+    
+    const checkCooldown = () => {
+      const lastRun = new Date(watch.lastRunAt!).getTime();
+      const now = Date.now();
+      const elapsed = (now - lastRun) / 1000;
+      const remaining = Math.max(0, 900 - elapsed);
+      setCooldownRemaining(Math.ceil(remaining));
+    };
+
+    checkCooldown();
+    const interval = setInterval(checkCooldown, 1000);
+    return () => clearInterval(interval);
+  }, [watch.lastRunAt]);
+
+  const formatCooldown = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
   const hasChanges = 
     active !== watch.active ||
     frequency !== watch.frequency ||
@@ -78,7 +108,7 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
         frequency,
         significanceThreshold: threshold,
         searchQueries: queries,
-        notificationEmail: notificationEmail || null,
+        notificationEmail: notificationEmail.trim() ? notificationEmail : (userEmail || null),
         notificationSlackWebhook: notificationSlackWebhook || null,
       });
       if (result.error) {
@@ -182,11 +212,23 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
 
             <Button
               onClick={handleRunNow}
-              disabled={isPending || watch.runInProgress}
+              disabled={isPending || watch.runInProgress || cooldownRemaining > 0}
               className="bg-primary hover:bg-primary-hover text-on-primary font-sans font-medium rounded-full px-4 h-10 flex items-center gap-2 cursor-pointer text-xs"
             >
-              <Play className="w-4 h-4" />
-              <span>{watch.runInProgress ? "Running..." : "Run Now"}</span>
+              {isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Play className="w-4 h-4" />
+              )}
+              <span>
+                {watch.runInProgress
+                  ? "Running..."
+                  : isPending
+                  ? "Triggering..."
+                  : cooldownRemaining > 0
+                  ? `Cooldown (${formatCooldown(cooldownRemaining)})`
+                  : "Run Now"}
+              </span>
             </Button>
 
             <Button
@@ -241,8 +283,9 @@ export function WatchDetailView({ watch, findings, digests }: WatchDetailViewPro
                     <Label className="text-body-sm font-medium text-ink">Frequency Interval</Label>
                     <div className="grid grid-cols-3 gap-2">
                       {["hourly", "daily", "weekly"].map((f) => {
-                        const isLocked = f === "hourly";
+                        const isLocked = f === "hourly" && isHourlyLocked;
                         return (
+
                           <button
                             key={f}
                             type="button"
