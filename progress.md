@@ -219,6 +219,7 @@
 * Adjusted HTML email digest layouts to resolve links via the frontend environment URL and aligned report colors with the Electric Violet theme.
 * Renamed the generic logo file to noiseless-logo.png and deleted all unused template SVG assets and copies in the public directory.
 * Linked settings profile updates and billing plan changes directly to the client state store to resolve immediate layout updates and prevent data reversion on page reloads.
+* Configured proxy.ts at the app root for Next.js 16 route protection and deleted the legacy middleware.ts module.
 * Updated the billing plans usage metric to display the actual remaining tokens balance instead of an additive fraction.
 
 
