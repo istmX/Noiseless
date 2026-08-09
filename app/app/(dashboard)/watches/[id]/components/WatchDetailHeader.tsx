@@ -94,15 +94,6 @@ export function WatchDetailHeader({
   return (
     <>
     <div className="flex flex-col gap-4">
-      {/* Back nav */}
-      <Link
-        href="/watches"
-        className="inline-flex items-center gap-1.5 text-xs font-mono text-ink-muted hover:text-ink transition-colors w-fit group"
-      >
-        <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
-        Back to watches
-      </Link>
-
       <div className="workspace-panel flex flex-col gap-5 p-5 sm:p-6">
         <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-5">
           {/* Left: title + status */}

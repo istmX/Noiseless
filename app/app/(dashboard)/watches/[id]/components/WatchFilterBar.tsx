@@ -8,8 +8,6 @@ interface WatchFilterBarProps {
   onPresetChange: (preset: FilterPreset) => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
-  activeView: "links" | "detailed";
-  onViewChange: (view: "links" | "detailed") => void;
   startDate: string;
   onStartDateChange: (date: string) => void;
   endDate: string;
@@ -21,8 +19,6 @@ export function WatchFilterBar({
   onPresetChange,
   searchQuery,
   onSearchChange,
-  activeView,
-  onViewChange,
   startDate,
   onStartDateChange,
   endDate,
@@ -120,34 +116,6 @@ export function WatchFilterBar({
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
             />
           </div>
-        </div>
-
-        {/* View Toggle */}
-        <div className="flex items-center bg-surface-inset p-0.5 rounded-md border border-hairline">
-          <button
-            onClick={() => onViewChange("links")}
-            className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-sm transition-all ${
-              activeView === "links"
-                ? "bg-surface text-ink shadow-sm border border-hairline"
-                : "text-ink-muted hover:text-ink border border-transparent"
-            }`}
-            title="Links Index View"
-          >
-            <LinkIcon className="w-3.5 h-3.5" />
-            <span>Links</span>
-          </button>
-          <button
-            onClick={() => onViewChange("detailed")}
-            className={`flex items-center gap-1.5 px-3 py-1 text-[11px] font-medium rounded-sm transition-all ${
-              activeView === "detailed"
-                ? "bg-surface text-ink shadow-sm border border-hairline"
-                : "text-ink-muted hover:text-ink border border-transparent"
-            }`}
-            title="Detailed Timeline View"
-          >
-            <List className="w-3.5 h-3.5" />
-            <span>Timeline</span>
-          </button>
         </div>
       </div>
     </div>

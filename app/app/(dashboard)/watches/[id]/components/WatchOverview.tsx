@@ -73,7 +73,7 @@ export function WatchOverview({ watch, findings, digests }: WatchOverviewProps) 
   }, [latestDigest]);
 
   return (
-    <div className="space-y-6 overflow-y-auto h-full pr-1 scrollbar-hide pb-8">
+    <div className="space-y-6 pb-8">
       {/* Research Snapshot Metrics */}
       <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="workspace-panel p-4 flex flex-col gap-1.5 items-center justify-center text-center">

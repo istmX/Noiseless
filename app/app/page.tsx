@@ -229,7 +229,7 @@ export default function StandaloneLandingPage() {
         });
       }
 
-      // Feature elements fade reveals
+   
       const scrollItems = gsap.utils.toArray(".scroll-reveal");
       scrollItems.forEach((el: any) => {
         gsap.from(el, {

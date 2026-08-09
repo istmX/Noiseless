@@ -39,11 +39,11 @@ export default function DashboardLayout({
       <div className="flex min-w-0 flex-1 flex-col">
         <HeaderBar onOpenCommand={() => setIsCommandOpen(true)} />
 
-        <nav aria-label="Mobile navigation" className="grid grid-cols-4 border-b border-hairline bg-surface px-2 py-1 md:hidden">
+        <nav aria-label="Mobile navigation" className="grid grid-cols-3 border-b border-hairline bg-surface px-2 py-1 md:hidden">
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
             const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-            return <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined} className={`flex min-h-12 flex-col items-center justify-center gap-1 rounded-md text-[10px] font-medium ${active ? "bg-accent-soft text-accent" : "text-ink-muted"}`}><Icon aria-hidden="true" className="h-4 w-4" /><span>{item.label === "System Health" ? "Health" : item.label}</span></Link>;
+            return <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined} className={`flex min-h-12 flex-col items-center justify-center gap-1 rounded-md text-[10px] font-medium ${active ? "bg-accent-soft text-accent" : "text-ink-muted"}`}><Icon aria-hidden="true" className="h-4 w-4" /><span>{item.label}</span></Link>;
           })}
         </nav>
 

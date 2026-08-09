@@ -29,7 +29,7 @@ export default async function WatchWorkspaceLayout({ children, params }: WatchWo
   const digestsCount = watch._count.digests;
 
   return (
-    <div className="flex flex-col gap-5 w-full h-[calc(100vh-10rem)] md:h-[calc(100vh-8.5rem)] min-h-0">
+    <div className="flex flex-col gap-5 w-full">
       {/* Back button */}
       <div className="shrink-0">
         <Link

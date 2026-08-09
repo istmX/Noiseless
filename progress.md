@@ -198,6 +198,15 @@
 - Styled evidence cards to be fully collapsed by default (showing only domain, category, score, and relative time) with an inline expanded view and collapsible source details.
 - Integrated relative date-time indicators (e.g. "2h ago") and interactive claims that scroll and highlight the cited evidence.
 - Deleted the obsolete System Health agent page and its references, routing, header mappings, and sidebar menu items.
+- Restructured the Watch detail page into a nested sub-workspace with dedicated routes: /watches/[id] (Overview), /watches/[id]/summary (Reading Brief), /watches/[id]/evidence (Evidence Explorer), and /watches/[id]/evidence/[evidenceId] (Evidence details).
+- Created a persistent WorkspaceNav sub-navigation bar within the layout wrapper to support switching tabs cleanly.
+- Deleted the obsolete, monolithic WatchDetailView.tsx component from the components folder.
+- Removed the fixed viewport height constraints and page-level height locks from layout wrappers and sub-views to let the dashboard pages scroll naturally.
+- Cleaned up the Evidence Explorer view by removing the redundant Links/Timeline toggle filters from WatchFilterBar.tsx.
+- Resolved the duplicated "Back to watches" navigation links by deleting the inline back button element from WatchDetailHeader.tsx.
+- Optimized the mobile navigation grid columns to dynamically match the updated navigation items count (grid-cols-3 instead of grid-cols-4).
+- Added wrapping support and flexible flex directions to the evidence facet controls container to prevent horizontal overflow on smaller screens.
+- Updated main dashboard FindingInspector.tsx details links to point to the new dedicated sub-workspace detail route (/watches/[id]/evidence/[evidenceId]).
 
 
 ### Notes
