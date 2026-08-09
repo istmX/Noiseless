@@ -206,7 +206,11 @@
 - Resolved the duplicated "Back to watches" navigation links by deleting the inline back button element from WatchDetailHeader.tsx.
 - Optimized the mobile navigation grid columns to dynamically match the updated navigation items count (grid-cols-3 instead of grid-cols-4).
 - Added wrapping support and flexible flex directions to the evidence facet controls container to prevent horizontal overflow on smaller screens.
-- Updated main dashboard FindingInspector.tsx details links to point to the new dedicated sub-workspace detail route (/watches/[id]/evidence/[evidenceId]).
+* Updated main dashboard FindingInspector.tsx details links to point to the new dedicated sub-workspace detail route (/watches/[id]/evidence/[evidenceId]).
+* Integrated a bottom navigation bar (BottomNav.tsx) for mobile devices and removed the top mobile navigation bar.
+* Modified the watches grid row component (WatchRow.tsx) to stack watch items into cards on small screens.
+* Formatted the evidence row card header to lay out the domain, conflict badge, and title responsively by stacking them on mobile.
+* Adjusted the watch list header layout (WatchListHeader.tsx) and the evidence detail link container to prevent layout clips on narrow screens.
 
 
 ### Notes

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { HeaderBar } from "@/shared/components/shell/HeaderBar";
 import { SidebarRail } from "@/shared/components/shell/SidebarRail";
+import { BottomNav } from "@/shared/components/shell/BottomNav";
 import { CommandMenu } from "@/shared/components/command/CommandMenu";
 import { useWatchDrawerStore } from "@/shared/hooks/useWatchDrawerStore";
 import { WatchForm } from "./watches/components/WatchForm";
@@ -39,17 +40,11 @@ export default function DashboardLayout({
       <div className="flex min-w-0 flex-1 flex-col">
         <HeaderBar onOpenCommand={() => setIsCommandOpen(true)} />
 
-        <nav aria-label="Mobile navigation" className="grid grid-cols-3 border-b border-hairline bg-surface px-2 py-1 md:hidden">
-          {NAV_ITEMS.map((item) => {
-            const Icon = item.icon;
-            const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
-            return <Link key={item.href} href={item.href} aria-current={active ? "page" : undefined} className={`flex min-h-12 flex-col items-center justify-center gap-1 rounded-md text-[10px] font-medium ${active ? "bg-accent-soft text-accent" : "text-ink-muted"}`}><Icon aria-hidden="true" className="h-4 w-4" /><span>{item.label}</span></Link>;
-          })}
-        </nav>
-
-        <main className="min-w-0 flex-1 overflow-auto px-4 py-5 sm:px-6 lg:px-8">
+        <main className="min-w-0 flex-1 overflow-auto px-4 py-5 pb-20 sm:px-6 lg:px-8 md:pb-5">
           <div className="mx-auto w-full max-w-[1440px]">{children}</div>
         </main>
+
+        <BottomNav />
 
         <CommandMenu isOpen={isCommandOpen} onClose={() => setIsCommandOpen(false)} />
 

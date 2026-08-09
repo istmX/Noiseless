@@ -165,10 +165,10 @@ export default function StandaloneLandingPage() {
     return () => clearInterval(timer);
   }, []);
 
-  // GSAP animations
+  
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Split text character slide up reveal
+
       gsap.from(".split-char", {
         y: 60,
         rotate: 8,

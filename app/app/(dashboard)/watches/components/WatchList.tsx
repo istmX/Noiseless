@@ -128,10 +128,10 @@ export function WatchList({ watches }: WatchListProps) {
             </div>
           ) : (
             <div className="border border-hairline rounded-md divide-y divide-hairline overflow-hidden">
-              <div className="grid grid-cols-12 gap-4 px-5 py-2 bg-surface-inset text-[10px] font-mono uppercase tracking-widest text-ink-faint">
+              <div className="hidden md:grid grid-cols-12 gap-4 px-5 py-2 bg-surface-inset text-[10px] font-mono uppercase tracking-widest text-ink-faint">
                 <div className="col-span-6">Watch</div>
-                <div className="col-span-2 hidden md:block">Frequency</div>
-                <div className="col-span-2 hidden md:block">Score</div>
+                <div className="col-span-2">Frequency</div>
+                <div className="col-span-2">Score</div>
                 <div className="col-span-2 text-right">Findings</div>
               </div>
               {filteredWatches.map((watch) => (

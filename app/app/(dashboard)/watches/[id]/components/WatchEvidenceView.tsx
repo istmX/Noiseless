@@ -337,19 +337,21 @@ function EvidenceRowCard({
         onClick={onToggleExpand}
         className="p-3 flex items-center justify-between gap-4 cursor-pointer hover:bg-surface-inset/40"
       >
-        <div className="flex items-center gap-3 min-w-0">
-          <span className="text-[10px] font-mono text-ink-muted truncate font-bold">
-            {domain}
-          </span>
-          <span className="text-xs font-sans font-semibold text-ink leading-none truncate">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 min-w-0">
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="text-[10px] font-mono text-ink-muted font-bold truncate max-w-[120px] sm:max-w-none">
+              {domain}
+            </span>
+            {isConflict && (
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-warning-soft text-warning border border-warning/10 text-[9px] font-mono shrink-0 leading-none">
+                <AlertTriangle className="w-2.5 h-2.5" />
+                <span>Conflict</span>
+              </span>
+            )}
+          </div>
+          <span className="text-xs font-sans font-semibold text-ink leading-tight sm:leading-none truncate">
             {finding.title}
           </span>
-          {isConflict && (
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-warning-soft text-warning border border-warning/10 text-[9px] font-mono shrink-0 leading-none">
-              <AlertTriangle className="w-2.5 h-2.5" />
-              <span>Conflict</span>
-            </span>
-          )}
         </div>
 
         <div className="flex items-center gap-2 shrink-0">

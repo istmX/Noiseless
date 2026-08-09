@@ -65,7 +65,6 @@ export async function upgradeUserPlan(tier: string) {
       data: {
         tier,
         tokensBalance,
-        tokensUsed: 0,
       },
     });
 

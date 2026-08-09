@@ -117,7 +117,7 @@ export default async function EvidenceDetailPage({ params }: EvidenceDetailPageP
                   href={finding.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-accent hover:underline truncate text-right max-w-[280px]"
+                  className="text-accent hover:underline truncate text-right max-w-[160px] sm:max-w-[280px]"
                 >
                   {finding.url}
                 </a>
