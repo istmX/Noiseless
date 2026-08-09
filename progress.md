@@ -216,6 +216,8 @@
 * Implemented dynamic preflight token balance checks inside the agent pipeline and manual watch runs based on user subscription levels.
 * Purged unused placeholder modules (placeholder.ts), legacy route handlers (proxy.ts), and the backend scratch directory.
 * Upgraded user avatar URL template styles to use the newer 10.x/croodles Dicebear API style across all registrations and profile updates.
+* Adjusted HTML email digest layouts to resolve links via the frontend environment URL and aligned report colors with the Electric Violet theme.
+* Renamed the generic logo file to noiseless-logo.png and deleted all unused template SVG assets and copies in the public directory.
 
 
 ### Notes

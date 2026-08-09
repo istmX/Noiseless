@@ -32,7 +32,7 @@ class NotificationService:
         import re
         
         # 1. Parse Links: [Text](URL) -> Styled Anchor
-        link_style = "color: #166534; text-decoration: none; font-weight: 600; border-bottom: 1.5px solid #bbf7d0;"
+        link_style = "color: #7C3AED; text-decoration: none; font-weight: 600; border-bottom: 1.5px solid #DDD6FE;"
         html_summary = re.sub(
             r'\[([^\]]+)\]\(([^)]+)\)',
             f'<a href="\\2" target="_blank" style="{link_style}">\\1</a>',
@@ -42,7 +42,7 @@ class NotificationService:
         # 2. Parse Bold: **Text** -> <strong>Text</strong>
         html_summary = re.sub(
             r'\*\*([^*]+)\*\*',
-            r'<strong style="color: #0f172a; font-weight: 700;">\1</strong>',
+            r'<strong style="color: #18181B; font-weight: 700;">\1</strong>',
             html_summary
         )
         
@@ -54,7 +54,7 @@ class NotificationService:
             if p:
                 p_html = p.replace('\n', '<br>')
                 formatted_paragraphs.append(
-                    f'<p style="margin-top: 0; margin-bottom: 18px; font-size: 15px; color: #334155; line-height: 1.7; text-align: justify;">{p_html}</p>'
+                    f'<p style="margin-top: 0; margin-bottom: 18px; font-size: 15px; color: #27272A; line-height: 1.7; text-align: justify;">{p_html}</p>'
                 )
         
         parsed_content = "\n".join(formatted_paragraphs)
@@ -65,17 +65,17 @@ class NotificationService:
         if watch_id:
             action_html = f"""
             <!-- CTA / Action Section -->
-            <div style="padding: 0 32px 32px 32px; text-align: center; border-bottom: 1px solid #f1f5f9;">
-                <a href="{settings.FRONTEND_URL}/watches/{watch_id}" target="_blank" style="display: inline-block; background-color: #16a34a; color: #ffffff; font-weight: 600; font-size: 14px; text-decoration: none; padding: 12px 24px; border-radius: 6px; box-shadow: 0 2px 4px 0 rgba(22, 163, 74, 0.2);">
+            <div style="padding: 0 32px 32px 32px; text-align: center; border-bottom: 1px solid #E4E4E7;">
+                <a href="{settings.FRONTEND_URL}/watches/{watch_id}" target="_blank" style="display: inline-block; background-color: #7C3AED; color: #ffffff; font-weight: 600; font-size: 14px; text-decoration: none; padding: 12px 24px; border-radius: 6px; box-shadow: 0 2px 4px 0 rgba(124, 58, 237, 0.2);">
                     Open Watch Workstation
                 </a>
-                <p style="margin: 16px 0 0 0; font-size: 12px; color: #64748b;">
-                    Want to edit settings or stop alerts? <a href="{settings.FRONTEND_URL}/watches/{watch_id}" target="_blank" style="color: #16a34a; font-weight: 600; text-decoration: none;">Pause monitoring</a> or update configuration.
+                <p style="margin: 16px 0 0 0; font-size: 12px; color: #71717A;">
+                    Want to edit settings or stop alerts? <a href="{settings.FRONTEND_URL}/watches/{watch_id}" target="_blank" style="color: #7C3AED; font-weight: 600; text-decoration: none;">Pause monitoring</a> or update configuration.
                 </p>
             </div>
             """
 
-        # Premium HTML report layout matching Forest Green branding
+        # Premium HTML report layout matching Warm Slate Editorial branding
         html_content = f"""
         <!DOCTYPE html>
         <html>
@@ -84,29 +84,29 @@ class NotificationService:
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>[Noiseless] Intelligence Digest: {topic}</title>
         </head>
-        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f8fafc; padding: 32px 16px; margin: 0; color: #0f172a; -webkit-font-smoothing: antialiased;">
-            <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-top: 5px solid #16a34a; border-radius: 12px; max-width: 650px; margin: 0 auto; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);">
+        <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #FAFAFA; padding: 32px 16px; margin: 0; color: #18181B; -webkit-font-smoothing: antialiased;">
+            <div style="background-color: #ffffff; border: 1px solid #E4E4E7; border-top: 5px solid #7C3AED; border-radius: 12px; max-width: 650px; margin: 0 auto; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);">
                 
                 <!-- Header Section -->
-                <div style="padding: 32px 32px 24px 32px; border-bottom: 1px solid #f1f5f9;">
+                <div style="padding: 32px 32px 24px 32px; border-bottom: 1px solid #E4E4E7;">
                     <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-                        <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #16a34a; background-color: #f0fdf4; padding: 4px 10px; border-radius: 9999px;">
+                        <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #7C3AED; background-color: #F5F3FF; padding: 4px 10px; border-radius: 9999px;">
                             Intelligence Brief
                         </span>
-                        <span style="font-size: 12px; color: #64748b; font-weight: 500;">
+                        <span style="font-size: 12px; color: #71717A; font-weight: 500;">
                             {current_date}
                         </span>
                     </div>
-                    <h1 style="font-size: 24px; font-weight: 800; color: #0f172a; margin: 0 0 8px 0; letter-spacing: -0.02em; line-height: 1.2;">
+                    <h1 style="font-size: 24px; font-weight: 800; color: #18181B; margin: 0 0 8px 0; letter-spacing: -0.02em; line-height: 1.2;">
                         Noiseless Intelligence Digest
                     </h1>
-                    <p style="margin: 0; font-size: 14px; color: #64748b; font-weight: 500;">
-                        Topic Focus: <span style="color: #0f172a; font-weight: 600;">{topic}</span>
+                    <p style="margin: 0; font-size: 14px; color: #71717A; font-weight: 500;">
+                        Topic Focus: <span style="color: #18181B; font-weight: 600;">{topic}</span>
                     </p>
                 </div>
 
                 <!-- Report Content -->
-                <div style="padding: 32px 32px 24px 32px; border-bottom: 1px solid #f1f5f9;">
+                <div style="padding: 32px 32px 24px 32px; border-bottom: 1px solid #E4E4E7;">
                     {parsed_content}
                 </div>
 
@@ -114,11 +114,11 @@ class NotificationService:
                 {action_html}
 
                 <!-- Footer Section -->
-                <div style="padding: 24px 32px; background-color: #f8fafc; text-align: center;">
-                    <p style="margin: 0 0 8px 0; font-size: 12px; font-weight: 600; color: #475569; letter-spacing: 0.05em; text-transform: uppercase;">
+                <div style="padding: 24px 32px; background-color: #FAFAFA; text-align: center;">
+                    <p style="margin: 0 0 8px 0; font-size: 12px; font-weight: 600; color: #27272A; letter-spacing: 0.05em; text-transform: uppercase;">
                         Noiseless Research Analyst
                     </p>
-                    <p style="margin: 0; font-size: 11px; color: #94a3b8; line-height: 1.5;">
+                    <p style="margin: 0; font-size: 11px; color: #71717A; line-height: 1.5;">
                         This is an automated intelligence stream. To manage your watches, configuration parameters, or notification settings, please visit your dashboard.
                     </p>
                 </div>

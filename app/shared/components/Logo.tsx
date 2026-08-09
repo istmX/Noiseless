@@ -19,7 +19,7 @@ export function Logo({
   const content = (
     <div className={`flex items-center gap-2.5 ${className}`}>
       <Image
-        src="/logos/image.png"
+        src="/logos/noiseless-logo.png"
         alt="Noiseless Logo"
         width={size}
         height={size}
