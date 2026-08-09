@@ -1,42 +1,53 @@
 @import "tailwindcss";
 
-/* 1. Light Grey Theme (Exclusive) */
+/* ============================================================
+   Noiseless — Warm Slate Editorial Theme
+   Palette: warm zinc near-white + slate charcoal + violet accent
+   Fonts: DM Sans (UI) + DM Mono (data)
+   ============================================================ */
+
 :root {
   /* Canvas and surfaces */
-  --color-canvas:           #FFFFFF;   /* Pure white canvas */
-  --color-surface:          #FFFFFF;   /* Pure white for cards */
-  --color-surface-elevated: #FFFFFF;
-  --color-surface-inset:    #F8FAF9;   /* Very subtle mint inset */
-  --color-sidebar:          #F4FDF6;   /* Light pastel mint green */
-  --color-sidebar-active:   #D2F8D9;   /* Mint green active background */
+  --color-canvas:           #FAFAFA;   /* Warm near-white page background */
+  --color-surface:          #FFFFFF;   /* Pure white cards */
+  --color-surface-elevated: #FFFFFF;   /* Elevated panels */
+  --color-surface-inset:    #F4F4F5;   /* Inset areas, zinc-100 */
+  --color-sidebar:          #F4F4F5;   /* Icon rail background */
+  --color-sidebar-active:   #E4E4E7;   /* Active rail item background */
 
   /* Borders */
-  --color-hairline:         #E2ECE9;   /* Very soft light mint border */
-  --color-hairline-strong:  #C5D3CF;   /* Stronger mint grey border */
+  --color-hairline:         #E4E4E7;   /* Zinc-200 — warm zinc border */
+  --color-hairline-strong:  #D4D4D8;   /* Zinc-300 — stronger border */
 
-  /* Text (ink ladder) */
-  --color-ink:              #121212;   /* Charcoal black */
-  --color-ink-body:         #3A3F3B;   /* Dark forest grey */
-  --color-ink-muted:        #6B726E;   /* Muted grey green */
-  --color-ink-faint:        #A2ABA6;   /* Faint grey green */
+  /* Text hierarchy */
+  --color-ink:              #09090B;   /* Zinc-950 — near black */
+  --color-ink-body:         #3F3F46;   /* Zinc-700 — body text */
+  --color-ink-muted:        #71717A;   /* Zinc-500 — secondary text */
+  --color-ink-faint:        #A1A1AA;   /* Zinc-400 — placeholders, timestamps */
 
-  /* Brand accent (Forest Green Accent) */
-  --color-primary:          #007D5A;
-  --color-primary-hover:    #006347;
-  --color-primary-press:    #004d37;
-  --color-primary-soft:     #D2F8D9;   /* Soft mint green tint */
-  --color-on-primary:       #FFFFFF;
+  /* Primary actions — slate charcoal */
+  --color-primary:          #18181B;   /* Zinc-900 — dark charcoal buttons */
+  --color-primary-hover:    #27272A;   /* Zinc-800 */
+  --color-primary-press:    #09090B;   /* Zinc-950 */
+  --color-primary-soft:     #F4F4F5;   /* Ghost button background */
+  --color-on-primary:       #FAFAFA;   /* Text on dark buttons */
 
-  /* Semantic state colors */
-  --color-success:          #007D5A;   /* Deep forest green */
-  --color-success-soft:     #D2F8D9;
-  --color-warning:          #D97706;
-  --color-warning-soft:     #D9770614;
-  --color-danger:           #DC2626;
-  --color-danger-soft:      #DC262614;
-  
+  /* Accent — electric violet (active states, links, highlights) */
+  --color-accent:           #7C3AED;   /* Violet-700 */
+  --color-accent-hover:     #6D28D9;   /* Violet-800 */
+  --color-accent-soft:      #EDE9FE;   /* Violet-100 */
+  --color-on-accent:        #FFFFFF;
+
+  /* Semantic states */
+  --color-success:          #059669;   /* Emerald-600 — monitoring active */
+  --color-success-soft:     #D1FAE5;   /* Emerald-100 */
+  --color-warning:          #D97706;   /* Amber-600 */
+  --color-warning-soft:     #FEF3C7;   /* Amber-100 */
+  --color-danger:           #DC2626;   /* Red-600 */
+  --color-danger-soft:      #FEE2E2;   /* Red-100 */
+
   /* Agent running pulse */
-  --color-pulse:            #007D5A;
+  --color-pulse:            #059669;   /* Matches success */
 
   /* Radius tokens */
   --radius-full:            9999px;
@@ -44,82 +55,111 @@
   --radius-lg:              8px;
   --radius-md:              6px;
   --radius-sm:              4px;
+
+  /* Shadow tokens */
+  --shadow-low:    0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-medium: 0 4px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-high:   0 16px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
 }
 
-/* 2. Theme registration for Tailwind utilities */
+/* ============================================================
+   Tailwind v4 @theme registration
+   All semantic tokens exposed as Tailwind utilities
+   ============================================================ */
 @theme inline {
-  /* Shadcn-style system defaults */
-  --color-background:         var(--color-canvas);
-  --color-foreground:         var(--color-ink);
-  --color-card:               var(--color-surface);
-  --color-card-foreground:    var(--color-ink);
-  --color-popover:            var(--color-surface-elevated);
-  --color-popover-foreground: var(--color-ink);
-  --color-primary:            var(--color-primary);
-  --color-primary-foreground: var(--color-on-primary);
-  --color-secondary:          var(--color-surface-elevated);
+  /* shadcn/ui system defaults */
+  --color-background:           var(--color-canvas);
+  --color-foreground:           var(--color-ink);
+  --color-card:                 var(--color-surface);
+  --color-card-foreground:      var(--color-ink);
+  --color-popover:              var(--color-surface-elevated);
+  --color-popover-foreground:   var(--color-ink);
+  --color-primary:              var(--color-primary);
+  --color-primary-foreground:   var(--color-on-primary);
+  --color-secondary:            var(--color-surface-elevated);
   --color-secondary-foreground: var(--color-ink);
-  --color-muted:              var(--color-surface-elevated);
-  --color-muted-foreground:   var(--color-ink-muted);
-  --color-accent:             var(--color-primary-soft);
-  --color-accent-foreground:  var(--color-ink);
-  --color-destructive:        var(--color-danger);
+  --color-muted:                var(--color-surface-inset);
+  --color-muted-foreground:     var(--color-ink-muted);
+  --color-accent:               var(--color-accent-soft);
+  --color-accent-foreground:    var(--color-accent);
+  --color-destructive:          var(--color-danger);
   --color-destructive-foreground: #ffffff;
-  --color-border:             var(--color-hairline);
-  --color-input:              var(--color-hairline);
-  --color-ring:               var(--color-primary);
-  --radius:                   var(--radius-md);
-  --font-sans:                var(--font-sans);
-  --font-mono:                var(--font-mono);
-  --font-display:             var(--font-display);
+  --color-border:               var(--color-hairline);
+  --color-input:                var(--color-hairline);
+  --color-ring:                 var(--color-accent);
+  --radius:                     var(--radius-md);
+  --font-sans:                  var(--font-sans);
+  --font-mono:                  var(--font-mono);
+  --font-display:               var(--font-display);
 
-  /* NEW: Registered context tokens for clean classnames */
-  --color-canvas:           var(--color-canvas);
-  --color-surface:          var(--color-surface);
-  --color-surface-elevated: var(--color-surface-elevated);
-  --color-surface-inset:    var(--color-surface-inset);
-  --color-hairline:         var(--color-hairline);
-  --color-hairline-strong:  var(--color-hairline-strong);
-  --color-ink:              var(--color-ink);
-  --color-ink-body:         var(--color-ink-body);
-  --color-ink-muted:        var(--color-ink-muted);
-  --color-ink-faint:        var(--color-ink-faint);
-  --color-primary-hover:    var(--color-primary-hover);
-  --color-primary-press:    var(--color-primary-press);
-  --color-primary-soft:     var(--color-primary-soft);
-  --color-success:          var(--color-success);
-  --color-success-soft:     var(--color-success-soft);
-  --color-warning:          var(--color-warning);
-  --color-warning-soft:     var(--color-warning-soft);
-  --color-danger:           var(--color-danger);
-  --color-danger-soft:      var(--color-danger-soft);
-  --color-pulse:            var(--color-pulse);
-  --color-on-primary:       var(--color-on-primary);
-  
-  --font-data:              var(--font-data);
-  
-  --text-display:           var(--text-display);
-  --text-body:              var(--text-body);
-  --text-body-sm:           var(--text-body-sm);
-  --text-label:             var(--text-label);
+  /* Surface tokens */
+  --color-canvas:               var(--color-canvas);
+  --color-surface:              var(--color-surface);
+  --color-surface-elevated:     var(--color-surface-elevated);
+  --color-surface-inset:        var(--color-surface-inset);
+  --color-sidebar:              var(--color-sidebar);
+  --color-sidebar-active:       var(--color-sidebar-active);
 
-  --radius-full:            var(--radius-full);
-  --radius-xl:              var(--radius-xl);
-  --radius-lg:              var(--radius-lg);
-  --radius-md:              var(--radius-md);
-  --radius-sm:              var(--radius-sm);
+  /* Border tokens */
+  --color-hairline:             var(--color-hairline);
+  --color-hairline-strong:      var(--color-hairline-strong);
 
-  --shadow-low:             var(--shadow-low);
-  --shadow-md:              var(--shadow-md);
+  /* Text tokens */
+  --color-ink:                  var(--color-ink);
+  --color-ink-body:             var(--color-ink-body);
+  --color-ink-muted:            var(--color-ink-muted);
+  --color-ink-faint:            var(--color-ink-faint);
+
+  /* Primary action tokens */
+  --color-primary-hover:        var(--color-primary-hover);
+  --color-primary-press:        var(--color-primary-press);
+  --color-primary-soft:         var(--color-primary-soft);
+  --color-on-primary:           var(--color-on-primary);
+
+  /* Accent tokens */
+  --color-accent:               var(--color-accent);
+  --color-accent-hover:         var(--color-accent-hover);
+  --color-accent-soft:          var(--color-accent-soft);
+  --color-on-accent:            var(--color-on-accent);
+
+  /* Semantic tokens */
+  --color-success:              var(--color-success);
+  --color-success-soft:         var(--color-success-soft);
+  --color-warning:              var(--color-warning);
+  --color-warning-soft:         var(--color-warning-soft);
+  --color-danger:               var(--color-danger);
+  --color-danger-soft:          var(--color-danger-soft);
+  --color-pulse:                var(--color-pulse);
+
+  /* Font tokens */
+  --font-data:                  var(--font-data);
+
+  /* Radius tokens */
+  --radius-full:                var(--radius-full);
+  --radius-xl:                  var(--radius-xl);
+  --radius-lg:                  var(--radius-lg);
+  --radius-md:                  var(--radius-md);
+  --radius-sm:                  var(--radius-sm);
+
+  /* Shadow tokens */
+  --shadow-low:                 var(--shadow-low);
+  --shadow-md:                  var(--shadow-medium);
+  --shadow-high:                var(--shadow-high);
 }
 
-/* 5. Base body styles */
+/* ============================================================
+   Base body
+   ============================================================ */
 body {
   background-color: var(--color-canvas);
   color: var(--color-ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* 6. Global animations */
+/* ============================================================
+   Global animations
+   ============================================================ */
 @keyframes agent-pulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50%       { opacity: 0.4; transform: scale(1.35); }
@@ -139,6 +179,9 @@ body {
   animation: fade-up 200ms cubic-bezier(0, 0, 0.2, 1) both;
 }
 
+/* ============================================================
+   Accessibility
+   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -146,6 +189,9 @@ body {
   }
 }
 
+/* ============================================================
+   Utility
+   ============================================================ */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
@@ -153,4 +199,3 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-

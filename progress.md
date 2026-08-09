@@ -100,6 +100,26 @@
 - Implemented a custom markdown-to-HTML parser in `notifications.py` to format headers, paragraphs, bold styling, and active hyperlinks.
 - Redesigned the email digest template with a premium, Forest Green branded intelligence brief report design.
 - Integrated interactive CTA buttons ("Open Watch Workstation") and pause/management anchors directly in transactional emails.
+- **Dashboard Redesign — Phase 1 (Sidebar + Watch List):**
+  - Redesigned Sidebar to a clean 64px icon-rail with animated tooltip labels on hover; removed expandable/collapsible toggle.
+  - Removed dead `sidebarCollapsed` / `setSidebarCollapsed` state from Zustand store and AuthProvider.
+  - Split monolithic WatchList.tsx (404 lines) into focused sub-components: `WatchListHeader`, `WatchMetrics`, `WatchFilters`.
+  - Rewrote `WatchCard` and `WatchRow` to be fully design-token compliant (no raw hex values, proper status chip pattern).
+  - Refactored `AllWatchesList` to reuse shared `WatchFilters` and `WatchMetrics` components, eliminating duplicate code.
+  - All components verified with `npx tsc --noEmit` — 0 errors.
+- **Dashboard Redesign — Phase 2 (Watch Detail Workstation):**
+  - Split monolithic WatchDetailView.tsx (507 lines) into 3 focused components: `WatchDetailHeader`, `WatchSettings`, slim `WatchDetailView` (~85 lines).
+  - `WatchDetailHeader`: back nav, title/status, stat chips, Run Now with cooldown timer, Configure toggle.
+  - `WatchSettings`: collapsible config panel — active toggle, frequency, threshold slider, queries editor, notifications, delete.
+  - Redesigned `FindingCard` with 3-tier significance badge using design-system semantic tokens (success/warning/danger).
+  - All components verified with `npx tsc --noEmit` — 0 errors.
+- **Design System Overhaul (Warm Slate Editorial):**
+  - Replaced mint green palette: zinc near-white canvas `#FAFAFA`, slate charcoal primary `#18181B`, electric violet accent `#7C3AED`, emerald success `#059669`.
+  - Replaced Outfit + JetBrains Mono fonts with DM Sans + DM Mono (geometric, screen-optimised pairing).
+  - Added full accent token family to globals.css and @theme block.
+  - Updated `.istm-context/design.md` and GEMINI.md with locked Warm Slate Editorial palette.
+  - Verified with `npx tsc --noEmit` — 0 errors.
+
 
 ### Pending
 

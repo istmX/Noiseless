@@ -280,9 +280,10 @@ No source file should exceed approximately 250 lines whenever reasonably possibl
 - **Surfaces**: `bg-canvas`, `bg-surface`, `bg-surface-elevated`, `bg-surface-inset`
 - **Text**: `text-ink`, `text-ink-body`, `text-ink-muted`, `text-ink-faint`
 - **Borders**: `border-hairline`, `border-hairline-strong`
-- **States**: `bg-primary hover:bg-primary-hover`, `text-danger border-danger-soft`
-- **Typography**: `font-sans`, `font-data`, `text-display`, `text-body`
-- Always use these clean, native class names.
+- **Primary (slate charcoal buttons)**: `bg-primary hover:bg-primary-hover`, `text-on-primary`
+- **Accent (violet highlights, active states, links)**: `bg-accent`, `text-accent`, `bg-accent-soft`, `border-accent/20`
+- **States**: `text-danger border-danger-soft`, `text-success bg-success-soft`, `text-warning bg-warning-soft`
+
 
 # Constants and Styling Rules
 

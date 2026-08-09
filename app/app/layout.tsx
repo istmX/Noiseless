@@ -1,27 +1,29 @@
 import type { Metadata } from "next";
-import { Outfit, JetBrains_Mono } from "next/font/google";
+import { DM_Sans, DM_Mono } from "next/font/google";
 import "./globals.css";
 import { auth } from "@/shared/lib/auth";
 import { AuthProvider } from "@/shared/components/AuthProvider";
+import { Toaster } from "@/shared/components/ui/sonner";
 
-const outfit = Outfit({
+const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-sans",
   weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
-const jetBrainsMono = JetBrains_Mono({
+const dmMono = DM_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
-  weight: ["400"],
+  weight: ["400", "500"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Autonomous Research Analyst",
-  description: "Monitor topics, industries, and competitors with an autonomous AI research agent.",
+  title: "Noiseless — Autonomous Research Analyst",
+  description:
+    "Monitor topics, industries, and competitors with an autonomous AI research agent. Signal-only intelligence, delivered when it matters.",
 };
-
-import { Toaster } from "@/shared/components/ui/sonner";
 
 export default async function RootLayout({
   children,
@@ -34,7 +36,7 @@ export default async function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${outfit.variable} ${jetBrainsMono.variable} h-full antialiased`}
+      className={`${dmSans.variable} ${dmMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-canvas relative">
         <AuthProvider isLoggedIn={!!session?.user}>

@@ -1,57 +1,76 @@
 "use client";
 
 import { Finding } from "../types";
-import { ExternalLink, Calendar } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { motion } from "motion/react";
 
 interface FindingCardProps {
   finding: Finding;
 }
 
-export function FindingCard({ finding }: FindingCardProps) {
-  const isHighSignificance = finding.significanceScore >= 8;
+function ScoreBadge({ score }: { score: number }) {
+  const color =
+    score >= 7
+      ? "bg-success-soft text-success border-success/20"
+      : score >= 4
+      ? "bg-warning-soft text-warning border-warning/20"
+      : "bg-danger-soft text-danger border-danger/20";
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 8 }}
+    <span className={`px-2 py-0.5 rounded-sm text-[10px] font-mono font-semibold border ${color}`}>
+      {score} / 10
+    </span>
+  );
+}
+
+function formatDate(date: Date | string): string {
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+export function FindingCard({ finding }: FindingCardProps) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-6 bg-surface border border-hairline rounded-md shadow-xs hover:border-hairline-strong transition-all flex flex-col gap-3"
+      transition={{ duration: 0.18, ease: "easeOut" }}
+      className="p-4 bg-surface border border-hairline rounded-md hover:border-hairline-strong transition-colors flex flex-col gap-2.5"
     >
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 rounded-sm text-xs font-mono tracking-wider bg-surface-inset text-ink border border-hairline uppercase font-medium">
+      {/* Top row: category + date + score */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="px-2 py-0.5 rounded-sm text-[10px] font-mono font-medium bg-surface-inset text-ink-muted border border-hairline uppercase shrink-0">
             {finding.category}
           </span>
-          <div className="flex items-center gap-1 text-xs font-mono text-ink-muted">
-            <Calendar className="w-3.5 h-3.5" />
-            <span>{new Date(finding.publishedAt).toLocaleDateString()}</span>
-          </div>
+          <span className="text-[10px] font-mono text-ink-faint truncate" suppressHydrationWarning>
+            {formatDate(finding.publishedAt)}
+          </span>
         </div>
-
-        <div className={`px-2.5 py-0.5 rounded-sm text-xs font-mono font-medium border ${
-          isHighSignificance 
-            ? "bg-primary-soft text-primary border-primary/20" 
-            : "bg-surface-inset text-ink-muted border-hairline"
-        }`}>
-          Score {finding.significanceScore}/10
-        </div>
+        <ScoreBadge score={finding.significanceScore} />
       </div>
 
-      <h4 className="text-base font-sans font-semibold text-ink leading-snug">
-        <a 
-          href={finding.url} 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="hover:text-primary transition-colors flex items-center gap-1.5 group"
-        >
-          <span>{finding.title}</span>
-          <ExternalLink className="w-3.5 h-3.5 text-ink-faint group-hover:text-primary transition-colors shrink-0" />
-        </a>
-      </h4>
+      {/* Title with link */}
+      <a
+        href={finding.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group flex items-start gap-1.5 hover:text-success transition-colors"
+      >
+        <h4 className="text-sm font-sans font-semibold text-ink leading-snug group-hover:text-success transition-colors">
+          {finding.title}
+        </h4>
+        <ExternalLink className="w-3.5 h-3.5 text-ink-faint group-hover:text-success shrink-0 mt-0.5 transition-colors" />
+      </a>
 
-      <p className="text-xs text-ink-muted leading-relaxed font-sans">
-        {finding.summary}
-      </p>
+      {/* Summary excerpt */}
+      {finding.summary && (
+        <p className="text-xs text-ink-muted font-sans leading-relaxed line-clamp-3">
+          {finding.summary}
+        </p>
+      )}
     </motion.div>
   );
 }

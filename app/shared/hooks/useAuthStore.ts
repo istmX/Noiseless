@@ -8,8 +8,7 @@ interface AuthState {
   userAvatarUrl: string;
   userTier: string;
   setProfile: (profile: { name: string; email: string; avatarUrl: string; tier: string }) => void;
-  sidebarCollapsed: boolean;
-  setSidebarCollapsed: (collapsed: boolean) => void;
+
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -26,7 +25,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       userAvatarUrl: profile.avatarUrl,
       userTier: profile.tier,
     }),
-  sidebarCollapsed: false,
-  setSidebarCollapsed: (collapsed) => set({ sidebarCollapsed: collapsed }),
+
 }));
 

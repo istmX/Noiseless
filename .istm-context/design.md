@@ -63,45 +63,51 @@ uses a curated trio of fonts instead of Geist, and adapts the structural tokens 
 
 ## Color Tokens
 
-### Exclusive Light Grey Theme
+### Exclusive Light Warm Zinc Theme (Warm Slate Editorial)
 
 ```css
 :root {
 /* Canvas and surfaces */
---color-canvas:           #FFFFFF;   /* Pure white canvas */
---color-surface:          #FFFFFF;   /* Pure white for cards */
+--color-canvas:           #FAFAFA;   /* Warm near-white page background */
+--color-surface:          #FFFFFF;   /* Pure white cards */
 --color-surface-elevated: #FFFFFF;
---color-surface-inset:    #F8FAF9;   /* Very subtle mint inset */
---color-sidebar:          #F4FDF6;   /* Light pastel mint green */
---color-sidebar-active:   #D2F8D9;   /* Mint green active background */
+--color-surface-inset:    #F4F4F5;   /* Zinc-100 inset areas */
+--color-sidebar:          #F4F4F5;   /* Icon rail background */
+--color-sidebar-active:   #E4E4E7;   /* Active nav item background */
 
 /* Borders */
---color-hairline:         #E2ECE9;   /* Very soft light mint border */
---color-hairline-strong:  #C5D3CF;   /* Stronger mint grey border */
+--color-hairline:         #E4E4E7;   /* Zinc-200 border */
+--color-hairline-strong:  #D4D4D8;   /* Zinc-300 border */
 
 /* Text */
---color-ink:              #121212;   /* Charcoal black */
---color-ink-body:         #3A3F3B;   /* Dark forest grey */
---color-ink-muted:        #6B726E;   /* Muted grey green */
---color-ink-faint:        #A2ABA6;   /* Faint grey green */
+--color-ink:              #09090B;   /* Zinc-950 near black */
+--color-ink-body:         #3F3F46;   /* Zinc-700 body */
+--color-ink-muted:        #71717A;   /* Zinc-500 secondary */
+--color-ink-faint:        #A1A1AA;   /* Zinc-400 timestamps/placeholders */
 
-/* Brand accent */
---color-primary:          #121212;   /* Charcoal black for primary actions */
---color-primary-hover:    #262626;
---color-primary-press:    #000000;
---color-primary-soft:     #E2ECE9;   /* Soft mint green tint */
---color-on-primary:       #FFFFFF;
+/* Primary actions — slate charcoal */
+--color-primary:          #18181B;
+--color-primary-hover:    #27272A;
+--color-primary-press:    #09090B;
+--color-primary-soft:     #F4F4F5;
+--color-on-primary:       #FAFAFA;
+
+/* Accent — electric violet */
+--color-accent:           #7C3AED;
+--color-accent-hover:     #6D28D9;
+--color-accent-soft:      #EDE9FE;
+--color-on-accent:        #FFFFFF;
 
 /* Semantic */
---color-success:          #007D5A;   /* Deep forest green */
---color-success-soft:     #D2F8D9;
+--color-success:          #059669;   /* Emerald-600 */
+--color-success-soft:     #D1FAE5;
 --color-warning:          #D97706;
---color-warning-soft:     #D9770614;
+--color-warning-soft:     #FEF3C7;
 --color-danger:           #DC2626;
---color-danger-soft:      #DC262614;
+--color-danger-soft:      #FEE2E2;
 
 /* Agent pulse */
---color-pulse:            #007D5A;
+--color-pulse:            #059669;
 }
 ```
 
@@ -119,10 +125,10 @@ Three fonts work together as a system. Each has one job.
 
 ```css
 :root {
---font-display:  "Outfit", system-ui, sans-serif;
---font-sans:     "Inter", system-ui, sans-serif;
---font-data:     "Inter", system-ui, sans-serif;
---font-mono:     "JetBrains Mono", "Courier New", monospace;
+--font-display:  "DM Sans", system-ui, sans-serif;
+--font-sans:     "DM Sans", system-ui, sans-serif;
+--font-data:     "DM Mono", "Courier New", monospace;
+--font-mono:     "DM Mono", "Courier New", monospace;
 }
 ```
 

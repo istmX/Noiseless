@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import { useAuthStore } from "../hooks/useAuthStore";
 import { Sidebar } from "./Sidebar";
-
 import { usePathname } from "next/navigation";
 
 export function AuthProvider({
@@ -14,7 +13,6 @@ export function AuthProvider({
   children: React.ReactNode;
 }) {
   const setLoggedIn = useAuthStore((state) => state.setLoggedIn);
-  const sidebarCollapsed = useAuthStore((state) => state.sidebarCollapsed);
   const pathname = usePathname();
   const initialized = useRef(false);
 
@@ -46,12 +44,11 @@ export function AuthProvider({
     );
   }
 
+  // Sidebar is always a fixed 64px icon rail on desktop
   return (
     <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-canvas">
       <Sidebar />
-      <main className={`flex-1 overflow-y-auto overflow-x-hidden w-full transition-all duration-300 ${
-        sidebarCollapsed ? "pl-0 md:pl-16" : "pl-0 md:pl-64"
-      }`}>
+      <main className="flex-1 overflow-y-auto overflow-x-hidden w-full pl-0 md:pl-16">
         {children}
       </main>
     </div>
