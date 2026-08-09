@@ -53,7 +53,7 @@ export default function CheckoutPage({ params }: PageProps) {
       setCheckoutError("Please fill out all billing address fields.");
       return;
     }
-    if (step === 2 && (!cardName.trim() || cardNumber.length < 16 || !cardExpiry.includes("/") || cardCvc.length < 3)) {
+    if (step === 2 && (!cardName.trim() || cardNumber.replace(/\s/g, "").length < 16 || !cardExpiry.includes("/") || cardCvc.length < 3)) {
       setCheckoutError("Please complete all payment card details.");
       return;
     }
@@ -105,7 +105,7 @@ export default function CheckoutPage({ params }: PageProps) {
   }
 
   return (
-    <div className="relative flex flex-col w-full max-w-3xl mx-auto px-6 md:px-12 py-8 md:py-12 min-h-screen space-y-8">
+    <div className="relative mx-auto flex min-h-screen w-full max-w-3xl flex-col space-y-8 px-4 py-8 sm:px-6 md:px-12 md:py-12">
       {/* Back to settings button */}
       <div>
         <Link
@@ -153,7 +153,7 @@ export default function CheckoutPage({ params }: PageProps) {
       </div>
 
       {/* Main card panel */}
-      <div className="bg-surface border border-hairline rounded-xl p-6 sm:p-8 shadow-xs relative overflow-hidden">
+      <div className="workspace-panel relative overflow-hidden p-5 sm:p-8">
         {/* Loading overlay for security steps */}
         {isPending && (
           <div className="absolute inset-0 bg-surface/90 backdrop-blur-xs flex flex-col items-center justify-center z-20 space-y-4">
@@ -181,7 +181,7 @@ export default function CheckoutPage({ params }: PageProps) {
           <div className="space-y-6">
             <div className="space-y-2">
               <label className="text-body-sm font-medium text-ink">Choose Billing Interval</label>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <button
                   type="button"
                   onClick={() => setBillingInterval("monthly")}
@@ -279,10 +279,15 @@ export default function CheckoutPage({ params }: PageProps) {
               <input
                 type="text"
                 required
-                maxLength={16}
-                placeholder="4111222233334444"
+                maxLength={19}
+                placeholder="4111 2222 3333 4444"
                 value={cardNumber}
-                onChange={(e) => setCardNumber(e.target.value.replace(/\D/g, ""))}
+                onChange={(e) => {
+                  const raw = e.target.value;
+                  const clean = raw.replace(/\D/g, "");
+                  const formatted = clean.match(/.{1,4}/g)?.join(" ") || clean;
+                  setCardNumber(formatted.slice(0, 19));
+                }}
                 className="w-full text-xs bg-surface-inset border border-hairline rounded-md p-2.5 text-ink outline-hidden focus:border-primary font-mono"
               />
             </div>
@@ -298,7 +303,15 @@ export default function CheckoutPage({ params }: PageProps) {
                   placeholder="MM/YY"
                   maxLength={5}
                   value={cardExpiry}
-                  onChange={(e) => setCardExpiry(e.target.value)}
+                  onChange={(e) => {
+                    const raw = e.target.value;
+                    const clean = raw.replace(/\D/g, "");
+                    if (clean.length > 2) {
+                      setCardExpiry(`${clean.slice(0, 2)}/${clean.slice(2, 4)}`);
+                    } else {
+                      setCardExpiry(clean);
+                    }
+                  }}
                   className="w-full text-xs bg-surface-inset border border-hairline rounded-md p-2.5 text-ink outline-hidden focus:border-primary font-mono"
                 />
               </div>

@@ -1,177 +1,53 @@
 "use client";
 
-import { useState, useDeferredValue, useEffect } from "react";
-import { createPortal } from "react-dom";
+import Link from "next/link";
+import { useDeferredValue, useMemo, useState } from "react";
+import { Eye, Plus, Search, SlidersHorizontal } from "lucide-react";
+import { useWatchDrawerStore } from "@/shared/hooks/useWatchDrawerStore";
 import { Watch } from "../types";
-import { WatchCard } from "./WatchCard";
-import { WatchRow } from "./WatchRow";
-import { WatchFilters, StatusFilter, ViewMode } from "./WatchFilters";
-import { WatchMetrics } from "./WatchMetrics";
-import { WatchForm } from "./WatchForm";
-import { Button } from "@/shared/components/ui/button";
-import { motion, AnimatePresence } from "motion/react";
-import { Eye, Plus, Sliders, X } from "lucide-react";
+import { PageHeader } from "@/shared/components/workspace/PageHeader";
+import { StatusBadge } from "@/shared/components/workspace/StatusBadge";
 
-interface AllWatchesListProps {
-  watches: Watch[];
+type StatusFilter = "ALL" | "MONITORING" | "RUNNING" | "PAUSED";
+
+const STATUS_FILTERS: readonly StatusFilter[] = ["ALL", "MONITORING", "RUNNING", "PAUSED"];
+
+function getStatus(watch: Watch): Exclude<StatusFilter, "ALL"> {
+  if (watch.runInProgress) return "RUNNING";
+  if (!watch.active) return "PAUSED";
+  return "MONITORING";
 }
 
-export function AllWatchesList({ watches }: AllWatchesListProps) {
+function formatRun(date: Date | null) {
+  if (!date) return "Not run yet";
+  return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(new Date(date));
+}
+
+export function AllWatchesList({ watches }: { readonly watches: readonly Watch[] }) {
+  const openDrawer = useWatchDrawerStore((state) => state.openDrawer);
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("ALL");
-  const [searchQuery, setSearchQuery] = useState("");
-  const deferredSearch = useDeferredValue(searchQuery);
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
-  const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [search, setSearch] = useState("");
+  const deferredSearch = useDeferredValue(search).trim().toLowerCase();
+  const filteredWatches = useMemo(() => watches.filter((watch) => {
+    const matchesStatus = statusFilter === "ALL" || getStatus(watch) === statusFilter;
+    const matchesSearch = !deferredSearch || watch.topic.toLowerCase().includes(deferredSearch) || watch.searchQueries.some((query) => query.toLowerCase().includes(deferredSearch));
+    return matchesStatus && matchesSearch;
+  }), [deferredSearch, statusFilter, watches]);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const activeCount = watches.filter((watch) => watch.active).length;
+  const runningCount = watches.filter((watch) => watch.runInProgress).length;
+  const pausedCount = watches.length - activeCount;
 
-  const filteredWatches = watches.filter((watch) => {
-    const isRunning = watch.runInProgress;
-    const isPaused = !watch.active;
-    const isMonitoring = watch.active && !watch.runInProgress;
+  return <section className="flex min-w-0 flex-col gap-6">
+    <PageHeader eyebrow="Operational inventory" title="Watches" description="Manage every intelligence surface in this workspace." actions={<button type="button" onClick={openDrawer} className="workspace-action inline-flex items-center justify-center gap-2 bg-primary text-on-primary hover:bg-primary-hover"><Plus aria-hidden="true" className="h-3.5 w-3.5" />New watch</button>} />
+    {!!watches.length && <div aria-label="Watch status summary" className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b border-hairline pb-5 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-faint"><span><strong className="font-semibold text-ink">{activeCount}</strong> active</span><span><strong className="font-semibold text-ink">{runningCount}</strong> running</span><span><strong className="font-semibold text-ink">{pausedCount}</strong> paused</span></div>}
+    {!watches.length ? <div className="workspace-panel flex min-h-72 flex-col items-center justify-center px-6 text-center"><Eye aria-hidden="true" className="h-6 w-6 text-ink-faint" /><h3 className="mt-4 text-base font-semibold text-ink">No watches configured</h3><p className="mt-2 max-w-sm text-sm leading-6 text-ink-muted">Create a watch to start filtering the web for material changes.</p><button type="button" onClick={openDrawer} className="mt-5 inline-flex min-h-10 items-center gap-2 rounded-md bg-primary px-3 text-xs font-medium text-on-primary hover:bg-primary-hover"><Plus aria-hidden="true" className="h-3.5 w-3.5" />Create watch</button></div> : <>
+      <div className="workspace-panel flex flex-col gap-3 p-3 sm:flex-row sm:items-center sm:justify-between"><div className="relative min-w-0 sm:w-80"><Search aria-hidden="true" className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-ink-faint" /><label htmlFor="watch-search" className="sr-only">Search watches</label><input id="watch-search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search watches and queries" className="min-h-10 w-full rounded-md border border-hairline bg-surface px-9 text-sm text-ink placeholder:text-ink-faint" /></div><div className="flex flex-wrap gap-1">{STATUS_FILTERS.map((status) => <button key={status} type="button" onClick={() => setStatusFilter(status)} className={`min-h-9 rounded-md px-2.5 font-mono text-[10px] tracking-[0.08em] ${status === statusFilter ? "bg-accent-soft text-accent" : "text-ink-muted hover:bg-surface-inset hover:text-ink"}`}>{status}</button>)}</div></div>
+      <div className="workspace-panel overflow-hidden"><div className="flex items-center justify-between border-b border-hairline px-4 py-3 sm:px-5"><p className="text-xs text-ink-muted"><span className="font-medium text-ink">{filteredWatches.length}</span> matching watches</p><SlidersHorizontal aria-hidden="true" className="h-4 w-4 text-ink-faint" /></div><div className="hidden grid-cols-[minmax(14rem,1.8fr)_minmax(7rem,.65fr)_minmax(7rem,.65fr)_minmax(8rem,.8fr)_minmax(6rem,.45fr)] gap-4 border-b border-hairline bg-surface-inset px-5 py-2 font-mono text-[10px] uppercase tracking-[0.1em] text-ink-faint md:grid"><span>Watch</span><span>Status</span><span>Cadence</span><span>Last run</span><span className="text-right">Signals</span></div><div className="divide-y divide-hairline">{filteredWatches.map((watch) => <Link key={watch.id} href={`/watches/${watch.id}`} className="group grid min-w-0 gap-3 px-4 py-4 transition-colors hover:bg-surface-inset md:grid-cols-[minmax(14rem,1.8fr)_minmax(7rem,.65fr)_minmax(7rem,.65fr)_minmax(8rem,.8fr)_minmax(6rem,.45fr)] md:items-center md:gap-4 md:px-5"><span className="min-w-0"><span className="block truncate text-sm font-medium text-ink group-hover:text-accent">{watch.topic}</span><span className="mt-1 block truncate font-mono text-[10px] text-ink-faint">{watch.searchQueries.length} query terms <span aria-hidden="true">·</span> threshold {watch.significanceThreshold}/10</span></span><StatusLabel status={getStatus(watch)} /><span className="font-mono text-[11px] uppercase text-ink-muted">{watch.frequency}</span><span className="font-mono text-[11px] text-ink-muted">{formatRun(watch.lastRunAt)}</span><span className="font-mono text-sm tabular-nums text-ink md:text-right">{watch._count?.findings ?? 0}</span></Link>)}</div>{!filteredWatches.length && <div className="px-6 py-14 text-center"><p className="text-sm font-medium text-ink">No watches match these filters</p><p className="mt-2 text-sm text-ink-muted">Try a different search term or state.</p></div>}</div>
+    </>}</section>;
+}
 
-    if (statusFilter === "MONITORING" && !isMonitoring) return false;
-    if (statusFilter === "AGENT ACTIVE" && !isRunning) return false;
-    if (statusFilter === "PAUSED" && !isPaused) return false;
-
-    if (deferredSearch) {
-      const q = deferredSearch.toLowerCase();
-      const matchesTopic = watch.topic.toLowerCase().includes(q);
-      const matchesQueries = watch.searchQueries.some((sq) => sq.toLowerCase().includes(q));
-      if (!matchesTopic && !matchesQueries) return false;
-    }
-
-    return true;
-  });
-
-  return (
-    <div className="flex flex-col gap-6">
-      {/* Page Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-sans font-semibold text-ink tracking-tight">
-            Watches Workstation
-          </h1>
-          <p className="text-sm text-ink-muted mt-0.5">
-            Manage and track all continuous monitoring streams.
-          </p>
-        </div>
-        <Button
-          onClick={() => setIsCreateOpen(true)}
-          className="bg-primary hover:bg-primary-hover text-on-primary font-sans font-medium rounded-md px-4 py-2 text-sm flex items-center gap-2 cursor-pointer transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          New Watch
-        </Button>
-      </div>
-
-      {watches.length === 0 ? (
-        <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4 text-center">
-          <Eye className="w-10 h-10 text-ink-faint" />
-          <div>
-            <h2 className="text-lg font-sans font-semibold text-ink">No watches yet</h2>
-            <p className="text-sm text-ink-muted mt-1 max-w-xs">
-              Create your first watch to start monitoring a topic.
-            </p>
-          </div>
-          <Button
-            onClick={() => setIsCreateOpen(true)}
-            className="bg-primary hover:bg-primary-hover text-on-primary font-sans font-medium rounded-md px-5 py-2 text-sm flex items-center gap-2 cursor-pointer mt-2"
-          >
-            <Plus className="w-4 h-4" />
-            Create Watch
-          </Button>
-        </div>
-      ) : (
-        <>
-          <WatchMetrics watches={watches} filteredCount={filteredWatches.length} />
-
-          <div className="bg-surface border border-hairline rounded-md">
-            <div className="p-4 border-b border-hairline">
-              <WatchFilters
-                statusFilter={statusFilter}
-                searchQuery={searchQuery}
-                viewMode={viewMode}
-                onStatusChange={setStatusFilter}
-                onSearchChange={setSearchQuery}
-                onViewModeChange={setViewMode}
-              />
-            </div>
-
-            <div className="p-4">
-              {filteredWatches.length === 0 ? (
-                <div className="py-12 flex flex-col items-center gap-3 text-center">
-                  <Sliders className="w-8 h-8 text-ink-faint" />
-                  <p className="text-sm font-sans font-semibold text-ink">No matching watches</p>
-                  <p className="text-xs text-ink-muted max-w-xs">
-                    Try adjusting your status filter or search query.
-                  </p>
-                </div>
-              ) : viewMode === "grid" ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {filteredWatches.map((watch) => (
-                    <WatchCard key={watch.id} watch={watch} />
-                  ))}
-                </div>
-              ) : (
-                <div className="border border-hairline rounded-md divide-y divide-hairline overflow-hidden">
-                  <div className="grid grid-cols-12 gap-4 px-5 py-2 bg-surface-inset text-[10px] font-mono uppercase tracking-widest text-ink-faint">
-                    <div className="col-span-6">Watch</div>
-                    <div className="col-span-2 hidden md:block">Frequency</div>
-                    <div className="col-span-2 hidden md:block">Score</div>
-                    <div className="col-span-2 text-right">Findings</div>
-                  </div>
-                  {filteredWatches.map((watch) => (
-                    <WatchRow key={watch.id} watch={watch} />
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </>
-      )}
-
-      {/* Create Watch Drawer */}
-      {mounted && typeof document !== "undefined" &&
-        createPortal(
-          <AnimatePresence>
-            {isCreateOpen && (
-              <>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  onClick={() => setIsCreateOpen(false)}
-                  className="fixed inset-0 bg-ink/25 backdrop-blur-sm z-50 cursor-pointer"
-                />
-                <motion.div
-                  initial={{ x: "100%" }}
-                  animate={{ x: 0 }}
-                  exit={{ x: "100%" }}
-                  transition={{ type: "spring", damping: 26, stiffness: 260 }}
-                  className="fixed right-0 top-0 h-full w-full md:w-[500px] bg-surface border-l border-hairline shadow-high flex flex-col z-50"
-                >
-                  <div className="flex items-center justify-between px-6 py-4 border-b border-hairline bg-surface-inset shrink-0">
-                    <h2 className="text-base font-sans font-semibold text-ink">Create New Watch</h2>
-                    <button
-                      onClick={() => setIsCreateOpen(false)}
-                      className="p-1.5 hover:bg-surface rounded-md text-ink-muted hover:text-ink transition-colors cursor-pointer"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-                  <div className="flex-1 overflow-y-auto overflow-x-hidden px-6 py-5 scrollbar-hide">
-                    <WatchForm onSuccess={() => setIsCreateOpen(false)} />
-                  </div>
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>,
-          document.body
-        )}
-    </div>
-  );
+function StatusLabel({ status }: { readonly status: Exclude<StatusFilter, "ALL"> }) {
+  const tone: "info" | "neutral" | "success" = status === "RUNNING" ? "info" : status === "PAUSED" ? "neutral" : "success";
+  return <StatusBadge label={status} tone={tone} />;
 }

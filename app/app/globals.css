@@ -1,201 +1,196 @@
 @import "tailwindcss";
 
-/* ============================================================
-   Noiseless — Warm Slate Editorial Theme
-   Palette: warm zinc near-white + slate charcoal + violet accent
-   Fonts: DM Sans (UI) + DM Mono (data)
-   ============================================================ */
-
 :root {
-  /* Canvas and surfaces */
-  --color-canvas:           #FAFAFA;   /* Warm near-white page background */
-  --color-surface:          #FFFFFF;   /* Pure white cards */
-  --color-surface-elevated: #FFFFFF;   /* Elevated panels */
-  --color-surface-inset:    #F4F4F5;   /* Inset areas, zinc-100 */
-  --color-sidebar:          #F4F4F5;   /* Icon rail background */
-  --color-sidebar-active:   #E4E4E7;   /* Active rail item background */
+  --color-canvas: #f7f8fa;
+  --color-canvas-subtle: #eef1f4;
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-surface-inset: #f5f4f1;
+  --color-sidebar: #f1f3f5;
 
-  /* Borders */
-  --color-hairline:         #E4E4E7;   /* Zinc-200 — warm zinc border */
-  --color-hairline-strong:  #D4D4D8;   /* Zinc-300 — stronger border */
+  --color-hairline: #dfe4e8;
+  --color-hairline-strong: #cbd3da;
+  --color-ink: #17202a;
+  --color-ink-body: #33404c;
+  --color-ink-muted: #66727e;
+  --color-ink-faint: #89949e;
 
-  /* Text hierarchy */
-  --color-ink:              #09090B;   /* Zinc-950 — near black */
-  --color-ink-body:         #3F3F46;   /* Zinc-700 — body text */
-  --color-ink-muted:        #71717A;   /* Zinc-500 — secondary text */
-  --color-ink-faint:        #A1A1AA;   /* Zinc-400 — placeholders, timestamps */
+  --color-primary: #1e2a36;
+  --color-primary-hover: #2c3b49;
+  --color-primary-press: #141d25;
+  --color-primary-soft: #e8edf2;
+  --color-on-primary: #ffffff;
 
-  /* Primary actions — slate charcoal */
-  --color-primary:          #18181B;   /* Zinc-900 — dark charcoal buttons */
-  --color-primary-hover:    #27272A;   /* Zinc-800 */
-  --color-primary-press:    #09090B;   /* Zinc-950 */
-  --color-primary-soft:     #F4F4F5;   /* Ghost button background */
-  --color-on-primary:       #FAFAFA;   /* Text on dark buttons */
+  --color-accent: #3568b8;
+  --color-accent-hover: #2a559b;
+  --color-accent-soft: #e9f0fb;
+  --color-on-accent: #ffffff;
 
-  /* Accent — electric violet (active states, links, highlights) */
-  --color-accent:           #7C3AED;   /* Violet-700 */
-  --color-accent-hover:     #6D28D9;   /* Violet-800 */
-  --color-accent-soft:      #EDE9FE;   /* Violet-100 */
-  --color-on-accent:        #FFFFFF;
+  --color-success: #237a58;
+  --color-success-soft: #e8f5ee;
+  --color-warning: #a06016;
+  --color-warning-soft: #fff4df;
+  --color-danger: #b4473b;
+  --color-danger-soft: #fcece9;
+  --color-info: #3568b8;
+  --color-info-soft: #e9f0fb;
+  --color-pulse: #237a58;
+  --font-interface: "Inter", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-data: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 
-  /* Semantic states */
-  --color-success:          #059669;   /* Emerald-600 — monitoring active */
-  --color-success-soft:     #D1FAE5;   /* Emerald-100 */
-  --color-warning:          #D97706;   /* Amber-600 */
-  --color-warning-soft:     #FEF3C7;   /* Amber-100 */
-  --color-danger:           #DC2626;   /* Red-600 */
-  --color-danger-soft:      #FEE2E2;   /* Red-100 */
+  --radius-full: 9999px;
+  --radius-xl: 12px;
+  --radius-lg: 10px;
+  --radius-md: 7px;
+  --radius-sm: 5px;
 
-  /* Agent running pulse */
-  --color-pulse:            #059669;   /* Matches success */
-
-  /* Radius tokens */
-  --radius-full:            9999px;
-  --radius-xl:              12px;
-  --radius-lg:              8px;
-  --radius-md:              6px;
-  --radius-sm:              4px;
-
-  /* Shadow tokens */
-  --shadow-low:    0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-medium: 0 4px 12px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
-  --shadow-high:   0 16px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06);
+  --shadow-low: 0 1px 2px rgb(23 32 42 / 0.05);
+  --shadow-medium: 0 8px 24px rgb(23 32 42 / 0.09);
+  --shadow-high: 0 20px 48px rgb(23 32 42 / 0.16);
 }
 
-/* ============================================================
-   Tailwind v4 @theme registration
-   All semantic tokens exposed as Tailwind utilities
-   ============================================================ */
 @theme inline {
-  /* shadcn/ui system defaults */
-  --color-background:           var(--color-canvas);
-  --color-foreground:           var(--color-ink);
-  --color-card:                 var(--color-surface);
-  --color-card-foreground:      var(--color-ink);
-  --color-popover:              var(--color-surface-elevated);
-  --color-popover-foreground:   var(--color-ink);
-  --color-primary:              var(--color-primary);
-  --color-primary-foreground:   var(--color-on-primary);
-  --color-secondary:            var(--color-surface-elevated);
+  --color-background: var(--color-canvas);
+  --color-foreground: var(--color-ink);
+  --color-card: var(--color-surface);
+  --color-card-foreground: var(--color-ink);
+  --color-popover: var(--color-surface-raised);
+  --color-popover-foreground: var(--color-ink);
+  --color-primary: var(--color-primary);
+  --color-primary-foreground: var(--color-on-primary);
+  --color-on-primary: var(--color-on-primary);
+  --color-secondary: var(--color-surface-inset);
   --color-secondary-foreground: var(--color-ink);
-  --color-muted:                var(--color-surface-inset);
-  --color-muted-foreground:     var(--color-ink-muted);
-  --color-accent:               var(--color-accent-soft);
-  --color-accent-foreground:    var(--color-accent);
-  --color-destructive:          var(--color-danger);
-  --color-destructive-foreground: #ffffff;
-  --color-border:               var(--color-hairline);
-  --color-input:                var(--color-hairline);
-  --color-ring:                 var(--color-accent);
-  --radius:                     var(--radius-md);
-  --font-sans:                  var(--font-sans);
-  --font-mono:                  var(--font-mono);
-  --font-display:               var(--font-display);
+  --color-muted: var(--color-surface-inset);
+  --color-muted-foreground: var(--color-ink-muted);
+  --color-accent: var(--color-accent);
+  --color-accent-foreground: var(--color-on-accent);
+  --color-on-accent: var(--color-on-accent);
+  --color-border: var(--color-hairline);
+  --color-ring: var(--color-accent);
+  --radius: var(--radius-md);
 
-  /* Surface tokens */
-  --color-canvas:               var(--color-canvas);
-  --color-surface:              var(--color-surface);
-  --color-surface-elevated:     var(--color-surface-elevated);
-  --color-surface-inset:        var(--color-surface-inset);
-  --color-sidebar:              var(--color-sidebar);
-  --color-sidebar-active:       var(--color-sidebar-active);
+  --font-sans: var(--font-interface);
+  --font-mono: var(--font-data);
+  --font-display: var(--font-interface);
 
-  /* Border tokens */
-  --color-hairline:             var(--color-hairline);
-  --color-hairline-strong:      var(--color-hairline-strong);
-
-  /* Text tokens */
-  --color-ink:                  var(--color-ink);
-  --color-ink-body:             var(--color-ink-body);
-  --color-ink-muted:            var(--color-ink-muted);
-  --color-ink-faint:            var(--color-ink-faint);
-
-  /* Primary action tokens */
-  --color-primary-hover:        var(--color-primary-hover);
-  --color-primary-press:        var(--color-primary-press);
-  --color-primary-soft:         var(--color-primary-soft);
-  --color-on-primary:           var(--color-on-primary);
-
-  /* Accent tokens */
-  --color-accent:               var(--color-accent);
-  --color-accent-hover:         var(--color-accent-hover);
-  --color-accent-soft:          var(--color-accent-soft);
-  --color-on-accent:            var(--color-on-accent);
-
-  /* Semantic tokens */
-  --color-success:              var(--color-success);
-  --color-success-soft:         var(--color-success-soft);
-  --color-warning:              var(--color-warning);
-  --color-warning-soft:         var(--color-warning-soft);
-  --color-danger:               var(--color-danger);
-  --color-danger-soft:          var(--color-danger-soft);
-  --color-pulse:                var(--color-pulse);
-
-  /* Font tokens */
-  --font-data:                  var(--font-data);
-
-  /* Radius tokens */
-  --radius-full:                var(--radius-full);
-  --radius-xl:                  var(--radius-xl);
-  --radius-lg:                  var(--radius-lg);
-  --radius-md:                  var(--radius-md);
-  --radius-sm:                  var(--radius-sm);
-
-  /* Shadow tokens */
-  --shadow-low:                 var(--shadow-low);
-  --shadow-md:                  var(--shadow-medium);
-  --shadow-high:                var(--shadow-high);
+  --color-canvas: var(--color-canvas);
+  --color-canvas-subtle: var(--color-canvas-subtle);
+  --color-surface: var(--color-surface);
+  --color-surface-raised: var(--color-surface-raised);
+  --color-surface-elevated: var(--color-surface-elevated);
+  --color-surface-inset: var(--color-surface-inset);
+  --color-sidebar: var(--color-sidebar);
+  --color-hairline: var(--color-hairline);
+  --color-hairline-strong: var(--color-hairline-strong);
+  --color-ink: var(--color-ink);
+  --color-ink-body: var(--color-ink-body);
+  --color-ink-muted: var(--color-ink-muted);
+  --color-ink-faint: var(--color-ink-faint);
+  --color-success: var(--color-success);
+  --color-success-soft: var(--color-success-soft);
+  --color-warning: var(--color-warning);
+  --color-warning-soft: var(--color-warning-soft);
+  --color-danger: var(--color-danger);
+  --color-danger-soft: var(--color-danger-soft);
+  --color-info: var(--color-info);
+  --color-info-soft: var(--color-info-soft);
 }
 
-/* ============================================================
-   Base body
-   ============================================================ */
+* {
+  border-color: var(--color-hairline);
+}
+
+html {
+  min-width: 320px;
+  background: var(--color-canvas);
+}
+
 body {
-  background-color: var(--color-canvas);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: var(--color-canvas);
   color: var(--color-ink);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
-/* ============================================================
-   Global animations
-   ============================================================ */
-@keyframes agent-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.4; transform: scale(1.35); }
+button,
+a,
+input,
+select,
+textarea {
+  transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.workspace-panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+}
+
+.workspace-panel-inset {
+  background: var(--color-surface-inset);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+}
+
+.workspace-kicker {
+  color: var(--color-ink-faint);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.workspace-action {
+  min-height: 40px;
+  border-radius: var(--radius-md);
+  padding-inline: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.workspace-panel-raised {
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-low);
 }
 
 .status-dot--running {
-  animation: agent-pulse 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: agent-pulse 1.8s ease-in-out infinite;
   background-color: var(--color-pulse);
 }
 
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+@keyframes agent-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
 }
 
-.finding-card {
-  animation: fade-up 200ms cubic-bezier(0, 0, 0.2, 1) both;
-}
-
-/* ============================================================
-   Accessibility
-   ============================================================ */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* ============================================================
-   Utility
-   ============================================================ */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

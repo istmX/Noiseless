@@ -71,10 +71,10 @@ Provide a significance score (1 to 10):
         except Exception as groq_err:
             print(f"Groq scoring failed, attempting Gemini fallback: {groq_err}")
 
-        # 2. Try Gemini 3.5 Flash Fallback
+        # 2. Try Gemini 1.5 Flash Fallback
         if settings.GEMINI_API_KEY:
             try:
-                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key={settings.GEMINI_API_KEY}"
+                url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={settings.GEMINI_API_KEY}"
                 payload = {
                     "contents": [{"parts": [{"text": prompt_text}]}],
                     "generationConfig": {

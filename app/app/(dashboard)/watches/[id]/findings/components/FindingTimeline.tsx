@@ -3,12 +3,18 @@
 import { Finding } from "../types";
 import { FindingCard } from "./FindingCard";
 import { Search } from "lucide-react";
+import { useEffect } from "react";
 
 interface FindingTimelineProps {
   findings: Finding[];
+  selectedFindingId?: string;
 }
 
-export function FindingTimeline({ findings }: FindingTimelineProps) {
+export function FindingTimeline({ findings, selectedFindingId }: FindingTimelineProps) {
+  useEffect(() => {
+    if (!selectedFindingId) return;
+    document.querySelector(`[data-finding-id="${selectedFindingId}"]`)?.scrollIntoView({ block: "center" });
+  }, [selectedFindingId]);
   if (!findings || findings.length === 0) {
     return (
       <div className="py-16 text-center bg-surface border border-hairline rounded-none p-8 flex flex-col items-center">

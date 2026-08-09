@@ -77,6 +77,11 @@
 ## 2026-08-09
 
 ### Completed
+- Implemented the Signal Desk authenticated workspace refactor foundations: unified warm paper tokens, opaque panel system, accessible focus and reduced motion rules, labeled desktop navigation, responsive header, and keyboard accessible command menu.
+- Rebuilt Dashboard into an intelligence triage surface, Watches into a searchable operational inventory, and System Health into a restrained operations view.
+- Realigned Watch Detail findings and digest surfaces to the Signal Desk panel system while retaining existing run, cooldown, configuration, and notification flows.
+- Updated the durable design blueprint to match the implemented Signal Desk token system.
+- Verified TypeScript compilation with `npx tsc --noEmit` and checked the current diff for whitespace errors.
 - Added tier column to database and updated user models in Next.js and FastAPI backend.
 - Enforced token limit validations and hourly frequency constraints in the background agent pipeline.
 - Implemented real time token deduction post run and depletion notification alerts via email and Slack.
@@ -119,14 +124,78 @@
   - Added full accent token family to globals.css and @theme block.
   - Updated `.istm-context/design.md` and GEMINI.md with locked Warm Slate Editorial palette.
   - Verified with `npx tsc --noEmit` — 0 errors.
-
+- **Full App Awwwards Benji Workstation UI Overhaul:**
+  - Upgraded design tokens in `.istm-context/design.md` to support Benji workstation aesthetic.
+  - Redesigned `WatchMetrics` component with centered stat readouts, status dot indicators, and background blur cards.
+  - Upgraded `WatchFilters` with `⌘K` command shortcut keybinding badges and high contrast status pills.
+  - Enhanced `WatchCard` and `WatchRow` with 12px rounded borders, subtle gradient hairlines, and monochrome status badges.
+  - Elevated `WatchDetailHeader` workstation top bar with `⌘R` keyboard shortcut badge, live run cooldown timer, and pill query tags.
+  - Upgraded `FindingCard` with 3 tier score indicators, domain favicons, summary excerpts, and hover spotlights.
+  - Redesigned `DigestCard` with AI report styling, delivery channel pills, and structured citation grids.
+  - Verified TypeScript compilation (`npx tsc --noEmit`) with 0 errors.
+- **Curated SaaS Workstation Synthesis (Linear + Raycast + Vercel + Stripe):**
+  - Integrated Raycast style command palette (`⌘K`) with keyboard navigation in `CommandMenu.tsx`.
+  - Upgraded top header capsule bar in `HeaderBar.tsx` with live signal status dots and navigation tabs.
+  - Refactored `DashboardLayout.tsx` with smooth drawer overlays and backdrop blur panels.
+  - Formatted form controls in `WatchForm.tsx` with clear field groupings and focus rings.
+  - Verified full TypeScript compilation (`npx tsc --noEmit`) with 0 errors.
+- **Layout Alignment and Sidebar Cleanup (Design Critique Fix):**
+  - Integrated `SidebarRail.tsx` navigation into `DashboardLayout.tsx` for a spec-compliant 64px floating sidebar rail.
+  - Added layout padding shifts (`pl-0 md:pl-20`) to prevent overlap between sidebar navigation and main canvases.
+  - Configured `HeaderBar.tsx` top navigation pills to display only on mobile viewports (`flex md:hidden`).
+  - Added `System Health` route and Lucide `Activity` icon to `NAV_ITEMS` layout constants.
+  - Deleted the dead, bypassed `Sidebar.tsx` file from the codebase.
+  - Verified full TypeScript compilation (`npx tsc --noEmit`) with 0 errors.
+- **Design System Colorization & Token Alignment (Design Critique Fix):**
+  - Refactored `FindingCard.tsx` and [FindingInspector.tsx](file:///workspaces/Noiseless/app/app/(dashboard)/dashboard/components/FindingInspector.tsx) to remove hardcoded Tailwind v3 color overrides (e.g. `bg-emerald-500/10`, `text-slate-950 on bg-amber-400`).
+  - Swapped arbitrary styling with semantic design system tokens (`bg-success-soft`, `bg-warning-soft`, `bg-danger-soft`, `text-ink`, `text-ink-muted`).
+- **Error Boundary Hardening & Mock Purge (Design Critique Fix):**
+  - Replaced silent catch statements in `/watches/[id]/page.tsx` and `watches/actions.ts` with transparent DB error propagation.
+  - Purged in-memory mock stores (`localWatchesStore`) to avoid leaking artificial data during DB connection timeouts.
+  - Created a global Next.js [error.tsx](file:///workspaces/Noiseless/app/app/(dashboard)/watches/error.tsx) handler displaying connection status errors using Lucide `AlertOctagon` and system theme tokens.
+- **Checkout Form Polish (Design Critique Fix):**
+  - Implemented card number auto-formatting masks (`4111 2222 3333 4444`) and expiration date masks (`MM/YY`) on change inputs in `/checkout/[plan]/page.tsx`.
+  - Adjusted checkout validation logic to strip space formatting during length criteria validation.
+  - Generated visual layout representation of the checkout card form.
+- **Premium Awwwards Landing Page Implementation:**
+  - Authored visual motion spec at `.istm-context/specs/0002-motion-landing-page.md` for "The Monochromatic Sanctuary" concept.
+  - Built a comprehensive standalone [page.tsx](file:///workspaces/Noiseless/app/app/page.tsx) rendering 8 interactive visual sections (Hero, Simulator, Capabilities, Flow, Pricing, Security, FAQ, and Contacts).
+  - Cleared temporary route group configs to prevent Next.js URL conflicts.
+  - Integrated GSAP timelines and ScrollTrigger reveals for smooth staggered page load transitions and scroll based scroll reveals with proper context unmount cleanups.
+  - Verified full TypeScript compilation (`npx tsc --noEmit`) with 0 errors.
 
 ### Pending
+
+- Simplified the authenticated workspace information architecture: dashboard now prioritizes attention, Watches is a list first, and watch items show only comparison essentials while configuration stays on the detail workstation.
+- Reworked the dashboard into a signal inbox with New signals and Earlier signals sections, compact signal cards, and a selected evidence inspector.
+- Redesigned the dashboard overview with compact summary cards, a three signal first viewport, and expandable earlier evidence so it reads as a dashboard instead of a long archive.
+
+### Implemented in this pass
+- Consolidated the full product direction around the light Signal Desk system for solo analysts.
+- Added shared page header, status badge, empty state, and metric readout primitives.
+- Added labeled desktop navigation, responsive mobile navigation, and System Health navigation.
+- Reworked the Dashboard around priority signals, evidence inspection, watch coverage, and agent activity.
+- Reworked Watches around an operational inventory with status filters, search, responsive table rows, and semantic status badges.
+- Reworked System Health and Settings headers and status surfaces to use the shared workspace language.
+- Reworked authentication layouts and corrected the forgot password route link.
+- Removed the production build dependency on network fetched Google Fonts by using a local system font stack.
+- Verified TypeScript compilation with `npx tsc --noEmit`.
+- Production build remains blocked by the sandbox Turbopack process permission error, while the initial build reached compilation after font loading was made local.
+- Hydrated the browser auth store from the server session with the user name, email, avatar, and tier.
+- Updated the Dashboard and sidebar account area to show the user name consistently.
+- Made the desktop sidebar fixed to the viewport height with independently scrollable navigation and bottom pinned profile and logout actions.
+- Added dashboard and watch detail evidence period filters for the last day, last week, last month, and all time.
+- Limited signal summaries to a concise preview and added direct links to the matching watch and finding.
+- Added a server side token preflight for manual watch runs and an insufficient balance upgrade dialog.
+- Added a dedicated `/settings/billing` subscription page and moved the Settings subscription entry to that page.
+- Reworked dashboard signal cards to show only concise summaries, with the full source explanation inside an accessible accordion.
+- Added a direct `Open watch detail` action from the selected signal inspector.
+- Added selected finding scroll positioning on Watch Detail pages.
+- Added global horizontal overflow protection and mobile sizing improvements for filters, billing methods, and checkout choices.
+
 
 ### Notes
 - Design tokens must be resolved before any component is coded.
 - GROQ_API_KEY must be set in the FastAPI .env. LangChain (ChatGroq) reads this key automatically.
 - Qdrant Cloud cluster must be provisioned.
 - shadcn initialized with Tailwind v4 in app/. Alias paths set to @/shared/components and @/shared/lib.
-
-

@@ -69,7 +69,7 @@ export async function registerAction(
   }
 }
 
-export async function serverLogoutAction() {
+export async function serverLogoutAction(): Promise<{ success: boolean }> {
   try {
     const cookieStore = await cookies();
     const cookieNames = [
@@ -89,5 +89,6 @@ export async function serverLogoutAction() {
     console.error("Failed to delete cookies:", e);
   }
   
-  await signOut({ redirectTo: "/login" });
+  await signOut({ redirect: false });
+  return { success: true };
 }

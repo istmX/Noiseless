@@ -2,7 +2,8 @@ import { auth } from "@/shared/lib/auth";
 import { prisma } from "@/shared/lib/db";
 import { redirect } from "next/navigation";
 import { ProfileForm } from "./components/ProfileForm";
-import { BillingPlans } from "./components/BillingPlans";
+import { PageHeader } from "@/shared/components/workspace/PageHeader";
+import Link from "next/link";
 
 export default async function SettingsPage() {
   const session = await auth();
@@ -30,23 +31,14 @@ export default async function SettingsPage() {
   }
 
   return (
-    <div className="relative flex flex-col w-full max-w-7xl mx-auto px-6 md:px-12 py-8 md:py-12 min-h-screen space-y-8">
-      {/* Title Header */}
-      <div>
-        <h1 className="text-3xl sm:text-4xl font-sans font-semibold text-ink tracking-tight">
-          Workstation Settings
-        </h1>
-        <p className="text-xs text-ink-muted mt-2">
-          Configure your personal preferences, plan details, and notification thresholds.
-        </p>
-      </div>
+    <div className="flex min-w-0 flex-col gap-6">
+      <PageHeader eyebrow="Account" title="Settings" description="Manage your profile, delivery destinations, and plan limits." />
 
       {/* Settings Sections */}
-      <div className="grid grid-cols-1 gap-8">
+      <div className="grid grid-cols-1 gap-6">
         <ProfileForm initialUser={user} />
-        <BillingPlans tokensBalance={user.tokensBalance} tokensUsed={user.tokensUsed} tier={user.tier} />
+        <section className="workspace-panel flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6"><div><p className="workspace-kicker">Subscription</p><h2 className="mt-2 text-base font-semibold text-ink">{user.tier} plan</h2><p className="mt-1 text-sm text-ink-muted">{user.tokensBalance} tokens available. Review usage and manage your plan.</p></div><Link href="/settings/billing" className="workspace-action inline-flex shrink-0 items-center justify-center bg-primary text-on-primary hover:bg-primary-hover">Manage subscription</Link></section>
       </div>
     </div>
   );
-
 }

@@ -11,34 +11,34 @@ interface MetricBarProps {
   label: string;
   value: number;
   total: number;
-  color: "success" | "primary" | "pulse";
+  indicatorColor: string;
 }
 
-function MetricBar({ label, value, total, color }: MetricBarProps) {
+function MetricBar({ label, value, total, indicatorColor }: MetricBarProps) {
   const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
 
-  const barColor =
-    color === "success"
-      ? "bg-success"
-      : color === "primary"
-      ? "bg-primary"
-      : "bg-success";
-
   return (
-    <div className="bg-surface-inset border border-hairline rounded-lg p-4 flex flex-col gap-3">
-      <span className="text-[10px] font-mono uppercase tracking-widest text-ink-muted">
-        {label}
-      </span>
-      <div className="flex items-end justify-between">
-        <span className="text-xl font-sans font-semibold text-ink">
-          {value}
-          <span className="text-sm font-normal text-ink-muted ml-1">/ {total}</span>
+    <div className="bg-surface/80 backdrop-blur-md border border-hairline rounded-xl p-4.5 flex flex-col justify-between gap-3 shadow-low hover:border-hairline-strong hover:shadow-medium transition-all group">
+      <div className="flex items-center justify-between">
+        <span className="text-[11px] font-mono font-medium uppercase tracking-wider text-ink-muted flex items-center gap-2">
+          <span className={`w-1.5 h-1.5 rounded-full ${indicatorColor} animate-pulse`} />
+          {label}
         </span>
-        <span className="text-xs font-mono text-ink-faint">{percentage}%</span>
+        <span className="text-[11px] font-mono text-ink-faint bg-surface-inset px-2 py-0.5 rounded-md border border-hairline">
+          {percentage}%
+        </span>
       </div>
-      <div className="w-full bg-hairline h-1 rounded-full overflow-hidden">
+
+      <div className="flex items-baseline justify-between pt-1">
+        <span className="text-2xl font-sans font-bold text-ink tracking-tight group-hover:text-accent transition-colors">
+          {value}
+          <span className="text-xs font-normal text-ink-faint ml-1.5">/ {total}</span>
+        </span>
+      </div>
+
+      <div className="w-full bg-surface-inset h-1.5 rounded-full overflow-hidden border border-hairline/50 p-0.5">
         <div
-          className={`${barColor} h-full rounded-full transition-all duration-500`}
+          className="h-full rounded-full bg-primary transition-all duration-700 ease-out"
           style={{ width: `${percentage}%` }}
         />
       </div>
@@ -52,10 +52,25 @@ export function WatchMetrics({ watches, filteredCount }: WatchMetricsProps) {
   const runningCount = watches.filter((w) => w.runInProgress).length;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <MetricBar label="Active watches" value={activeCount} total={totalCount} color="success" />
-      <MetricBar label="Agent running" value={runningCount} total={totalCount} color="primary" />
-      <MetricBar label="In timeframe" value={filteredCount} total={totalCount} color="pulse" />
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+      <MetricBar
+        label="ACTIVE WATCHES"
+        value={activeCount}
+        total={totalCount}
+        indicatorColor="bg-emerald-500"
+      />
+      <MetricBar
+        label="AGENTS RUNNING"
+        value={runningCount}
+        total={totalCount}
+        indicatorColor="bg-violet-500"
+      />
+      <MetricBar
+        label="TIMEFRAME MATCHES"
+        value={filteredCount}
+        total={totalCount}
+        indicatorColor="bg-amber-500"
+      />
     </div>
   );
 }

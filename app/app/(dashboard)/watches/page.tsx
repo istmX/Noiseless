@@ -5,11 +5,8 @@ export default async function WatchesPage() {
   const watches = await getWatches();
 
   return (
-    <div className="relative flex flex-col w-full max-w-7xl mx-auto px-6 md:px-12 py-12 md:py-16 min-h-screen bg-canvas">
-      <div className="relative z-10">
-        <AllWatchesList watches={watches} />
-      </div>
+    <div className="flex flex-col gap-6 w-full min-h-full">
+      <AllWatchesList watches={watches} />
     </div>
   );
 }
-

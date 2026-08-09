@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, Grid, List } from "lucide-react";
+import { Search, Grid, List, Command } from "lucide-react";
 
 export type StatusFilter = "ALL" | "MONITORING" | "AGENT ACTIVE" | "PAUSED";
 export type ViewMode = "grid" | "list";
@@ -34,9 +34,9 @@ export function WatchFilters({
             <button
               key={status}
               onClick={() => onStatusChange(status)}
-              className={`px-3 py-1 text-xs font-sans font-medium rounded-md border transition-colors cursor-pointer ${
+              className={`px-3 py-1 text-[11px] font-mono font-medium tracking-wide rounded-md border transition-all cursor-pointer ${
                 isActive
-                  ? "bg-primary text-on-primary border-primary"
+                  ? "bg-primary text-on-primary border-primary shadow-xs"
                   : "bg-surface-inset text-ink-muted border-hairline hover:text-ink hover:border-hairline-strong"
               }`}
             >
@@ -48,22 +48,25 @@ export function WatchFilters({
 
       {/* Search + View Toggle */}
       <div className="flex items-center gap-2">
-        <div className="relative">
-          <Search className="w-3.5 h-3.5 text-ink-faint absolute left-2.5 top-1/2 -translate-y-1/2" />
+        <div className="relative flex items-center">
+          <Search className="w-3.5 h-3.5 text-ink-faint absolute left-3 pointer-events-none" />
           <input
             type="text"
             placeholder="Search watches…"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-8 pr-3 py-1.5 text-xs bg-surface-inset border border-hairline rounded-md focus:border-primary focus:outline-none w-[180px] transition-colors font-sans text-ink placeholder:text-ink-faint"
+            className="w-full pl-8 pr-8 py-1.5 text-xs bg-surface-inset border border-hairline rounded-md focus:border-primary focus:outline-none sm:w-[200px] transition-all font-sans text-ink placeholder:text-ink-faint shadow-xs"
           />
+          <kbd className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono text-ink-faint bg-surface border border-hairline rounded pointer-events-none">
+            <Command className="w-2.5 h-2.5" />K
+          </kbd>
         </div>
 
         <div className="flex items-center border border-hairline rounded-md bg-surface-inset overflow-hidden p-0.5">
           <button
             onClick={() => onViewModeChange("grid")}
             className={`p-1.5 rounded-sm cursor-pointer transition-colors ${
-              viewMode === "grid" ? "bg-primary text-on-primary" : "text-ink-muted hover:text-ink"
+              viewMode === "grid" ? "bg-primary text-on-primary shadow-xs" : "text-ink-muted hover:text-ink"
             }`}
             title="Grid View"
           >
@@ -72,7 +75,7 @@ export function WatchFilters({
           <button
             onClick={() => onViewModeChange("list")}
             className={`p-1.5 rounded-sm cursor-pointer transition-colors ${
-              viewMode === "list" ? "bg-primary text-on-primary" : "text-ink-muted hover:text-ink"
+              viewMode === "list" ? "bg-primary text-on-primary shadow-xs" : "text-ink-muted hover:text-ink"
             }`}
             title="List View"
           >

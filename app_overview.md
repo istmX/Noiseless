@@ -56,3 +56,4 @@ We are strictly adhering to a **premium, data-dense aesthetic**.
 - We rely heavily on typography (Playfair Display, Space Grotesk, Inter, JetBrains Mono) and subtle micro-animations to make the interface feel alive.
 
 You're jumping in right as we've finished building the **Dashboard UI** (where watches are listed and created). Next up is connecting it to the Python backend!
+

@@ -22,11 +22,12 @@ import { useAuthStore } from "@/shared/hooks/useAuthStore";
 interface WatchSettingsProps {
   watch: Watch;
   open: boolean;
+  onClose: () => void;
 }
 
 const FREQUENCIES = ["hourly", "daily", "weekly"] as const;
 
-export function WatchSettings({ watch, open }: WatchSettingsProps) {
+export function WatchSettings({ watch, open, onClose }: WatchSettingsProps) {
   const router = useRouter();
   const { userTier, userEmail } = useAuthStore();
   const isHourlyLocked = userTier === "FREE";
@@ -93,18 +94,32 @@ export function WatchSettings({ watch, open }: WatchSettingsProps) {
     <>
       <AnimatePresence>
         {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.22, ease: "easeInOut" }}
-            className="overflow-hidden"
+          <>
+          <motion.button
+            type="button"
+            aria-label="Close watch configuration"
+            onClick={onClose}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-ink/20"
+          />
+          <motion.aside
+            role="dialog"
+            aria-modal="true"
+            aria-label="Configure watch"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed inset-y-0 right-0 z-50 w-full max-w-2xl overflow-y-auto border-l border-hairline bg-surface p-5 shadow-high sm:p-6"
           >
-            <div className="bg-surface border border-hairline rounded-md p-5 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="mb-6 flex items-start justify-between border-b border-hairline pb-4"><div><p className="text-[10px] font-mono uppercase tracking-[0.14em] text-ink-faint">Watch rules</p><h2 className="mt-1 text-lg font-semibold text-ink">Configure watch</h2><p className="mt-1 text-xs text-ink-muted">Change how Noiseless finds and delivers intelligence.</p></div><button type="button" onClick={onClose} className="min-h-10 rounded-md px-3 text-xs text-ink-muted hover:bg-surface-inset hover:text-ink">Close</button></div>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               {/* Left col: configuration */}
               <div className="space-y-5">
                 <p className="text-[10px] font-mono uppercase tracking-widest text-ink-muted border-b border-hairline pb-2">
-                  Watch Configuration
+                  Cadence and significance
                 </p>
 
                 {/* Active toggle */}
@@ -175,7 +190,7 @@ export function WatchSettings({ watch, open }: WatchSettingsProps) {
                 {/* Notifications */}
                 <div className="space-y-3 pt-1">
                   <p className="text-[10px] font-mono uppercase tracking-widest text-ink-muted border-b border-hairline pb-2">
-                    Notifications
+                    Delivery
                   </p>
                   <div className="space-y-1">
                     <Label className="text-xs font-sans font-medium text-ink">Alert Email</Label>
@@ -211,7 +226,7 @@ export function WatchSettings({ watch, open }: WatchSettingsProps) {
               {/* Right col: search queries */}
               <div className="space-y-4">
                 <p className="text-[10px] font-mono uppercase tracking-widest text-ink-muted border-b border-hairline pb-2">
-                  Target Search Queries
+                  Scope
                 </p>
                 <form onSubmit={handleAddQuery} className="flex gap-2">
                   <div className="relative flex-1">
@@ -253,7 +268,6 @@ export function WatchSettings({ watch, open }: WatchSettingsProps) {
                 </div>
               </div>
 
-              {/* Footer actions */}
               <div className="col-span-1 md:col-span-2 pt-4 border-t border-hairline flex items-center justify-between gap-3">
                 <Button
                   onClick={() => setShowDeleteConfirm(true)}
@@ -276,7 +290,8 @@ export function WatchSettings({ watch, open }: WatchSettingsProps) {
                 )}
               </div>
             </div>
-          </motion.div>
+          </motion.aside>
+          </>
         )}
       </AnimatePresence>
 

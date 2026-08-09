@@ -1,56 +1,31 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useAuthStore } from "../hooks/useAuthStore";
-import { Sidebar } from "./Sidebar";
-import { usePathname } from "next/navigation";
+
+interface AuthProfile {
+  readonly name: string;
+  readonly email: string;
+  readonly avatarUrl: string;
+  readonly tier: string;
+}
 
 export function AuthProvider({
   isLoggedIn,
+  profile,
   children,
 }: {
   isLoggedIn: boolean;
+  profile?: AuthProfile;
   children: React.ReactNode;
 }) {
   const setLoggedIn = useAuthStore((state) => state.setLoggedIn);
-  const pathname = usePathname();
-  const initialized = useRef(false);
-
-  if (!initialized.current) {
-    useAuthStore.setState({ isLoggedIn });
-    initialized.current = true;
-  }
+  const setProfile = useAuthStore((state) => state.setProfile);
 
   useEffect(() => {
     setLoggedIn(isLoggedIn);
-  }, [isLoggedIn, setLoggedIn]);
+    if (profile) setProfile(profile);
+  }, [isLoggedIn, profile, setLoggedIn, setProfile]);
 
-  const isDashboardRoute =
-    pathname === "/dashboard" ||
-    pathname?.startsWith("/watches") ||
-    pathname?.startsWith("/agent") ||
-    pathname?.startsWith("/settings") ||
-    pathname?.startsWith("/checkout");
-
-  const showSidebar = isLoggedIn && isDashboardRoute;
-
-  if (!showSidebar) {
-    return (
-      <div className="flex flex-col h-screen overflow-hidden bg-canvas">
-        <main className="flex-1 overflow-y-auto overflow-x-hidden w-full">
-          {children}
-        </main>
-      </div>
-    );
-  }
-
-  // Sidebar is always a fixed 64px icon rail on desktop
-  return (
-    <div className="flex flex-col md:flex-row h-screen overflow-hidden bg-canvas">
-      <Sidebar />
-      <main className="flex-1 overflow-y-auto overflow-x-hidden w-full pl-0 md:pl-16">
-        {children}
-      </main>
-    </div>
-  );
+  return <>{children}</>;
 }

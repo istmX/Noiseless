@@ -9,9 +9,9 @@ export const metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen w-full flex flex-col md:flex-row bg-canvas">
+    <div className="min-h-screen w-full flex flex-col bg-canvas md:flex-row">
       {/* Brand / Hero Section */}
-      <div className="hidden md:flex md:w-1/2 bg-surface-inset border-r border-hairline p-12 flex-col justify-between relative overflow-hidden">
+      <div className="relative hidden overflow-hidden border-r border-hairline bg-sidebar p-12 md:flex md:w-[46%] md:flex-col md:justify-between">
 
 
         <div className="relative z-10">
@@ -19,8 +19,9 @@ export default function LoginPage() {
         </div>
 
         <div className="relative z-10 max-w-md">
-          <h1 className="font-sans text-display font-bold text-ink leading-tight mb-4">
-            Signal-only intelligence.
+          <p className="workspace-kicker">Signal Desk</p>
+          <h1 className="mt-3 font-sans text-4xl font-semibold leading-tight tracking-tight text-ink">
+            A quieter way to notice what matters.
           </h1>
           <p className="font-data text-body text-ink-muted leading-relaxed">
             Automate continuous monitoring across industries, competitors, and technology trends. Our agent searches, deduplicates, scores, and notifies you only when something genuinely new happens.
@@ -29,10 +30,11 @@ export default function LoginPage() {
       </div>
 
       {/* Form Section */}
-      <div className="flex-1 flex flex-col items-center justify-center p-8 md:p-12 relative">
-        <div className="w-full max-w-sm flex flex-col gap-8">
+      <div className="relative flex flex-1 flex-col items-center justify-center p-6 sm:p-10 md:p-12">
+        <div className="flex w-full max-w-sm flex-col gap-8">
           <div className="flex flex-col gap-2 text-center md:text-left">
-            <h2 className="font-sans text-2xl font-semibold text-ink tracking-tight">
+            <p className="workspace-kicker">Workspace access</p>
+            <h2 className="font-sans text-2xl font-semibold tracking-tight text-ink">
               Welcome back
             </h2>
             <p className="font-data text-body text-ink-muted">

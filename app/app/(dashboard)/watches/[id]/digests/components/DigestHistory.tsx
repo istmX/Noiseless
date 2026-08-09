@@ -6,9 +6,10 @@ import { FileText } from "lucide-react";
 
 interface DigestHistoryProps {
   digests: Digest[];
+  onCitationClick?: (url: string) => void;
 }
 
-export function DigestHistory({ digests }: DigestHistoryProps) {
+export function DigestHistory({ digests, onCitationClick }: DigestHistoryProps) {
   if (!digests || digests.length === 0) {
     return (
       <div className="py-16 text-center bg-surface border border-hairline rounded-none p-8 flex flex-col items-center">
@@ -24,7 +25,7 @@ export function DigestHistory({ digests }: DigestHistoryProps) {
   return (
     <div className="space-y-4">
       {digests.map((digest) => (
-        <DigestCard key={digest.id} digest={digest} />
+        <DigestCard key={digest.id} digest={digest} onCitationClick={onCitationClick} />
       ))}
     </div>
   );

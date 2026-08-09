@@ -12,22 +12,23 @@ interface WatchCardProps {
 function StatusChip({ watch }: { watch: Watch }) {
   if (watch.runInProgress) {
     return (
-      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-sm text-[11px] font-sans font-semibold tracking-wide bg-success-soft text-success border border-success/20 uppercase">
-        <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
-        Active
+      <span className="inline-flex items-center gap-1.5 rounded-sm bg-success-soft px-1.5 py-1 text-[10px] font-mono font-semibold tracking-wider text-success uppercase">
+        <span className="h-1.5 w-1.5 rounded-full bg-success status-dot--running" />
+        ACTIVE
       </span>
     );
   }
   if (!watch.active) {
     return (
-      <span className="px-2 py-0.5 rounded-sm text-[11px] font-sans font-semibold tracking-wide bg-surface-inset text-ink-faint border border-hairline uppercase">
-        Paused
+      <span className="rounded-sm bg-surface-inset px-1.5 py-1 text-[10px] font-mono font-medium tracking-wider text-ink-faint uppercase">
+        PAUSED
       </span>
     );
   }
   return (
-    <span className="px-2 py-0.5 rounded-sm text-[11px] font-sans font-semibold tracking-wide bg-surface-inset text-ink-muted border border-hairline uppercase">
-      Monitoring
+    <span className="inline-flex items-center gap-1.5 rounded-sm bg-surface-inset px-1.5 py-1 text-[10px] font-mono font-medium tracking-wider text-ink-muted uppercase">
+      <span className="h-1.5 w-1.5 rounded-full bg-ink-faint" />
+      MONITORING
     </span>
   );
 }
@@ -52,34 +53,34 @@ export function WatchCard({ watch }: WatchCardProps) {
   return (
     <motion.div
       onClick={() => router.push(`/watches/${watch.id}`)}
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -2 }}
       transition={{ duration: 0.2, ease: "easeOut" }}
-      className="group cursor-pointer flex flex-col bg-surface border border-hairline hover:border-hairline-strong rounded-md p-4 gap-3 transition-colors duration-150"
+      className="workspace-panel group relative flex cursor-pointer flex-col gap-4 overflow-hidden p-5 transition-colors hover:border-hairline-strong"
     >
-      {/* Top row: status + frequency */}
       <div className="flex items-center justify-between">
         <StatusChip watch={watch} />
-        <span className="text-[10px] font-mono text-ink-faint uppercase tracking-widest">
-          {watch.frequency}
-        </span>
+        <span className="font-mono text-[10px] uppercase tracking-widest text-ink-faint">{watch.frequency}</span>
       </div>
 
-      {/* Topic */}
-      <h3 className="text-sm font-sans font-semibold text-ink leading-snug line-clamp-2 group-hover:text-success transition-colors duration-150">
-        {watch.topic}
-      </h3>
+      <div className="space-y-1.5">
+        <h3 className="text-base font-sans font-semibold text-ink leading-snug line-clamp-2 group-hover:text-accent transition-colors">
+          {watch.topic}
+        </h3>
+        <p className="truncate font-mono text-[10px] text-ink-faint">{watch.searchQueries.length} query terms <span aria-hidden="true">·</span> threshold {watch.significanceThreshold}/10</p>
+      </div>
 
       {/* Footer row */}
-      <div className="mt-auto pt-3 border-t border-hairline flex items-center justify-between">
-        <div className="flex items-center gap-1 text-[11px] font-mono text-ink-faint" suppressHydrationWarning>
-          <Clock className="w-3 h-3" />
+      <div className="mt-auto pt-3.5 border-t border-hairline flex items-center justify-between">
+        <div className="flex items-center gap-1.5 text-xs font-mono text-ink-faint" suppressHydrationWarning>
+          <Clock className="w-3.5 h-3.5" />
           {formatLastRun(watch.lastRunAt)}
         </div>
-        <div className="flex items-center gap-1 text-[11px] font-mono text-ink-muted">
-          <TrendingUp className="w-3 h-3 text-success" />
-          <span className="font-semibold text-ink">{findingCount}</span>
-          <span className="text-ink-faint">findings</span>
+        <div className="flex items-center gap-1.5 text-xs font-mono text-ink-muted">
+          <TrendingUp className="w-3.5 h-3.5 text-success" />
+          <span className="font-semibold text-ink font-sans">{findingCount}</span>
+          <span className="text-ink-faint text-[11px]">signals</span>
         </div>
       </div>
     </motion.div>

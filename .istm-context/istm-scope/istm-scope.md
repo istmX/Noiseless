@@ -21,6 +21,12 @@ Noiseless is an automated workspace for intelligence monitoring. It helps profes
 | 10 | Dashboard and watches navigation | Slice 8 | in-progress |
 | 11 | Watch workspace fixes | Slice 9 | in-progress |
 | 12 | Workspace quality improvements | Slice 10 | in-progress |
+| 13 | Dev Native Design System and Global Shell | Redesign Slice 1 | in-progress |
+| 14 | Intelligence Stream Dashboard and Citation Inspector | Redesign Slice 2 | planned |
+| 15 | Interactive Data Table Watches Workstation | Redesign Slice 3 | planned |
+| 16 | Watch Detail and RAG Digest Inspector | Redesign Slice 4 | in-progress |
+| 17 | Live Agent Telemetry and Execution Trace | Redesign Slice 5 | planned |
+| 18 | Consolidated Settings Profile and Billing | Redesign Slice 6 | planned |
 
 ## Existing features
 
@@ -52,7 +58,7 @@ code in `backend/app/`
 Retrieve Tavily pages, perform vector deduplication, and score significance using Groq.
 code in `backend/app/agent/`
 
-## Planned features
+## Active features
 
 ### 8. Token consumption enforcement · in-progress
 Track user token balances and deduct tokens on watch runs. Block runs when balances are low.
@@ -113,6 +119,55 @@ The custom animated 404 page, the system health stats page, and the watch execut
 - [ ] Verify it: `/istm-check verify workspace quality improvements`
 - [ ] Test it: `/istm-test workspace quality improvements`
 Spec 0015 · code in `app/app/`
+
+## Planned features (Redesign Phase)
+
+### 13. Dev Native Design System and Global Shell · in-progress
+Rebuild the core layout shell in pure obsidian dark theme with a 64px monolithic left rail, top breadcrumb bar, live agent status pulse dot, and Cmd K command menu overlay.
+**Done when:** the left rail morphs active item backgrounds using Motion spring physics, Cmd K triggers the global command overlay, and the top bar displays breadcrumbs and live agent status.
+- [x] Design it (spec): `/architect dev native design system and global shell`
+- [x] Build it: `/istm-develop dev native global shell`
+   - [x] Global setup and CSS design tokens
+   - [x] Navigation Rail with spring layout morph
+   - [x] Header breadcrumbs and live pulse indicator
+   - [x] Global command palette overlay (Cmd K)
+   - [x] Layout integration and verification
+- [ ] Verify it: `/istm-check verify dev native global shell`
+- [ ] Test it: `/istm-test dev native global shell`
+Spec 0017 · code in `app/shared/components/shell/`
+
+### 14. Intelligence Stream Dashboard and Citation Inspector · planned · needs a decision
+Rebuild the main dashboard into a split pane view pairing a high density intelligence stream with a right side telemetry column and slide out citation inspector drawer.
+**Done when:** selecting a finding row smoothly slides out the right citation drawer with spring physics, displaying extracted key facts, confidence ratings, and source web links.
+- [ ] Design it (spec): `/architect intelligence stream dashboard and citation inspector`
+
+### 15. Interactive Data Table Watches Workstation · planned · needs a decision
+Rebuild the watches list as an interactive data table with inline status toggles, threshold sliders, frequency badges, and quick search filters.
+**Done when:** users can sort and filter watches in a high density data table, toggle active status inline, and adjust significance thresholds without opening modals.
+- [ ] Design it (spec): `/architect interactive data table watches workstation`
+
+### 16. Watch Detail and RAG Digest Inspector · in-progress
+Rebuild the watch detail page into a dual column workspace featuring a chronological finding feed on the left and a RAG digest reader with source citations on the right, with a compact links toggle and date range filters.
+**Done when:** users can inspect findings chronologically, read generated digests with interactive source tags, toggle a dense links list, filter findings and digests by date, and trigger manual runs.
+- [x] Design it (spec): `/architect watch detail and rag digest inspector`
+- [ ] Build it: `/istm-develop watch detail and rag digest inspector`
+   - [x] Types and Constants Definition
+   - [x] Implement the Filter Bar Component
+   - [x] Build the Links Index Component
+   - [x] Update the Watch Detail View Container
+- [ ] Verify it: `/istm-check verify watch detail and rag digest inspector`
+- [ ] Test it: `/istm-test watch detail and rag digest inspector`
+Spec 0020 · code in `app/app/(dashboard)/watches/`
+
+### 17. Live Agent Telemetry and Execution Trace · planned · needs a decision
+Rebuild the system health page (/agent) into a live telemetry inspector showing step by step background run execution traces, token consumption meters, and vector database status.
+**Done when:** users can view live trace step durations (Tavily search, Qdrant dedup, Groq scoring) and track monthly token budgets visually.
+- [ ] Design it (spec): `/architect live agent telemetry and execution trace`
+
+### 18. Consolidated Settings Profile and Billing · planned · needs a decision
+Consolidate user profile, notification webhook targets, API credentials, and subscription billing into a single tabbed workstation with spring animated tab indicators.
+**Done when:** users switch smoothly between profile, webhooks, API keys, and billing tabs using spring animations, updating preferences without page reloads.
+- [ ] Design it (spec): `/architect consolidated settings profile and billing`
 
 ## Legend
 

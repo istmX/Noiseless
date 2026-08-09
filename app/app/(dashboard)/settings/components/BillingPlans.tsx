@@ -118,7 +118,7 @@ export function BillingPlans({ tokensBalance, tokensUsed, tier }: BillingPlansPr
   const activePlanInfo = plans.find((p) => p.current) || plans[0];
 
   return (
-    <div className="bg-surface border border-hairline rounded-xl p-6 sm:p-8 shadow-xs space-y-8">
+    <section className="workspace-panel space-y-8 p-5 sm:p-6">
       <div className="border-b border-hairline pb-4 flex justify-between items-center">
         <div>
           <h2 className="text-lg font-sans font-semibold text-ink">Subscription and Billing</h2>
@@ -141,13 +141,13 @@ export function BillingPlans({ tokensBalance, tokensUsed, tier }: BillingPlansPr
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
         {plans.map((plan) => (
           <div
             key={plan.name}
-            className={`border rounded-lg p-5 flex flex-col justify-between transition-all ${
+            className={`flex flex-col justify-between rounded-lg border p-5 transition-all ${
               plan.current
-                ? "bg-surface-inset border-primary border-2 shadow-xs"
+                ? "bg-accent-soft border-accent"
                 : "bg-surface border-hairline hover:border-hairline-strong"
             }`}
           >
@@ -213,7 +213,7 @@ export function BillingPlans({ tokensBalance, tokensUsed, tier }: BillingPlansPr
             )}
 
             {/* Payment Method Selector */}
-            <div className="grid grid-cols-3 gap-2 pb-2">
+            <div className="grid grid-cols-1 gap-2 pb-2 sm:grid-cols-3">
               <button
                 type="button"
                 onClick={() => setPaymentMethod("card")}
@@ -346,6 +346,6 @@ export function BillingPlans({ tokensBalance, tokensUsed, tier }: BillingPlansPr
           </form>
         </DialogContent>
       </Dialog>
-    </div>
+    </section>
   );
 }

@@ -5,10 +5,6 @@ import { auth } from "@/shared/lib/auth";
 import { fetchApi } from "@/shared/lib/api-client";
 import { watchFormSchema, WatchFormValues, Watch } from "./types";
 import { prisma } from "@/shared/lib/db";
-import { mockWatches } from "./placeholder";
-
-// In-memory store fallback for dev/scaffolding mode
-const localWatchesStore: Watch[] = [];
 
 export async function createWatch(values: WatchFormValues) {
   const session = await auth();
@@ -56,30 +52,7 @@ export async function createWatch(values: WatchFormValues) {
     revalidatePath("/watches");
     return { data: newWatch as unknown as Watch };
   } catch (dbErr) {
-    // 3. Dev / Scaffolding In-Memory Fallback
-    const localWatch: Watch = {
-      id: "watch-" + Date.now(),
-      userId: userId,
-      topic: payload.topic,
-      searchQueries: payload.searchQueries,
-      frequency: payload.frequency,
-      significanceThreshold: payload.significanceThreshold,
-      notificationEmail: payload.notificationEmail || null,
-      notificationSlackWebhook: payload.notificationSlackWebhook || null,
-      lastRunAt: null,
-      runInProgress: false,
-      active: payload.active,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      _count: {
-        findings: 0,
-        digests: 0,
-      },
-    };
-
-    localWatchesStore.unshift(localWatch);
-    revalidatePath("/watches");
-    return { data: localWatch };
+    return { error: "Failed to save watch in database. Please check database connection." };
   }
 }
 
@@ -87,26 +60,20 @@ export async function getWatches(): Promise<Watch[]> {
   const session = await auth();
   const userId = session?.user?.id;
 
-  try {
-    if (userId) {
-      const watches = await prisma.watch.findMany({
-        where: { userId: userId },
-        orderBy: { createdAt: "desc" },
-        include: {
-          _count: {
-            select: { findings: true, digests: true },
-          },
-        },
-      });
-      if (watches.length > 0) {
-        return watches as unknown as Watch[];
-      }
-    }
-  } catch (dbErr) {
-    // DB offline or not configured
+  if (!userId) {
+    return [];
   }
 
-  return localWatchesStore;
+  const watches = await prisma.watch.findMany({
+    where: { userId: userId },
+    orderBy: { createdAt: "desc" },
+    include: {
+      _count: {
+        select: { findings: true, digests: true },
+      },
+    },
+  });
+  return watches as unknown as Watch[];
 }
 
 export async function updateWatch(watchId: string, values: any) {
@@ -192,6 +159,15 @@ export async function deleteWatch(watchId: string) {
 }
 
 export async function runWatchNow(watchId: string) {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return { error: "Authentication required" } as const;
+
+  const user = await prisma.user.findUnique({ where: { id: userId }, select: { tokensBalance: true } });
+  if (!user || user.tokensBalance < 10) {
+    return { error: "Your token balance is too low to run this watch.", code: "INSUFFICIENT_TOKENS" as const, tokensBalance: user?.tokensBalance ?? 0 };
+  }
+
   try {
     const res = await fetchApi<any>(`/internal/run-watch/${watchId}`, {
       method: "POST",
@@ -201,9 +177,47 @@ export async function runWatchNow(watchId: string) {
       revalidatePath(`/watches/${watchId}`);
       return { success: true };
     }
-    return { error: res.error || "Failed to trigger agent run" };
+    const errorMessage = res.error || "Failed to trigger agent run";
+    if (errorMessage.toLowerCase().includes("token")) {
+      return { error: errorMessage, code: "INSUFFICIENT_TOKENS" as const, tokensBalance: user.tokensBalance };
+    }
+    return { error: errorMessage };
   } catch (err) {
     return { error: "Failed to connect to backend agent" };
   }
 }
 
+export async function getRecentFindings() {
+  const session = await auth();
+  const userId = session?.user?.id;
+  
+  if (!userId) return [];
+
+  try {
+    const findings = await prisma.finding.findMany({
+      where: {
+        watch: {
+          userId: userId
+        },
+        score: {
+          gte: 7 // Only highly significant findings
+        }
+      },
+      include: {
+        watch: {
+          select: {
+            id: true,
+            topic: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: "desc"
+      },
+      take: 50
+    });
+    return findings;
+  } catch (err) {
+    return [];
+  }
+}
