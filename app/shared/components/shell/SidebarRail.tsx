@@ -32,7 +32,7 @@ export function SidebarRail() {
   return (
     <aside className="sticky top-0 hidden h-screen max-h-screen w-60 shrink-0 flex-col overflow-hidden border-r border-hairline bg-sidebar px-3 py-4 md:flex">
       <Link href="/dashboard" className="flex min-h-11 items-center gap-3 rounded-md px-3 text-ink hover:bg-surface-inset">
-        <Logo size={22} textClassName="text-sm font-semibold tracking-tight" />
+        <Logo size={22} textClassName="text-sm font-semibold tracking-tight" href="" />
       </Link>
 
       <nav aria-label="Primary navigation" className="mt-8 flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto">
