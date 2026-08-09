@@ -28,6 +28,7 @@
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-hook-form": "^7.84.0",
+    "sheryjs": "^1.0.0-beta.0.1.8",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.6.0",
     "zod": "^4.4.3",
