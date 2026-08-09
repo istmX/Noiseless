@@ -18,7 +18,7 @@ export async function updateUserProfile(name: string, email: string) {
 
   try {
     // Generate default Dicebear avatar based on name
-    const avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(name.trim())}`;
+    const avatarUrl = `https://api.dicebear.com/10.x/croodles/svg?seed=${encodeURIComponent(name.trim())}`;
     
     await prisma.user.update({
       where: { id: userId },

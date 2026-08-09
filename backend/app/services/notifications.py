@@ -151,14 +151,14 @@ class NotificationService:
             print(f"Error sending Brevo email: {e}")
             return False
 
-    async def send_token_depletion_alert(self, recipient_email: str, webhook_url: str, topic: str, watch_id: str) -> bool:
+    async def send_token_depletion_alert(self, recipient_email: str, webhook_url: str, topic: str, watch_id: str, required_tokens: int = 10) -> bool:
         """Sends an alert to email and Slack when a watch run is blocked due to depleted tokens."""
         email_sent = True
         slack_sent = True
 
         if webhook_url:
             payload = {
-                "text": f"⚠️ *Noiseless Watch Blocked* for topic *{topic}*\n\nYour watch run was blocked because your token balance is depleted (less than 10 tokens remaining). Please upgrade your plan or top up your tokens on the settings page.\n\n🔗 _Update billing: /settings_"
+                "text": f"⚠️ *Noiseless Watch Blocked* for topic *{topic}*\n\nYour watch run was blocked because your token balance is depleted (less than {required_tokens} tokens remaining). Please upgrade your plan or top up your tokens on the settings page.\n\n🔗 _Update billing: /settings_"
             }
             try:
                 async with httpx.AsyncClient() as client:
@@ -183,7 +183,7 @@ class NotificationService:
                     <h2 style="color: #DC2626; margin-top: 0;">Noiseless Watch Blocked: Depleted Tokens</h2>
                     <p><strong>Topic:</strong> {topic}</p>
                     <div style="border-top: 1px solid #E4E4E7; padding-top: 16px; margin-top: 16px; line-height: 1.6;">
-                        Your watch run has been blocked because your token balance is depleted. You must have at least 10 tokens to execute a watch run.
+                        Your watch run has been blocked because your token balance is depleted. You must have at least {required_tokens} tokens to execute a watch run.
                     </div>
                     <div style="margin-top: 24px; font-size: 12px; color: #71717A;">
                         Please visit the settings page on your Noiseless dashboard to purchase additional tokens or upgrade your subscription.

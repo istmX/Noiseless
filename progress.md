@@ -211,6 +211,10 @@
 * Modified the watches grid row component (WatchRow.tsx) to stack watch items into cards on small screens.
 * Formatted the evidence row card header to lay out the domain, conflict badge, and title responsively by stacking them on mobile.
 * Adjusted the watch list header layout (WatchListHeader.tsx) and the evidence detail link container to prevent layout clips on narrow screens.
+* Preserved the token usage counter (tokensUsed) during subscription plan upgrades and downgrades.
+* Added an End Premium cancellation action to the billing page that returns Pro and Enterprise accounts back to the Free plan.
+* Implemented dynamic preflight token balance checks inside the agent pipeline and manual watch runs based on user subscription levels.
+* Purged unused placeholder modules (placeholder.ts), legacy route handlers (proxy.ts), and the backend scratch directory.
 
 
 ### Notes

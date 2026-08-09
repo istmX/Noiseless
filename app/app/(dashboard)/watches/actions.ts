@@ -163,9 +163,12 @@ export async function runWatchNow(watchId: string) {
   const userId = session?.user?.id;
   if (!userId) return { error: "Authentication required" } as const;
 
-  const user = await prisma.user.findUnique({ where: { id: userId }, select: { tokensBalance: true } });
-  if (!user || user.tokensBalance < 10) {
-    return { error: "Your token balance is too low to run this watch.", code: "INSUFFICIENT_TOKENS" as const, tokensBalance: user?.tokensBalance ?? 0 };
+  const user = await prisma.user.findUnique({ where: { id: userId }, select: { tokensBalance: true, tier: true } });
+  if (!user) return { error: "User not found" } as const;
+
+  const tokenCost = user.tier === "ENTERPRISE" ? 5 : user.tier === "PRO" ? 10 : 25;
+  if (user.tokensBalance < tokenCost) {
+    return { error: `Your token balance is too low to run this watch. Requires at least ${tokenCost} tokens.`, code: "INSUFFICIENT_TOKENS" as const, tokensBalance: user.tokensBalance };
   }
 
   try {

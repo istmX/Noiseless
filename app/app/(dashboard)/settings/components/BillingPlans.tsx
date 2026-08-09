@@ -179,6 +179,13 @@ export function BillingPlans({ tokensBalance, tokensUsed, tier }: BillingPlansPr
                 <Button disabled className="w-full bg-surface-elevated text-ink-faint border border-hairline rounded-md text-xs cursor-not-allowed">
                   Current Plan
                 </Button>
+              ) : plan.id === "FREE" && (tier === "PRO" || tier === "ENTERPRISE") ? (
+                <Button
+                  onClick={() => handleOpenUpgrade(plan.id)}
+                  className="w-full border border-danger/30 text-danger hover:bg-danger-soft/10 rounded-md text-xs cursor-pointer transition-colors"
+                >
+                  End Premium
+                </Button>
               ) : (
                 <Button
                   onClick={() => handleOpenUpgrade(plan.id)}
@@ -195,155 +202,212 @@ export function BillingPlans({ tokensBalance, tokensUsed, tier }: BillingPlansPr
       {/* Checkout Dialog */}
       <Dialog open={selectedPlan !== null} onOpenChange={handleCloseUpgrade}>
         <DialogContent className="sm:max-w-[480px] bg-surface border border-hairline rounded-lg p-6 shadow-high">
-          <DialogHeader>
-            <DialogTitle className="text-lg font-sans font-semibold text-ink flex items-center gap-2">
-              <CreditCard className="w-5 h-5 text-primary" />
-              Secure Checkout
-            </DialogTitle>
-            <DialogDescription className="text-xs text-ink-muted mt-1">
-              Complete your subscription upgrade details below.
-            </DialogDescription>
-          </DialogHeader>
+          {selectedPlan === "FREE" ? (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-lg font-sans font-semibold text-ink flex items-center gap-2">
+                  Cancel Premium Subscription
+                </DialogTitle>
+                <DialogDescription className="text-xs text-ink-muted mt-1">
+                  End your premium subscription and downgrade back to Free tier.
+                </DialogDescription>
+              </DialogHeader>
 
-          <form onSubmit={handleCheckoutSubmit} className="space-y-4 my-2">
-            {error && (
-              <div className="p-3 bg-danger-soft border border-danger/20 rounded-md text-xs text-danger text-center">
-                {error}
-              </div>
-            )}
-
-            {/* Payment Method Selector */}
-            <div className="grid grid-cols-1 gap-2 pb-2 sm:grid-cols-3">
-              <button
-                type="button"
-                onClick={() => setPaymentMethod("card")}
-                className={`py-2 px-3 text-center border rounded-md text-xs font-medium cursor-pointer transition-colors ${
-                  paymentMethod === "card"
-                    ? "bg-surface-inset border-primary text-ink"
-                    : "bg-surface border-hairline text-ink-muted hover:text-ink"
-                }`}
-              >
-                Card
-              </button>
-              <button
-                type="button"
-                onClick={() => setPaymentMethod("paypal")}
-                className={`py-2 px-3 text-center border rounded-md text-xs font-medium cursor-pointer transition-colors ${
-                  paymentMethod === "paypal"
-                    ? "bg-surface-inset border-primary text-ink"
-                    : "bg-surface border-hairline text-ink-muted hover:text-ink"
-                }`}
-              >
-                PayPal
-              </button>
-              <button
-                type="button"
-                onClick={() => setPaymentMethod("apple")}
-                className={`py-2 px-3 text-center border rounded-md text-xs font-medium cursor-pointer transition-colors ${
-                  paymentMethod === "apple"
-                    ? "bg-surface-inset border-primary text-ink"
-                    : "bg-surface border-hairline text-ink-muted hover:text-ink"
-                }`}
-              >
-                Apple Pay
-              </button>
-            </div>
-
-            {paymentMethod === "card" ? (
-              <div className="space-y-3">
-                <div className="space-y-1">
-                  <label className="text-[11px] font-medium text-ink-muted uppercase tracking-wider block">
-                    Cardholder Name
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Jane Doe"
-                    value={cardName}
-                    onChange={(e) => setCardName(e.target.value)}
-                    className="w-full text-xs bg-surface-inset border border-hairline rounded-md p-2.5 text-ink outline-hidden focus:border-primary"
-                  />
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[11px] font-medium text-ink-muted uppercase tracking-wider block">
-                    Card Number
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    maxLength={16}
-                    placeholder="4111 2222 3333 4444"
-                    value={cardNumber}
-                    onChange={(e) => setCardNumber(e.target.value.replace(/\D/g, ""))}
-                    className="w-full text-xs bg-surface-inset border border-hairline rounded-md p-2.5 text-ink outline-hidden focus:border-primary font-mono"
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1">
-                    <label className="text-[11px] font-medium text-ink-muted uppercase tracking-wider block">
-                      Expiration Date
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="MM/YY"
-                      maxLength={5}
-                      value={cardExpiry}
-                      onChange={(e) => setCardExpiry(e.target.value)}
-                      className="w-full text-xs bg-surface-inset border border-hairline rounded-md p-2.5 text-ink outline-hidden focus:border-primary font-mono"
-                    />
+              <div className="space-y-4 my-2">
+                {error && (
+                  <div className="p-3 bg-danger-soft border border-danger/20 rounded-md text-xs text-danger text-center">
+                    {error}
                   </div>
-                  <div className="space-y-1">
-                    <label className="text-[11px] font-medium text-ink-muted uppercase tracking-wider block">
-                      Security Code (CVC)
-                    </label>
-                    <input
-                      type="password"
-                      required
-                      maxLength={4}
-                      placeholder="•••"
-                      value={cardCvc}
-                      onChange={(e) => setCardCvc(e.target.value.replace(/\D/g, ""))}
-                      className="w-full text-xs bg-surface-inset border border-hairline rounded-md p-2.5 text-ink outline-hidden focus:border-primary font-mono"
-                    />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="py-6 text-center border border-dashed border-hairline rounded-md">
-                <p className="text-xs text-ink-muted">
-                  You will be redirected to complete payment with{" "}
-                  {paymentMethod === "paypal" ? "PayPal" : "Apple Pay"} upon clicking process.
+                )}
+                
+                <p className="text-xs text-ink-body leading-relaxed">
+                  Are you sure you want to end your premium subscription? Your watch configurations will remain, but you will lose premium benefits such as hourly monitoring, higher limits, and Slack notifications.
                 </p>
+
+                <DialogFooter className="pt-4 border-t border-hairline/50 mt-4 flex sm:flex-row gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={isProcessing}
+                    onClick={handleCloseUpgrade}
+                    className="w-full sm:w-auto text-xs bg-transparent border border-hairline text-ink hover:bg-surface-inset"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={async () => {
+                      setIsProcessing(true);
+                      setError(null);
+                      const result = await upgradeUserPlan("FREE");
+                      setIsProcessing(false);
+                      if (result?.error) {
+                        setError(result.error);
+                      } else {
+                        setSelectedPlan(null);
+                      }
+                    }}
+                    disabled={isProcessing}
+                    className="w-full sm:w-auto bg-danger hover:bg-danger/90 text-white text-xs font-sans font-semibold flex items-center justify-center gap-1.5"
+                  >
+                    {isProcessing ? "Processing..." : "End Premium"}
+                  </Button>
+                </DialogFooter>
               </div>
-            )}
+            </>
+          ) : (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-lg font-sans font-semibold text-ink flex items-center gap-2">
+                  <CreditCard className="w-5 h-5 text-primary" />
+                  Secure Checkout
+                </DialogTitle>
+                <DialogDescription className="text-xs text-ink-muted mt-1">
+                  Complete your subscription upgrade details below.
+                </DialogDescription>
+              </DialogHeader>
 
-            <div className="flex items-center gap-2 pt-2 text-[10px] text-ink-muted">
-              <ShieldCheck className="w-4 h-4 text-success shrink-0" />
-              <span>Payments are processed securely. Your data is encrypted end to end.</span>
-            </div>
+              <form onSubmit={handleCheckoutSubmit} className="space-y-4 my-2">
+                {error && (
+                  <div className="p-3 bg-danger-soft border border-danger/20 rounded-md text-xs text-danger text-center">
+                    {error}
+                  </div>
+                )}
 
-            <DialogFooter className="pt-4 border-t border-hairline/50 mt-4 flex sm:flex-row gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                disabled={isProcessing}
-                onClick={handleCloseUpgrade}
-                className="w-full sm:w-auto text-xs bg-transparent border border-hairline text-ink hover:bg-surface-inset"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                disabled={isProcessing}
-                className="w-full sm:w-auto bg-primary hover:bg-primary-hover text-on-primary text-xs font-sans font-semibold flex items-center justify-center gap-1.5"
-              >
-                {isProcessing ? "Processing..." : "Process Subscription"}
-              </Button>
-            </DialogFooter>
-          </form>
+                {/* Payment Method Selector */}
+                <div className="grid grid-cols-1 gap-2 pb-2 sm:grid-cols-3">
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod("card")}
+                    className={`py-2 px-3 text-center border rounded-md text-xs font-medium cursor-pointer transition-colors ${
+                      paymentMethod === "card"
+                        ? "bg-surface-inset border-primary text-ink"
+                        : "bg-surface border-hairline text-ink-muted hover:text-ink"
+                    }`}
+                  >
+                    Card
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod("paypal")}
+                    className={`py-2 px-3 text-center border rounded-md text-xs font-medium cursor-pointer transition-colors ${
+                      paymentMethod === "paypal"
+                        ? "bg-surface-inset border-primary text-ink"
+                        : "bg-surface border-hairline text-ink-muted hover:text-ink"
+                    }`}
+                  >
+                    PayPal
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod("apple")}
+                    className={`py-2 px-3 text-center border rounded-md text-xs font-medium cursor-pointer transition-colors ${
+                      paymentMethod === "apple"
+                        ? "bg-surface-inset border-primary text-ink"
+                        : "bg-surface border-hairline text-ink-muted hover:text-ink"
+                    }`}
+                  >
+                    Apple Pay
+                  </button>
+                </div>
+
+                {paymentMethod === "card" ? (
+                  <div className="space-y-3">
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-medium text-ink-muted uppercase tracking-wider block">
+                        Cardholder Name
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="Jane Doe"
+                        value={cardName}
+                        onChange={(e) => setCardName(e.target.value)}
+                        className="w-full text-xs bg-surface-inset border border-hairline rounded-md p-2.5 text-ink outline-hidden focus:border-primary"
+                      />
+                    </div>
+
+                    <div className="space-y-1">
+                      <label className="text-[11px] font-medium text-ink-muted uppercase tracking-wider block">
+                        Card Number
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        maxLength={16}
+                        placeholder="4111 2222 3333 4444"
+                        value={cardNumber}
+                        onChange={(e) => setCardNumber(e.target.value.replace(/\D/g, ""))}
+                        className="w-full text-xs bg-surface-inset border border-hairline rounded-md p-2.5 text-ink outline-hidden focus:border-primary font-mono"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-medium text-ink-muted uppercase tracking-wider block">
+                          Expiration Date
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          placeholder="MM/YY"
+                          maxLength={5}
+                          value={cardExpiry}
+                          onChange={(e) => setCardExpiry(e.target.value)}
+                          className="w-full text-xs bg-surface-inset border border-hairline rounded-md p-2.5 text-ink outline-hidden focus:border-primary font-mono"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[11px] font-medium text-ink-muted uppercase tracking-wider block">
+                          Security Code (CVC)
+                        </label>
+                        <input
+                          type="password"
+                          required
+                          maxLength={4}
+                          placeholder="•••"
+                          value={cardCvc}
+                          onChange={(e) => setCardCvc(e.target.value.replace(/\D/g, ""))}
+                          className="w-full text-xs bg-surface-inset border border-hairline rounded-md p-2.5 text-ink outline-hidden focus:border-primary font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="py-6 text-center border border-dashed border-hairline rounded-md">
+                    <p className="text-xs text-ink-muted">
+                      You will be redirected to complete payment with{" "}
+                      {paymentMethod === "paypal" ? "PayPal" : "Apple Pay"} upon clicking process.
+                    </p>
+                  </div>
+                )}
+
+                <div className="flex items-center gap-2 pt-2 text-[10px] text-ink-muted">
+                  <ShieldCheck className="w-4 h-4 text-success shrink-0" />
+                  <span>Payments are processed securely. Your data is encrypted end to end.</span>
+                </div>
+
+                <DialogFooter className="pt-4 border-t border-hairline/50 mt-4 flex sm:flex-row gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={isProcessing}
+                    onClick={handleCloseUpgrade}
+                    className="w-full sm:w-auto text-xs bg-transparent border border-hairline text-ink hover:bg-surface-inset"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    disabled={isProcessing}
+                    className="w-full sm:w-auto bg-primary hover:bg-primary-hover text-on-primary text-xs font-sans font-semibold flex items-center justify-center gap-1.5"
+                  >
+                    {isProcessing ? "Processing..." : "Process Subscription"}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </>
+          )}
         </DialogContent>
       </Dialog>
     </section>

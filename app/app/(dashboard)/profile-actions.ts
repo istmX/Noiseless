@@ -38,7 +38,7 @@ export async function updateProfileAction(name: string, email: string) {
 
     // Generate random Dicebear avatar seed if missing
     const avatarSeed = Math.random().toString(36).substring(7);
-    const newAvatarUrl = currentUser.avatarUrl || `https://api.dicebear.com/7.x/identicon/svg?seed=${avatarSeed}`;
+    const newAvatarUrl = currentUser.avatarUrl || `https://api.dicebear.com/10.x/croodles/svg?seed=${avatarSeed}`;
 
     const updatedUser = await prisma.user.update({
       where: { id: currentUser.id },
@@ -90,7 +90,7 @@ export async function getProfileAction() {
     // Generate avatar if missing
     if (!user.avatarUrl) {
       const avatarSeed = Math.random().toString(36).substring(7);
-      const avatarUrl = `https://api.dicebear.com/7.x/identicon/svg?seed=${avatarSeed}`;
+      const avatarUrl = `https://api.dicebear.com/10.x/croodles/svg?seed=${avatarSeed}`;
       await prisma.user.update({
         where: { email: session.user.email },
         data: { avatarUrl },

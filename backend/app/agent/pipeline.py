@@ -39,8 +39,11 @@ async def run_agent_pipeline(watch_id: str, db: AsyncSession):
         await db.commit()
         return
 
-    # 2. Enforce token limits: require at least 10 tokens to execute
-    if user.tokensBalance < 10:
+    # Determine token cost based on subscription tier
+    token_cost = 5 if user.tier == "ENTERPRISE" else (10 if user.tier == "PRO" else 25)
+
+    # 2. Enforce token limits: require at least token_cost to execute
+    if user.tokensBalance < token_cost:
         print(f"User {user.id} has insufficient tokens ({user.tokensBalance}), deactivating watch and sending alert.")
         watch.active = False
         await db.commit()
@@ -50,7 +53,8 @@ async def run_agent_pipeline(watch_id: str, db: AsyncSession):
             recipient_email=recipient,
             webhook_url=watch.notificationSlackWebhook,
             topic=watch.topic,
-            watch_id=watch.id
+            watch_id=watch.id,
+            required_tokens=token_cost
         )
         return
 
@@ -168,8 +172,9 @@ async def run_agent_pipeline(watch_id: str, db: AsyncSession):
 
         # Successful completion of pipeline run: deduct tokens only if new findings were found
         if new_findings:
-            user.tokensBalance = max(0, user.tokensBalance - 10)
-            user.tokensUsed += 10
+            token_cost = 5 if user.tier == "ENTERPRISE" else (10 if user.tier == "PRO" else 25)
+            user.tokensBalance = max(0, user.tokensBalance - token_cost)
+            user.tokensUsed += token_cost
             await db.commit()
         else:
             print(f"No new findings found for watch {watch_id}. Skipping token deduction.")
