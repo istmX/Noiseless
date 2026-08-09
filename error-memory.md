@@ -19,3 +19,9 @@ AI agents MUST inspect this file before making code changes or diagnosing errors
 - Root cause: Returning a SQLAlchemy model object directly inside a dictionary envelope when the endpoint has `response_model=dict`. Pydantic does not know how to automatically serialize SQLAlchemy models to basic JSON types in this context.
 - Fix: Use `WatchResponse.model_validate(watch).model_dump(mode="json")` to validate and serialize SQLAlchemy models to a JSON safe dict before returning them.
 - Verified: yes
+
+## 2026-08-09 Neon Stale Connections in SQLAlchemy Pool
+- Symptom: `sqlalchemy.exc.InterfaceError: (sqlalchemy.dialects.postgresql.asyncpg.InterfaceError) <class 'asyncpg.exceptions._base.InterfaceError'>: connection is closed` on request endpoints.
+- Root cause: Neon Postgres drops idle connections after a period of inactivity, leaving stale connections in the SQLAlchemy connection pool. When a request tries to use a pooled connection, it fails.
+- Fix: Configure `create_async_engine` with `pool_pre_ping=True` and `pool_recycle=300` to automatically detect closed connections and recycle them.
+- Verified: yes

@@ -28,7 +28,9 @@ if has_ssl:
 engine = create_async_engine(
     db_url,
     echo=False,
-    connect_args=connect_args
+    connect_args=connect_args,
+    pool_pre_ping=True,
+    pool_recycle=300
 )
 
 AsyncSessionLocal = async_sessionmaker(

@@ -3,70 +3,84 @@
 import { Watch } from "../types";
 import { motion } from "motion/react";
 import { useRouter } from "next/navigation";
+import { Clock, TrendingUp } from "lucide-react";
 
 interface WatchCardProps {
   watch: Watch;
-  onSelect?: () => void;
 }
 
-export function WatchCard({ watch, onSelect }: WatchCardProps) {
-  const router = useRouter();
-  const isRunning = watch.runInProgress;
-  const isPaused = !watch.active;
-  
-  let StatusBadge = (
-    <span className="px-2.5 py-0.5 rounded-sm text-xs font-sans tracking-wide bg-success-soft text-success border border-hairline uppercase font-semibold">
-      MONITORING
-    </span>
-  );
-  
-  if (isRunning) {
-    StatusBadge = (
-      <span className="px-2.5 py-0.5 rounded-sm text-xs font-sans tracking-wide bg-sidebar-active text-success border border-success/30 uppercase font-semibold animate-pulse">
-        AGENT ACTIVE
-      </span>
-    );
-  } else if (isPaused) {
-    StatusBadge = (
-      <span className="px-2.5 py-0.5 rounded-sm text-xs font-sans tracking-wide bg-surface-inset text-ink-muted border border-hairline uppercase font-semibold">
-        PAUSED
+function StatusChip({ watch }: { watch: Watch }) {
+  if (watch.runInProgress) {
+    return (
+      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-sm text-[11px] font-sans font-semibold tracking-wide bg-success-soft text-success border border-success/20 uppercase">
+        <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+        Active
       </span>
     );
   }
+  if (!watch.active) {
+    return (
+      <span className="px-2 py-0.5 rounded-sm text-[11px] font-sans font-semibold tracking-wide bg-surface-inset text-ink-faint border border-hairline uppercase">
+        Paused
+      </span>
+    );
+  }
+  return (
+    <span className="px-2 py-0.5 rounded-sm text-[11px] font-sans font-semibold tracking-wide bg-surface-inset text-ink-muted border border-hairline uppercase">
+      Monitoring
+    </span>
+  );
+}
 
-  const handleClick = () => {
-    if (onSelect) {
-      onSelect();
-    } else {
-      router.push(`/watches/${watch.id}`);
-    }
-  };
+function formatLastRun(date: Date | string | null | undefined): string {
+  if (!date) return "Never run";
+  const d = new Date(date);
+  const now = Date.now();
+  const diff = now - d.getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
+}
+
+export function WatchCard({ watch }: WatchCardProps) {
+  const router = useRouter();
+  const findingCount = watch._count?.findings ?? 0;
 
   return (
-    <motion.div 
-      onClick={handleClick}
-      initial={{ opacity: 0, y: 10 }}
+    <motion.div
+      onClick={() => router.push(`/watches/${watch.id}`)}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -2 }}
-      transition={{ duration: 0.2 }}
-      className="group cursor-pointer flex flex-col bg-surface border border-hairline hover:border-success transition-colors duration-300 rounded-md p-4 shadow-xs gap-4"
+      transition={{ duration: 0.2, ease: "easeOut" }}
+      className="group cursor-pointer flex flex-col bg-surface border border-hairline hover:border-hairline-strong rounded-md p-4 gap-3 transition-colors duration-150"
     >
+      {/* Top row: status + frequency */}
       <div className="flex items-center justify-between">
-        {StatusBadge}
-        <span className="text-xs font-mono uppercase text-ink-faint">
+        <StatusChip watch={watch} />
+        <span className="text-[10px] font-mono text-ink-faint uppercase tracking-widest">
           {watch.frequency}
         </span>
       </div>
 
-      <h3 className="text-base font-sans font-semibold text-ink group-hover:text-success transition-colors line-clamp-2 leading-snug">
+      {/* Topic */}
+      <h3 className="text-sm font-sans font-semibold text-ink leading-snug line-clamp-2 group-hover:text-success transition-colors duration-150">
         {watch.topic}
       </h3>
 
-      <div className="mt-auto pt-3 border-t border-hairline flex items-center justify-between font-mono text-xs text-ink-muted">
-        <span>Score: {watch.significanceThreshold}/10</span>
-        <span className="bg-sidebar-active px-3 py-0.5 rounded-sm border border-hairline text-success font-sans font-semibold">
-          {watch._count?.findings || 0} findings
-        </span>
+      {/* Footer row */}
+      <div className="mt-auto pt-3 border-t border-hairline flex items-center justify-between">
+        <div className="flex items-center gap-1 text-[11px] font-mono text-ink-faint" suppressHydrationWarning>
+          <Clock className="w-3 h-3" />
+          {formatLastRun(watch.lastRunAt)}
+        </div>
+        <div className="flex items-center gap-1 text-[11px] font-mono text-ink-muted">
+          <TrendingUp className="w-3 h-3 text-success" />
+          <span className="font-semibold text-ink">{findingCount}</span>
+          <span className="text-ink-faint">findings</span>
+        </div>
       </div>
     </motion.div>
   );

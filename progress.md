@@ -83,6 +83,23 @@
 - Updated NextAuth session callbacks and Zustand state to track and store user tier dynamically on the client.
 - Built a secure checkout payment modal supporting Card, PayPal, and Apple Pay checkout methods to upgrade user plans.
 - Dynamically enabled and locked hourly watches in create and edit watch views based on active user plan tier.
+- Resolved double slash API 404 endpoint routing errors by sanitizing base prefixes in the api-client wrapper.
+- Separated landing Dashboard displaying date filtered watches from a unfiltered Watches workstation listing all watches.
+- Created dynamic local default calendar calculations to prevent Server Component hydration mismatches.
+- Updated Navigation sidebar with Dashboard and Watches links, and updated authenticated proxy redirect rules.
+- Implemented Watch Form and Watch details settings updates to automatically default empty notification email fields to the session user account email.
+- Enforced a 15-minute manual watch run cooldown lock on both the FastAPI backend trigger API and the client-side details button.
+- Updated the manual Run Now action button to display a ticking cooldown countdown timer and disabled loading states.
+- Refactored watch pipelines to skip token deductions and dispatch a "No changes detected" alert email if runs yield zero new findings.
+- Refactored the dashboard sidebar to hide its layout on non-dashboard routes (including auth and 404 pages).
+- Created a live System Health metrics workstation page at `/agent` showing scheduler statuses, active worker logs, and resource usage ratios.
+- Designed a custom, high-end Awwwards-caliber minimalist 404 page featuring dynamic 3D kinetic typography spacing, perspective mouse movements, and cursor-following vector canvas coordinate spotlight ripple grids.
+- Aligned the 404 page colors and canvas drawing lines to our light theme design tokens (`bg-canvas`, `text-ink`, and `bg-primary`).
+- Configured FastAPI database engine with `pool_pre_ping=True` and `pool_recycle=300` to prevent stale connection pool timeouts on Neon.
+- Resolved transactional email delivery failure by switching sender fields to verified Brevo sender accounts.
+- Implemented a custom markdown-to-HTML parser in `notifications.py` to format headers, paragraphs, bold styling, and active hyperlinks.
+- Redesigned the email digest template with a premium, Forest Green branded intelligence brief report design.
+- Integrated interactive CTA buttons ("Open Watch Workstation") and pause/management anchors directly in transactional emails.
 
 ### Pending
 

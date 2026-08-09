@@ -160,9 +160,10 @@ async def run_agent_pipeline(watch_id: str, db: AsyncSession):
                 )
             if watch.notificationEmail:
                 await notification_service.send_email_notification(
-                    watch.notificationEmail,
-                    watch.topic,
-                    summary
+                    recipient_email=watch.notificationEmail,
+                    topic=watch.topic,
+                    digest_summary=summary,
+                    watch_id=watch.id
                 )
 
         # Successful completion of pipeline run: deduct tokens only if new findings were found
@@ -175,9 +176,10 @@ async def run_agent_pipeline(watch_id: str, db: AsyncSession):
             if watch.notificationEmail:
                 try:
                     await notification_service.send_email_notification(
-                        watch.notificationEmail,
-                        watch.topic,
-                        "No new changes detected for this watch since the last run. We will keep monitoring."
+                        recipient_email=watch.notificationEmail,
+                        topic=watch.topic,
+                        digest_summary="No new changes detected for this watch since the last run. We will keep monitoring.",
+                        watch_id=watch.id
                     )
                 except Exception as email_err:
                     print(f"Failed to send no-changes email: {email_err}")
