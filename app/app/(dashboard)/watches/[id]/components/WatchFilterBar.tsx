@@ -28,6 +28,29 @@ export function WatchFilterBar({
   endDate,
   onEndDateChange,
 }: WatchFilterBarProps) {
+  const formatDateDisplay = (dateStr: string, placeholder: string) => {
+    if (!dateStr) return placeholder;
+    try {
+      const parts = dateStr.split("-");
+      if (parts.length === 3) {
+        const year = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1;
+        const day = parseInt(parts[2], 10);
+        const d = new Date(year, month, day);
+        if (!isNaN(d.getTime())) {
+          return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+        }
+      }
+      const d = new Date(dateStr + "T00:00:00");
+      if (!isNaN(d.getTime())) {
+        return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      }
+      return dateStr;
+    } catch {
+      return dateStr;
+    }
+  };
+
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 border border-hairline bg-surface rounded-lg">
       {/* Search and preset filters */}
@@ -63,23 +86,40 @@ export function WatchFilterBar({
       </div>
 
       {/* Date picker inputs and View Toggle */}
-      <div className="flex flex-wrap items-center gap-4">
+      <div className="flex flex-wrap items-center gap-3">
         {/* Custom Date Range Picker */}
-        <div className="flex items-center gap-2 bg-surface-inset p-1 rounded-md border border-hairline">
-          <Calendar className="w-3.5 h-3.5 text-ink-faint ml-1" />
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => onStartDateChange(e.target.value)}
-            className="bg-transparent border-0 p-0 text-[11px] text-ink-body focus:ring-0 focus:outline-none w-[110px]"
-          />
-          <span className="text-[10px] text-ink-faint">to</span>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => onEndDateChange(e.target.value)}
-            className="bg-transparent border-0 p-0 text-[11px] text-ink-body focus:ring-0 focus:outline-none w-[110px]"
-          />
+        <div className="flex items-center gap-2">
+          {/* Start Date Container */}
+          <div className="relative flex items-center gap-2 bg-surface-inset px-2.5 py-1.5 rounded-md border border-hairline hover:border-hairline-strong transition-colors min-w-[130px] h-[28px]">
+            <Calendar className="w-3.5 h-3.5 text-ink-faint shrink-0" />
+            <span className="text-[11px] text-ink-body font-mono leading-none">
+              {formatDateDisplay(startDate, "Start date")}
+            </span>
+            <input
+              type="date"
+              value={startDate}
+              aria-label="Start date"
+              onChange={(e) => onStartDateChange(e.target.value)}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+          </div>
+
+          <span className="text-[10px] text-ink-faint font-mono">to</span>
+
+          {/* End Date Container */}
+          <div className="relative flex items-center gap-2 bg-surface-inset px-2.5 py-1.5 rounded-md border border-hairline hover:border-hairline-strong transition-colors min-w-[130px] h-[28px]">
+            <Calendar className="w-3.5 h-3.5 text-ink-faint shrink-0" />
+            <span className="text-[11px] text-ink-body font-mono leading-none">
+              {formatDateDisplay(endDate, "End date")}
+            </span>
+            <input
+              type="date"
+              value={endDate}
+              aria-label="End date"
+              onChange={(e) => onEndDateChange(e.target.value)}
+              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+            />
+          </div>
         </div>
 
         {/* View Toggle */}

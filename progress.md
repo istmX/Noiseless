@@ -192,6 +192,12 @@
 - Added a direct `Open watch detail` action from the selected signal inspector.
 - Added selected finding scroll positioning on Watch Detail pages.
 - Added global horizontal overflow protection and mobile sizing improvements for filters, billing methods, and checkout choices.
+- Redesigned the watch detail page into a premium, information-first two-column editorial research workstation (comfortable reading measure on the left, interactive context and evidence list on the right).
+- Replaced raw URL citation links in summary text with clean, clickable numbered superscript citation markers ([1], [2]) that navigate and expand their source in the sidebar.
+- Added a Research Snapshot widget to display totals, corroborated, conflicting, and primary source metrics.
+- Styled evidence cards to be fully collapsed by default (showing only domain, category, score, and relative time) with an inline expanded view and collapsible source details.
+- Integrated relative date-time indicators (e.g. "2h ago") and interactive claims that scroll and highlight the cited evidence.
+- Deleted the obsolete System Health agent page and its references, routing, header mappings, and sidebar menu items.
 
 
 ### Notes

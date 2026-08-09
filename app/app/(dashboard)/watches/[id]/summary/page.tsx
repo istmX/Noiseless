@@ -1,14 +1,14 @@
-import { Finding } from "./findings/types";
-import { Digest } from "./digests/types";
+import { Finding } from "../findings/types";
+import { Digest } from "../digests/types";
 import { prisma } from "@/shared/lib/db";
 import { redirect } from "next/navigation";
-import { WatchOverview } from "./components/WatchOverview";
+import { WatchSummaryView } from "../components/WatchSummaryView";
 
-interface WatchDetailPageProps {
+interface WatchSummaryPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function WatchDetailPage({ params }: WatchDetailPageProps) {
+export default async function WatchSummaryPage({ params }: WatchSummaryPageProps) {
   const { id } = await params;
 
   const watch = await prisma.watch.findUnique({
@@ -51,7 +51,7 @@ export default async function WatchDetailPage({ params }: WatchDetailPageProps) 
   }));
 
   return (
-    <WatchOverview 
+    <WatchSummaryView 
       watch={watch} 
       findings={findings} 
       digests={digests} 

@@ -28,7 +28,7 @@ class NotificationService:
         if not recipient_email or not settings.BREVO_API_KEY:
             return False
 
-        # Clean up markdown syntax to styled HTML
+        
         import re
         
         # 1. Parse Links: [Text](URL) -> Styled Anchor
