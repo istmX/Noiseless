@@ -255,6 +255,7 @@
 - Sections: sticky Nav, centered Hero (copy + full width Unsplash editorial photo panel), Marquee, Logo Bar, Features, Pipeline steps, Use Cases, Big Testimonial photo + Stats, Testimonials grid, 3-column Pricing (0/20/90), FAQ accordion, Email CTA, Big Footer.
 - Full GSAP motion layer added: `power4.out` hero staggered entrance, ScrollTrigger reveals for sections (`once: true`), staggered features/pricing, number count-ups for stats, magnetic button micro-interactions, smooth accordion heights, and parallax on the hero image panel. Reduced-motion fallbacks integrated.
 - Upgraded to Awwwards level "Magazine Pin": implemented Lenis smooth scrolling and a ScrollTrigger pinned hero image. The lower page content slides upward over the massive pinned hero image, creating a physical magazine page-turn feeling.
+- Advanced interaction layer added via `/istm-animate`: implemented custom SplitText-style line reveals for the hero headline (`power4.out`), added `ScrollTrigger` scrubbed parallax to the feature cards images, and tweaked the Magazine Pin duration.
 - Removed CSS module usage. All styling uses `globals.css` semantic tokens.
 - `npx tsc --noEmit` passes with 0 errors.
 
