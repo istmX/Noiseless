@@ -57,13 +57,13 @@ export function WatchMetrics({ watches, filteredCount }: WatchMetricsProps) {
         label="ACTIVE WATCHES"
         value={activeCount}
         total={totalCount}
-        indicatorColor="bg-emerald-500"
+        indicatorColor="bg-success"
       />
       <MetricBar
         label="AGENTS RUNNING"
         value={runningCount}
         total={totalCount}
-        indicatorColor="bg-violet-500"
+        indicatorColor="bg-accent"
       />
       <MetricBar
         label="TIMEFRAME MATCHES"

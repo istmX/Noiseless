@@ -38,6 +38,7 @@ export default async function RootLayout({
       className="h-full antialiased"
     >
       <body className="min-h-full flex flex-col bg-canvas relative text-ink">
+        {/* THESIS: Noiseless turns continuous research into a warm editorial signal world and refuses the generic software hero. OWN-WORLD: orange, peach, cream, ink, organic circles, framed poster surfaces, and oversized geometric type. STORY: the visitor sees the agent move from question to evidence to a useful brief, then starts a watch. FIRST VIEWPORT: a framed poster composition places the headline and action on the left and a live abstract signal scene on the right. FORM: replacement visual world, assigned direction seed f126c40c and 30906322, degraded with no challengers. FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md */}
         <AuthProvider
           isLoggedIn={!!session?.user}
           profile={dbUser ? {

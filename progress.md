@@ -170,6 +170,25 @@
 - Reworked the dashboard into a signal inbox with New signals and Earlier signals sections, compact signal cards, and a selected evidence inspector.
 - Redesigned the dashboard overview with compact summary cards, a three signal first viewport, and expandable earlier evidence so it reads as a dashboard instead of a long archive.
 
+### Landing page implementation
+- Replaced the default homepage with an editorial Noiseless landing page focused on continuous research and signal only intelligence.
+- Added the visual universe blueprint in `.istm-context/MASTER.md` and the motion plan in `.istm-context/animate.md`.
+- Built a responsive signal hero with a simulated watch, source discovery, duplicate resolution, confidence score, and digest state.
+- Added product narrative sections for the research loop, output brief, use cases, pricing entry point, and signup actions.
+- Reused the existing Noiseless semantic palette and typography tokens without adding a new brand color system.
+- Added Motion based entrance and scroll reveals with reduced motion support.
+- Verified TypeScript and focused landing page ESLint checks with 0 errors.
+- Full repository lint still has existing unrelated errors, and production builds remain blocked by the sandbox process permission issue plus a separate TypeScript config output issue in the Webpack fallback.
+- Replaced the initial hero proof card with a dedicated GSAP signal scene using sequenced text reveals, orbit motion, source card entrances, a scan beam, confidence count up, and pointer depth response.
+- Added explicit GSAP cleanup through `useGSAP` context reversion and event listener cleanup, with a reduced motion fallback.
+- Replaced the slate landing page with an eight section orange and peach editorial poster world based on the supplied reference image.
+- Added a local landing page visual system in `LandingPage.module.css`, separate from the authenticated product tokens.
+- Added framed poster hero, attention premise, agent pipeline, Watch proof, use cases, evidence chain, pricing action, and final invitation sections.
+- Replaced the earlier hero animation with GSAP ScrollTrigger reveals and local page motion for the new visual world.
+- Added `PRODUCT.md` to record confirmed product truth before the visual replacement.
+- Recolored the authenticated dashboard and login surfaces through the shared semantic palette to match the new orange, peach, cream, and ink direction without changing layout or behavior.
+- Added GSAP micro interactions to landing page actions and a continuously scrolling research topic bar with reduced motion support.
+
 ### Implemented in this pass
 - Consolidated the full product direction around the light Signal Desk system for solo analysts.
 - Added shared page header, status badge, empty state, and metric readout primitives.
@@ -228,3 +247,33 @@
 - GROQ_API_KEY must be set in the FastAPI .env. LangChain (ChatGroq) reads this key automatically.
 - Qdrant Cloud cluster must be provisioned.
 - shadcn initialized with Tailwind v4 in app/. Alias paths set to @/shared/components and @/shared/lib.
+
+## 2026-08-10
+
+### Completed
+- Rebuilt landing page (`_landing/LandingPage.tsx`) with pure Tailwind v4 layout matching the reference image styling.
+- Sections: sticky Nav, centered Hero (copy + full width Unsplash editorial photo panel), Marquee, Logo Bar, Features, Pipeline steps, Use Cases, Big Testimonial photo + Stats, Testimonials grid, 3-column Pricing (0/20/90), FAQ accordion, Email CTA, Big Footer.
+- Full GSAP motion layer added: `power4.out` hero staggered entrance, ScrollTrigger reveals for sections (`once: true`), staggered features/pricing, number count-ups for stats, magnetic button micro-interactions, smooth accordion heights, and parallax on the hero image panel. Reduced-motion fallbacks integrated.
+- Upgraded to Awwwards level "Magazine Pin": implemented Lenis smooth scrolling and a ScrollTrigger pinned hero image. The lower page content slides upward over the massive pinned hero image, creating a physical magazine page-turn feeling.
+- Removed CSS module usage. All styling uses `globals.css` semantic tokens.
+- `npx tsc --noEmit` passes with 0 errors.
+
+## 2026-08-09
+
+### Completed
+- Replaced generic landing page with editorial "Intelligence Brief" design (outcome-focused copy, no tech jargon).
+- Added SheryJS custom mouse follower (dynamic import, client-only).
+- Added SheryJS `imageEffect` on hero background and feature images (style 5 / 2).
+- Hero replaced with full-screen pixel-art background (`/public/hero-bg.png`) + GSAP `SplitText` 3D character stagger entrance.
+- Installed GSAP `ScrollTrigger`, `SplitText`, `DrawSVGPlugin` — all verified importable.
+- **Pinned features section** (`PinnedFeaturesSection.tsx`) — section pins for 300vh, 3 steps scrub in/out via `ScrollTrigger` pin + scrub.
+- **SVG Signal section** (`SvgSignalSection.tsx`) — `DrawSVGPlugin` draws "SIGNAL" stroke-by-stroke on scroll scrub; animated number counters.
+- **Before/After section** — GSAP `ScrollTrigger` animates strikethrough lines across "before" duplicate results as user scrolls.
+- **Testimonials** — GSAP scroll-triggered stagger entrance.
+- **SplitText CTA heading** — word-by-word reveal on scroll.
+- Added sticky nav that slides in only after user scrolls past hero.
+- Refactored landing page into modular `_landing/` files (≤250 lines each).
+- Added `sheryjs.d.ts` type declaration file (widened to any, no official types ship).
+- Added `images.unsplash.com` and `images.pexels.com` to `next.config.ts` remote patterns.
+- `npx tsc --noEmit` passes with zero errors.
+- **Reverted Landing Page:** Removed the SheryJS and GSAP landing page implementation, uninstalled related packages (`sheryjs`, `gsap`, `three`), deleted the `_landing` directory, and reset `app/page.tsx` to a default Next.js skeleton as requested.
