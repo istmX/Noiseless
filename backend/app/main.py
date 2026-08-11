@@ -48,6 +48,10 @@ app.include_router(findings.router)
 app.include_router(digests.router)
 app.include_router(internal.router)
 
+@app.get("/")
+async def root():
+    return {"service": "noiseless-api", "status": "ok", "docs": "/docs"}
+
 @app.get("/health")
 async def health_check():
     return {"status": "healthy", "service": "noiseless-api"}

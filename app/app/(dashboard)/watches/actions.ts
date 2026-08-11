@@ -15,9 +15,10 @@ export async function createWatch(values: WatchFormValues) {
     return { error: "Invalid form data" };
   }
 
-  // Convert searchQueries back to string array for backend
+  // Convert searchQueries back to string array for backend and inject userId
   const payload = {
     ...parsed.data,
+    userId: userId,
     searchQueries: parsed.data.searchQueries.map((q) => q.value),
   };
 

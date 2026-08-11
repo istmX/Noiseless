@@ -1,4 +1,5 @@
 import uuid
+import traceback
 from datetime import datetime, timezone
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,17 +25,17 @@ async def run_agent_pipeline(watch_id: str, db: AsyncSession):
     if not watch or not watch.active:
         return
 
-    # Check user tokens balance and subscription tier constraints
+    # Fetch the watch owner
     from app.models.user import User
     user_result = await db.execute(select(User).filter(User.id == watch.userId))
     user = user_result.scalar_one_or_none()
     if not user:
-        print(f"User owner of Watch {watch_id} not found, aborting.")
+        print(f"[pipeline] User owner of Watch {watch_id} not found, aborting.")
         return
 
-    # 1. Enforce tier restrictions: hourly watches require premium tier
+    # Enforce tier restrictions: hourly watches require premium tier
     if watch.frequency == "hourly" and user.tier == "FREE":
-        print(f"User {user.id} is on FREE tier but Watch {watch_id} has hourly frequency. Deactivating watch.")
+        print(f"[pipeline] User {user.id} is FREE tier but Watch {watch_id} has hourly frequency. Deactivating.")
         watch.active = False
         await db.commit()
         return
@@ -42,12 +43,11 @@ async def run_agent_pipeline(watch_id: str, db: AsyncSession):
     # Determine token cost based on subscription tier
     token_cost = 5 if user.tier == "ENTERPRISE" else (10 if user.tier == "PRO" else 25)
 
-    # 2. Enforce token limits: require at least token_cost to execute
+    # Enforce token limits: require at least token_cost to execute
     if user.tokensBalance < token_cost:
-        print(f"User {user.id} has insufficient tokens ({user.tokensBalance}), deactivating watch and sending alert.")
+        print(f"[pipeline] User {user.id} has insufficient tokens ({user.tokensBalance}). Deactivating watch.")
         watch.active = False
         await db.commit()
-        # Dispatch depletion alert to watch notification channels or fallback to user email
         recipient = watch.notificationEmail or user.email
         await notification_service.send_token_depletion_alert(
             recipient_email=recipient,
@@ -58,17 +58,16 @@ async def run_agent_pipeline(watch_id: str, db: AsyncSession):
         )
         return
 
-
     # Idempotency lock & rate limit check
     if watch.runInProgress:
-        print(f"Watch {watch_id} run in progress, skipping.")
+        print(f"[pipeline] Watch {watch_id} run already in progress, skipping.")
         return
 
     if not rate_limiter.check_rate_limit(watch_id, watch.frequency):
-        print(f"Watch {watch_id} hit rate limit, skipping.")
+        print(f"[pipeline] Watch {watch_id} hit rate limit, skipping.")
         return
 
-    # Set lock
+    # Acquire run lock
     watch.runInProgress = True
     watch.lastRunAt = datetime.now(timezone.utc)
     await db.commit()
@@ -92,23 +91,22 @@ async def run_agent_pipeline(watch_id: str, db: AsyncSession):
                 # Generate embedding
                 vector = await embedding_service.get_embedding_async(content)
 
-                # Query Qdrant for deduplication
-                matches = vector_store_service.query_similarity(watch.id, vector, limit=1)
-                is_duplicate = False
-                if matches:
-                    top_match = matches[0]
-                    # Cosine similarity above 0.88 threshold is a duplicate
-                    if top_match.score > 0.88:
-                        is_duplicate = True
+                # Query Qdrant for deduplication (non-fatal if Qdrant is unreachable)
+                try:
+                    matches = vector_store_service.query_similarity(watch.id, vector, limit=1)
+                    if matches and matches[0].score > 0.88:
+                        print(f"[pipeline] Duplicate detected (score={matches[0].score:.3f}), skipping: {url}")
+                        continue
+                except Exception as qdrant_query_err:
+                    print(f"[pipeline] Qdrant similarity query failed (continuing without dedup): {qdrant_query_err}")
 
-                if is_duplicate:
-                    continue
-
-                # Score significance
+                # Score significance via LLM
                 score_data = await llm_scoring_service.score_finding(watch.topic, title, content)
                 score = score_data.get("score", 1)
 
-                # Store finding only if score reaches threshold
+                print(f"[pipeline] Scored finding: score={score}, threshold={watch.significanceThreshold}, title={title[:60]}")
+
+                # Store finding only if score reaches watch threshold
                 if score >= watch.significanceThreshold:
                     finding_id = str(uuid.uuid4())
                     finding = Finding(
@@ -123,27 +121,31 @@ async def run_agent_pipeline(watch_id: str, db: AsyncSession):
                         createdAt=datetime.now(timezone.utc)
                     )
                     db.add(finding)
+                    # Commit to DB immediately — Qdrant failure must not rollback this record
+                    await db.commit()
                     new_findings.append(finding)
+                    print(f"[pipeline] Saved finding {finding_id} to DB.")
 
-                    # Store embedding in Qdrant
-                    payload = {
-                        "url": url,
-                        "title": title,
-                        "content": content,
-                        "score": score
-                    }
-                    vector_store_service.upsert_finding(watch.id, finding_id, vector, payload)
+                    # Store embedding in Qdrant for future deduplication (non-fatal)
+                    try:
+                        vector_store_service.upsert_finding(
+                            watch.id,
+                            finding_id,
+                            vector,
+                            {"url": url, "title": title, "content": content, "score": score}
+                        )
+                    except Exception as qdrant_upsert_err:
+                        print(f"[pipeline] Qdrant upsert failed for finding {finding_id}: {qdrant_upsert_err}")
 
-                    # Keep track of the most significant vector for digest generation
+                    # Track most significant finding for digest
                     if score > highest_score:
                         highest_score = score
                         highest_score_vector = vector
 
         # 3. Compile Digest & Notify if we have new significant findings
         if new_findings and highest_score_vector:
-            # Generate RAG digest
             summary = await digest_service.generate_digest(watch.topic, watch.id, highest_score_vector)
-            
+
             digest_id = f"dg_{uuid.uuid4().hex[:20]}"
             digest = Digest(
                 id=digest_id,
@@ -154,7 +156,6 @@ async def run_agent_pipeline(watch_id: str, db: AsyncSession):
             db.add(digest)
             await db.commit()
 
-            # Dispatch Notifications
             if watch.notificationSlackWebhook:
                 await notification_service.send_slack_notification(
                     watch.notificationSlackWebhook,
@@ -170,14 +171,14 @@ async def run_agent_pipeline(watch_id: str, db: AsyncSession):
                     watch_id=watch.id
                 )
 
-        # Successful completion of pipeline run: deduct tokens only if new findings were found
+        # 4. Deduct tokens only if new findings were produced
         if new_findings:
-            token_cost = 5 if user.tier == "ENTERPRISE" else (10 if user.tier == "PRO" else 25)
             user.tokensBalance = max(0, user.tokensBalance - token_cost)
             user.tokensUsed += token_cost
             await db.commit()
+            print(f"[pipeline] Watch {watch_id} done. {len(new_findings)} new finding(s). Deducted {token_cost} tokens.")
         else:
-            print(f"No new findings found for watch {watch_id}. Skipping token deduction.")
+            print(f"[pipeline] Watch {watch_id} done. No new findings. Skipping token deduction.")
             if watch.notificationEmail:
                 try:
                     await notification_service.send_email_notification(
@@ -187,13 +188,20 @@ async def run_agent_pipeline(watch_id: str, db: AsyncSession):
                         watch_id=watch.id
                     )
                 except Exception as email_err:
-                    print(f"Failed to send no-changes email: {email_err}")
+                    print(f"[pipeline] Failed to send no-changes email: {email_err}")
             await db.commit()
 
     except Exception as e:
-        print(f"Error in pipeline run for watch {watch_id}: {e}")
-        await db.rollback()
+        print(f"[pipeline] ERROR in pipeline run for watch {watch_id}: {e}")
+        print(traceback.format_exc())
+        try:
+            await db.rollback()
+        except Exception:
+            pass
     finally:
-        # Release lock
+        # Always release the run lock
         watch.runInProgress = False
-        await db.commit()
+        try:
+            await db.commit()
+        except Exception:
+            pass

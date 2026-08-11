@@ -14,6 +14,8 @@ import {
   Eye,
   Zap,
   Shield,
+  Menu,
+  X,
 } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import gsap from "gsap";
@@ -353,6 +355,7 @@ export function LandingPage() {
   const [email, setEmail] = useState("");
   const [footerEmail, setFooterEmail] = useState("");
   const [inputFocused, setInputFocused] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
 
   // Smooth scroll init
@@ -417,14 +420,16 @@ export function LandingPage() {
 
       // ── The Magazine Pin ──
       // Pin the hero image to the background as the page scrolls
-      ScrollTrigger.create({
-        trigger: ".hero-panel-wrapper",
-        start: "top top+=140",
-        end: "+=150%", 
-        pin: ".hero-panel",
-        pinSpacing: false,
-        scrub: 1,
-      });
+      if (window.matchMedia("(min-width: 768px)").matches) {
+        ScrollTrigger.create({
+          trigger: ".hero-panel-wrapper",
+          start: "top top+=140",
+          end: "+=150%", 
+          pin: ".hero-panel",
+          pinSpacing: false,
+          scrub: 1,
+        });
+      }
 
       // ── Feature Cards Image Parallax ──
       gsap.utils.toArray<HTMLElement>(".feature-card-img").forEach((img) => {
@@ -542,10 +547,10 @@ export function LandingPage() {
 
       {/* ── Nav ── */}
       <header className="hero-nav sticky top-0 z-50 bg-canvas/95 backdrop-blur-sm border-b border-hairline">
-        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center gap-8">
+        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <Logo href="/" size={28} textClassName="text-sm" />
 
-          <nav className="hidden md:flex items-center gap-1 flex-1" aria-label="Primary navigation">
+          <nav className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2" aria-label="Primary navigation">
             {NAV_LINKS.map((link) => (
               <a key={link.label} href={link.href}
                 className="px-3 py-1.5 text-[13px] font-medium text-ink-muted rounded hover:text-ink hover:bg-surface-inset transition-colors no-underline">
@@ -554,7 +559,7 @@ export function LandingPage() {
             ))}
           </nav>
 
-          <div className="ml-auto flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-2">
             <Link href="/login" className="text-[13px] font-medium text-ink-muted px-3 py-1.5 rounded hover:text-ink transition-colors no-underline">
               Login
             </Link>
@@ -563,7 +568,31 @@ export function LandingPage() {
               Get started
             </Link>
           </div>
+
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 -mr-2 text-ink">
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
         </div>
+
+        {/* Mobile Menu Overlay */}
+        {mobileMenuOpen && (
+          <div className="md:hidden absolute top-14 left-0 w-full bg-canvas/95 backdrop-blur-sm border-b border-hairline flex flex-col items-center py-6 gap-4 shadow-xl">
+            {NAV_LINKS.map((link) => (
+              <a key={link.label} href={link.href} onClick={() => setMobileMenuOpen(false)}
+                className="text-lg font-medium text-ink">
+                {link.label}
+              </a>
+            ))}
+            <div className="w-12 h-px bg-hairline my-2" />
+            <Link href="/login" onClick={() => setMobileMenuOpen(false)} className="text-base font-medium text-ink-muted">
+              Login
+            </Link>
+            <Link href="/register" onClick={() => setMobileMenuOpen(false)}
+              className="px-6 py-2.5 mt-2 bg-accent text-on-accent text-sm font-semibold rounded-md shadow-sm">
+              Get started
+            </Link>
+          </div>
+        )}
       </header>
 
       {/* ── Hero — centered ── */}

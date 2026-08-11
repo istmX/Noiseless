@@ -36,15 +36,22 @@ class VectorStoreService:
         return response.points
 
     def upsert_finding(self, watch_id: str, finding_id: str, vector: list[float], payload: dict):
-        """Upserts a finding embedding and payload to the watch collection."""
+        """Upserts a finding embedding and payload to the watch collection.
+        
+        Note: Qdrant requires point IDs to be uuid.UUID objects or integers.
+        Passing a plain string raises a validation error.
+        """
         collection_name = self._get_collection_name(watch_id)
         self.ensure_collection(watch_id)
+
+        # Convert string UUID to uuid.UUID — Qdrant does not accept plain strings
+        point_id = uuid.UUID(finding_id)
 
         self.client.upsert(
             collection_name=collection_name,
             points=[
                 PointStruct(
-                    id=finding_id,
+                    id=point_id,
                     vector=vector,
                     payload=payload
                 )
